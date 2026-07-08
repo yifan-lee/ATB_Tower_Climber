@@ -27,3 +27,12 @@ func _unhandled_input(event: InputEvent) -> void:
     # 4. 最后，把经过“安全检查”的坐标，真正赋值给主角
     position.x = target_x
     position.y = target_y
+
+func _on_area_entered(area: Area2D) -> void:
+	# 检查撞到的这个东西，有没有我们刚才贴上的 "enemy" 标签
+    if area.is_in_group("enemy"):
+        print("💥【系统提示】遭遇怪物！")
+        print("准备调用战斗画面...")
+        
+        # 为了防止主角在战斗时还能乱跑，我们可以先强行关掉他的按键检测
+        set_process_unhandled_input(false)
