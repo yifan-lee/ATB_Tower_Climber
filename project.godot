@@ -14,10 +14,15 @@ config/name="ATB_Tower_Climber"
 config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+GameConfig="*uid://c7e28f2p212wc"
+
 [display]
 
-window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/size/viewport_width=320
+window/size/viewport_height=320
+window/stretch/mode="viewport"
 
 [physics]
 

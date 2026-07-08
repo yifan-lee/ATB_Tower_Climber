@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://4ativjv3wmjo"]
+
+[ext_resource type="Script" uid="uid://w2go3lnmd7n2" path="res://scripts/player_map.gd" id="1_mab2k"]
+
+[node name="Player" type="Area2D" unique_id=1850533975]
+script = ExtResource("1_mab2k")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1943866640]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.6901961, 0.8784314, 0.9019608, 1)

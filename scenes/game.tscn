@@ -1,3 +1,15 @@
 [gd_scene format=3 uid="uid://idq4j80vj3xr"]
 
+[ext_resource type="PackedScene" uid="uid://4ativjv3wmjo" path="res://entities/player/Player.tscn" id="1_uwrxv"]
+[ext_resource type="PackedScene" uid="uid://c115cr5ya0hef" path="res://scenes/map/world.tscn" id="1_yqjtg"]
+
 [node name="game" type="Node2D" unique_id=1115838676]
+
+[node name="World" parent="." unique_id=545263436 instance=ExtResource("1_yqjtg")]
+
+[node name="Floor" type="ColorRect" parent="World" unique_id=1862298255]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0.78431374, 0.6392157, 0.85490197, 1)
+
+[node name="Player" parent="World" unique_id=1850533975 instance=ExtResource("1_uwrxv")]
