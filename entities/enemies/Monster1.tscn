@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bu3jrh244lpqn"]
+
+[node name="Monster1" type="Area2D" unique_id=616903997]
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1615167782]
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.4117647, 0.43137255, 0.4509804, 1)
