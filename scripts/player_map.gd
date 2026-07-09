@@ -1,38 +1,36 @@
-extends Area2D
+extends Area2D # 声明：这个脚本是挂载在 Area2D 节点上的
 
-func _unhandled_input(event: InputEvent) -> void:
-    var step: int = GameConfig.tile_size
-    
-    # 1. 我们先不直接修改位置，而是先算出一个“目标位置”
-    var target_x: float = position.x
-    var target_y: float = position.y
-    
-    if event.is_action_pressed("ui_right"):
-        target_x += step
-    elif event.is_action_pressed("ui_left"):
-        target_x -= step
-    elif event.is_action_pressed("ui_down"):
-        target_y += step
-    elif event.is_action_pressed("ui_up"):
-        target_y -= step
-        
-    # 2. 计算出地图的最大边界像素 (网格数量 - 1) * 格子大小
-    # 比如 5 个格子，最大索引是 4，4 * 64 = 256
-    var max_pos: float = (GameConfig.grid_size - 1) * GameConfig.tile_size
-    
-    # 3. 施展魔法：用 clamp 函数强行把目标坐标限制在 0 和最大边界之间！
-    target_x = clamp(target_x, 0, max_pos)
-    target_y = clamp(target_y, 0, max_pos)
-    
-    # 4. 最后，把经过“安全检查”的坐标，真正赋值给主角
-    position.x = target_x
-    position.y = target_y
+@onready var ray: RayCast2D = $RayCast2D # 绑定：在游戏启动时，自动找到子节点里的 RayCast2D 并赋值给变量 ray
 
-func _on_area_entered(area: Area2D) -> void:
-	# 检查撞到的这个东西，有没有我们刚才贴上的 "enemy" 标签
-    if area.is_in_group("enemy"):
-        print("💥【系统提示】遭遇怪物！")
-        print("准备调用战斗画面...")
+func _unhandled_input(event: InputEvent) -> void: # 事件：这是 Godot 内置函数，只要有按键按下就会触发
+    var step: int = GameConfig.tile_size # 读取：从全局配置中心获取格子像素大小 (64)
+    var move_dir: Vector2 = Vector2.ZERO # 初始化：准备一个变量来存玩家想移动的方向，默认为不动
+    
+    # 判断：检测玩家按下了哪个键，并把 move_dir 设置为对应的方向向量
+    if event.is_action_pressed("ui_right"): move_dir = Vector2.RIGHT * step
+    elif event.is_action_pressed("ui_left"): move_dir = Vector2.LEFT * step
+    elif event.is_action_pressed("ui_down"): move_dir = Vector2.DOWN * step
+    elif event.is_action_pressed("ui_up"): move_dir = Vector2.UP * step
         
-        # 为了防止主角在战斗时还能乱跑，我们可以先强行关掉他的按键检测
-        set_process_unhandled_input(false)
+    # 检测：如果玩家确实按下了某个方向键
+    if move_dir != Vector2.ZERO:
+        ray.target_position = move_dir # 伸出拐杖：把射线的目标点设置在你想要去的方向
+        ray.force_raycast_update() # 强制刷新：告诉引擎“现在就检测一次”，不要等下一帧
+        
+        # 判断拐杖结果：is_colliding() 返回 true 代表探测到了东西
+        if ray.is_colliding():
+            var collider = ray.get_collider() # 获取对象：看看射线碰到的是谁？
+            if collider.is_in_group("enemy"): # 分类：如果是怪物组的成员
+                print("撞到了怪物！触发战斗！")
+                trigger_battle() # 执行：触发战斗函数
+            else:
+                print("前方有障碍物，无法通过！") # 阻挡：如果是墙壁或其它，不移动
+        else:
+            # 执行移动：如果前面什么都没碰到，执行坐标偏移
+            var max_pos: float = (GameConfig.grid_size - 1) * GameConfig.tile_size
+            position.x = clamp(position.x + move_dir.x, 0, max_pos)
+            position.y = clamp(position.y + move_dir.y, 0, max_pos)
+
+func trigger_battle(): # 定义战斗：在这里处理战斗切换逻辑
+    # set_process_unhandled_input(false) # 锁定输入：战斗时禁止玩家乱走
+    print("战斗初始化中...")

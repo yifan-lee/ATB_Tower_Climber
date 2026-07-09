@@ -17,4 +17,9 @@ color = Color(0.6901961, 0.8784314, 0.9019608, 1)
 position = Vector2(32, 32)
 shape = SubResource("RectangleShape2D_frjq3")
 
+[node name="RayCast2D" type="RayCast2D" parent="." unique_id=88294509]
+position = Vector2(32, 32)
+target_position = Vector2(0, 0)
+collide_with_areas = true
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
