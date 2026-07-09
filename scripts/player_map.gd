@@ -43,6 +43,10 @@ func _decide_colliding_result() -> void:
 		trigger_battle() # 执行：触发战斗函数
 	elif collider.is_in_group("wall"):
 		print("前方有障碍物，无法通过！")
+	elif collider.is_in_group("stairs") and collider.is_active:
+		# 呼叫父节点 (Game) 换楼层，直接传楼层号，不需要传坐标！
+		get_parent().change_floor(collider.target_floor)
+		return # 终止本次移动逻辑
 	else:
 		print("不知道是什么，过不去！") # 阻挡：如果是墙壁或其它，不移动
 

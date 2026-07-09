@@ -2,6 +2,8 @@
 
 [ext_resource type="TileSet" uid="uid://on0xx8elxuqt" path="res://assets/tilesets/walls.tres" id="1_da718"]
 [ext_resource type="PackedScene" uid="uid://bu3jrh244lpqn" path="res://entities/enemies/Monster1.tscn" id="2_0f733"]
+[ext_resource type="PackedScene" uid="uid://chxhpg3vjjyn3" path="res://scenes/interactables/stair.tscn" id="3_c1e3w"]
+[ext_resource type="Script" uid="uid://cn0f42sorr7vg" path="res://scripts/stair.gd" id="4_7vrew"]
 
 [node name="Floor_1" type="Node2D" unique_id=545263436]
 
@@ -17,3 +19,8 @@ position = Vector2(128, 0)
 scale = Vector2(4, 4)
 tile_map_data = PackedByteArray(0, 0, 1, 0, 3, 0, 0, 0, 16, 0, 6, 0, 0, 0, 1, 0, 2, 0, 0, 0, 16, 0, 6, 0, 0, 0, 3, 0, 2, 0, 0, 0, 16, 0, 6, 0, 0, 0, 4, 0, 2, 0, 0, 0, 16, 0, 6, 0, 0, 0)
 tile_set = ExtResource("1_da718")
+
+[node name="Stair12" parent="." unique_id=536202918 instance=ExtResource("3_c1e3w")]
+position = Vector2(32, 32)
+script = ExtResource("4_7vrew")
+target_floor = 2

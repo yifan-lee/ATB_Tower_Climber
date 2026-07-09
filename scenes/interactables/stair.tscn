@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://chxhpg3vjjyn3"]
 
-[ext_resource type="Texture2D" uid="uid://c6axvug0uigk8" path="res://assets/sprites/wall.png" id="1_0yto6"]
+[ext_resource type="Texture2D" uid="uid://c6axvug0uigk8" path="res://assets/sprites/wall.png" id="2_pwt04"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
 size = Vector2(16, 16)
@@ -9,7 +9,7 @@ size = Vector2(16, 16)
 scale = Vector2(4, 4)
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1550393562]
-texture = ExtResource("1_0yto6")
+texture = ExtResource("2_pwt04")
 region_enabled = true
 region_rect = Rect2(256, 48, 15.827606, 16.224445)
 

@@ -1,15 +1,11 @@
 extends Area2D
 
-# 允许在编辑器里为每个楼梯配置不同的目标
-@export var target_floor: int = 1 # 要去第几层
-@export var spawn_pos: Vector2 = Vector2(0, 0) # 到了之后出生在第几个格子
+@export var target_floor: int = 1 # 在检查器里填你想去哪层
+var is_active: bool = false # 状态锁
 
-# 这一步很关键：当 Player 的碰撞盒接触到 Area2D 时自动触发
 func _ready():
-    body_entered.connect(_on_body_entered)
-
-func _on_body_entered(body):
-    if body.name == "Player":
-        print("🪜 触发楼梯！目标楼层：", target_floor)
-        # 调用大管家切换楼层
-        get_node("/root/Game").change_floor(target_floor, spawn_pos)
+    add_to_group("stairs")
+    # 魔法在此：新楼层加载时，楼梯在头 0.2 秒内是“死”的。
+    # 这样就算主角和它重叠，也不会瞬间触发传送回来。
+    await get_tree().create_timer(0.2).timeout
+    is_active = true

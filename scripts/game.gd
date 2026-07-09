@@ -23,3 +23,20 @@ func _ready() -> void:
 	player.position = spawn_grid_pos * GameConfig.tile_size
 	
 	print("✨ [架构就绪] 一楼地图加载成功，Player 已安全送达一楼初始位置：", player.position)
+
+
+func change_floor(floor_num: int):
+    # 1. 抽走旧桌布 (销毁旧楼层)
+	if current_floor_node:
+		current_floor_node.queue_free()
+        
+    # 2. 铺上新桌布 (加载新楼层)
+	var floor_path = "res://scenes/Map/Floor_" + str(floor_num) + ".tscn"
+	var new_floor = load(floor_path).instantiate()
+    
+    # 3. 放到场景里，并用 move_child 把它垫底，防止盖住主角
+	add_child(new_floor)
+	move_child(new_floor, 0)
+	current_floor_node = new_floor
+    
+    # 主角在哪？主角原地没动！完美契合你的需求！
