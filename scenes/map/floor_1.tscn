@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c115cr5ya0hef"]
 
 [ext_resource type="TileSet" uid="uid://on0xx8elxuqt" path="res://assets/tilesets/walls.tres" id="1_da718"]
-[ext_resource type="PackedScene" uid="uid://bu3jrh244lpqn" path="res://entities/enemies/Monster1.tscn" id="2_0f733"]
+[ext_resource type="PackedScene" uid="uid://bu3jrh244lpqn" path="res://entities/enemies/bloodshot_eye.tscn" id="2_0f733"]
 [ext_resource type="PackedScene" uid="uid://chxhpg3vjjyn3" path="res://scenes/interactables/stair.tscn" id="3_c1e3w"]
 [ext_resource type="Script" uid="uid://cn0f42sorr7vg" path="res://scripts/stair.gd" id="4_7vrew"]
 
@@ -12,7 +12,7 @@ offset_right = 320.0
 offset_bottom = 320.0
 color = Color(0.78431374, 0.6392157, 0.85490197, 1)
 
-[node name="Monster1" parent="." unique_id=616903997 instance=ExtResource("2_0f733")]
+[node name="BloodshotEye" parent="." unique_id=616903997 instance=ExtResource("2_0f733")]
 position = Vector2(128, 0)
 
 [node name="WallLayer" type="TileMapLayer" parent="." unique_id=1257321467 groups=["wall"]]

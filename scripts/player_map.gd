@@ -1,6 +1,7 @@
 extends Area2D # 声明：这个脚本是挂载在 Area2D 节点上的
 
 @onready var ray: RayCast2D = $RayCast2D # 绑定：在游戏启动时，自动找到子节点里的 RayCast2D 并赋值给变量 ray
+@onready var anim = $AnimatedSprite2D # 获取动画节点
 
 func _unhandled_input(event: InputEvent) -> void: # 事件：这是 Godot 内置函数，只要有按键按下就会触发
 	var move_dir: Vector2 = Vector2.ZERO # 初始化：准备一个变量来存玩家想移动的方向，默认为不动
@@ -17,26 +18,33 @@ func _decide_movement_direction(event: InputEvent) -> Vector2:
 	var move_dir: Vector2 = Vector2.ZERO # 初始化：准备一个变量来存玩家想移动的方向，默认为不动
 
 	# 判断：检测玩家按下了哪个键，并把 move_dir 设置为对应的方向向量
-	if event.is_action_pressed("ui_right"): move_dir = Vector2.RIGHT * step
-	elif event.is_action_pressed("ui_left"): move_dir = Vector2.LEFT * step
-	elif event.is_action_pressed("ui_down"): move_dir = Vector2.DOWN * step
-	elif event.is_action_pressed("ui_up"): move_dir = Vector2.UP * step
+	if event.is_action_pressed("ui_right"):
+		move_dir = Vector2.RIGHT * step
+	elif event.is_action_pressed("ui_left"):
+		move_dir = Vector2.LEFT * step
+	elif event.is_action_pressed("ui_down"):
+		move_dir = Vector2.DOWN * step
+	elif event.is_action_pressed("ui_up"):
+		move_dir = Vector2.UP * step
 
 	return move_dir
 
 
 func _decide_move_result(move_dir: Vector2) -> void:
+	var anim_name = "walk"
 	ray.target_position = move_dir # 伸出拐杖：把射线的目标点设置在你想要去的方向
 	ray.force_raycast_update() # 强制刷新：告诉引擎“现在就检测一次”，不要等下一帧
 	
 	# 判断拐杖结果：is_colliding() 返回 true 代表探测到了东西
 	if ray.is_colliding():
-		_decide_colliding_result()
+		_decide_colliding_result(move_dir)
+		anim.stop()
 	else:
 		_execute_move(move_dir)
+		anim.play(anim_name)
 		
 
-func _decide_colliding_result() -> void:
+func _decide_colliding_result(move_dir: Vector2) -> void:
 	var collider = ray.get_collider() # 获取对象：看看射线碰到的是谁？
 	if collider.is_in_group("enemy"): # 分类：如果是怪物组的成员
 		print("撞到了怪物！触发战斗！")
@@ -45,6 +53,7 @@ func _decide_colliding_result() -> void:
 		print("前方有障碍物，无法通过！")
 	elif collider.is_in_group("stairs") and collider.is_active:
 		# 呼叫父节点 (Game) 换楼层，直接传楼层号，不需要传坐标！
+		_execute_move(move_dir)
 		get_parent().change_floor(collider.target_floor)
 		return # 终止本次移动逻辑
 	else:

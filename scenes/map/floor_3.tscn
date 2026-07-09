@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cisl81tx8q8sm"]
 
-[ext_resource type="PackedScene" uid="uid://bu3jrh244lpqn" path="res://entities/enemies/Monster1.tscn" id="1_lywo7"]
+[ext_resource type="PackedScene" uid="uid://bu3jrh244lpqn" path="res://entities/enemies/bloodshot_eye.tscn" id="1_lywo7"]
 [ext_resource type="TileSet" uid="uid://on0xx8elxuqt" path="res://assets/tilesets/walls.tres" id="2_sut02"]
 [ext_resource type="PackedScene" uid="uid://chxhpg3vjjyn3" path="res://scenes/interactables/stair.tscn" id="3_sut02"]
 [ext_resource type="Script" uid="uid://cn0f42sorr7vg" path="res://scripts/stair.gd" id="4_0vvam"]
