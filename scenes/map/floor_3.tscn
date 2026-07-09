@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cisl81tx8q8sm"]
+
+[ext_resource type="PackedScene" uid="uid://bu3jrh244lpqn" path="res://entities/enemies/Monster1.tscn" id="1_lywo7"]
+[ext_resource type="TileSet" uid="uid://on0xx8elxuqt" path="res://assets/tilesets/walls.tres" id="2_sut02"]
+
+[node name="Floor_3" type="Node2D" unique_id=545263436]
+
+[node name="Floor" type="ColorRect" parent="." unique_id=232449562]
+offset_right = 320.0
+offset_bottom = 320.0
+color = Color(0.78431374, 0.6392157, 0.85490197, 1)
+
+[node name="Monster1" parent="." unique_id=616903997 instance=ExtResource("1_lywo7")]
+position = Vector2(128, 0)
+
+[node name="WallLayer" type="TileMapLayer" parent="." unique_id=1257321467 groups=["wall"]]
+scale = Vector2(4, 4)
+tile_map_data = PackedByteArray(0, 0, 1, 0, 3, 0, 0, 0, 16, 0, 6, 0, 0, 0, 1, 0, 2, 0, 0, 0, 16, 0, 6, 0, 0, 0, 3, 0, 2, 0, 0, 0, 16, 0, 6, 0, 0, 0, 4, 0, 2, 0, 0, 0, 16, 0, 6, 0, 0, 0)
+tile_set = ExtResource("2_sut02")

@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://idq4j80vj3xr"]
 
-[ext_resource type="PackedScene" uid="uid://c115cr5ya0hef" path="res://scenes/map/world.tscn" id="1_yqjtg"]
+[ext_resource type="Script" uid="uid://d2wjs184rcquq" path="res://scripts/game.gd" id="1_lnu2h"]
+[ext_resource type="PackedScene" uid="uid://4ativjv3wmjo" path="res://entities/player/Player.tscn" id="1_uwrxv"]
 
 [node name="game" type="Node2D" unique_id=1115838676]
+script = ExtResource("1_lnu2h")
 
-[node name="World" parent="." unique_id=545263436 instance=ExtResource("1_yqjtg")]
+[node name="Player" parent="." unique_id=1850533975 instance=ExtResource("1_uwrxv")]
+z_index = 1
