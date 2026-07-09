@@ -41,8 +41,10 @@ func _decide_colliding_result() -> void:
 	if collider.is_in_group("enemy"): # 分类：如果是怪物组的成员
 		print("撞到了怪物！触发战斗！")
 		trigger_battle() # 执行：触发战斗函数
+	elif collider.is_in_group("wall"):
+		print("前方有障碍物，无法通过！")
 	else:
-		print("前方有障碍物，无法通过！") # 阻挡：如果是墙壁或其它，不移动
+		print("不知道是什么，过不去！") # 阻挡：如果是墙壁或其它，不移动
 
 
 func trigger_battle(): # 定义战斗：在这里处理战斗切换逻辑
