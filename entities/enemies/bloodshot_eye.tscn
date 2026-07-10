@@ -1,46 +1,10 @@
 [gd_scene format=3 uid="uid://bu3jrh244lpqn"]
 
 [ext_resource type="Script" uid="uid://c7phh77w8blm2" path="res://scripts/enemy_map.gd" id="1_h52bo"]
-[ext_resource type="Texture2D" uid="uid://xs478and53s0" path="res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/BloodshotEye.png" id="2_1p6po"]
+[ext_resource type="SpriteFrames" uid="uid://c6dcnyanhe5xy" path="res://resources/spirits/bloodshot_eye.tres" id="2_h52bo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k3a8i"]
 size = Vector2(64, 64)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_l4ojm"]
-atlas = ExtResource("2_1p6po")
-region = Rect2(0, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_imfqj"]
-atlas = ExtResource("2_1p6po")
-region = Rect2(16, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_raprk"]
-atlas = ExtResource("2_1p6po")
-region = Rect2(32, 0, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i5m5n"]
-atlas = ExtResource("2_1p6po")
-region = Rect2(48, 0, 16, 16)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_k3a8i"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_l4ojm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_imfqj")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_raprk")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_i5m5n")
-}],
-"loop": 1,
-"name": &"walk",
-"speed": 5.0
-}]
 
 [node name="BloodshotEye" type="Area2D" unique_id=616903997 groups=["enemy"]]
 script = ExtResource("1_h52bo")
@@ -52,7 +16,9 @@ shape = SubResource("RectangleShape2D_k3a8i")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1168333286]
 position = Vector2(32, 32)
 scale = Vector2(4, 4)
-sprite_frames = SubResource("SpriteFrames_k3a8i")
-animation = &"walk"
+sprite_frames = ExtResource("2_h52bo")
+animation = &"idle"
+frame = 1
+frame_progress = 0.8350387
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]

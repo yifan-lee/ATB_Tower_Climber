@@ -1,9 +1,0 @@
-[gd_scene format=3 uid="uid://ds3um8wgwgtkg"]
-
-[ext_resource type="Texture2D" uid="uid://ces4tbcbfks1u" path="res://icon.svg" id="1_asmbr"]
-
-[node name="UnitIcon" type="TextureRect" unique_id=2066578970]
-offset_right = 32.0
-offset_bottom = 32.0
-texture = ExtResource("1_asmbr")
-expand_mode = 1
