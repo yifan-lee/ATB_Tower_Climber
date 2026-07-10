@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://3qnljn3lumyq"]
+
+[ext_resource type="Script" uid="uid://clh56mfrxviyk" path="res://resources/skill_data.gd" id="1_2t0dn"]
+
+[resource]
+script = ExtResource("1_2t0dn")
+skill_name = "快速攻击"
+damage_bonus = 20
+max_cd = 2
+metadata/_custom_type_script = "uid://clh56mfrxviyk"

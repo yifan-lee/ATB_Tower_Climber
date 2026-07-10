@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="CharacterStats" format=3 uid="uid://csnw4xs5nshej"]
+
+[ext_resource type="Script" uid="uid://cvk0dkdgiomyc" path="res://resources/character_stats.gd" id="1_61xyg"]
+[ext_resource type="Script" uid="uid://clh56mfrxviyk" path="res://resources/skill_data.gd" id="2_q4vif"]
+[ext_resource type="Resource" uid="uid://ma7adqxrgiio" path="res://resources/skills/base_attack.tres" id="3_xdxjj"]
+[ext_resource type="SpriteFrames" uid="uid://c6dcnyanhe5xy" path="res://resources/spirits/bloodshot_eye.tres" id="4_isgth"]
+
+[resource]
+script = ExtResource("1_61xyg")
+max_hp = 250.0
+current_hp = 250.0
+atk = 50.0
+def = 50.0
+spd = 50.0
+texture = ExtResource("4_isgth")
+skills = Array[ExtResource("2_q4vif")]([ExtResource("3_xdxjj")])
+metadata/_custom_type_script = "uid://cvk0dkdgiomyc"
