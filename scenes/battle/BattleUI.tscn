@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://dmm68ujtpew25"]
+
+[ext_resource type="Script" uid="uid://c3b4eiaoy8wl" path="res://scripts/battle_manager.gd" id="1_o3edr"]
+
+[node name="BattleUi" type="Control" unique_id=1044644206 node_paths=PackedStringArray("timeline_track")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_o3edr")
+timeline_track = NodePath("TimelineTrack")
+
+[node name="TimelineTrack" type="ColorRect" parent="." unique_id=519135801]
+layout_mode = 0
+offset_right = 320.0
+offset_bottom = 32.0
+color = Color(0.4117647, 0.43137255, 0.4509804, 1)
