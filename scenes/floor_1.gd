@@ -1,5 +1,9 @@
 extends Node2D
 
+
+const BloodshotEye = preload("res://entities/enemy/bloodshot_eye.gd") # 预加载敌人脚本
+var bloodshot_eye_instance: CharacterBody2D
+
 func _ready():
 	var floor_bg = ColorRect.new()
 	# 动态调用地图区域宽高
@@ -8,6 +12,7 @@ func _ready():
 	add_child(floor_bg)
 	
 	_create_boundaries()
+	_load_enemies()
 
 func _create_boundaries():
 	var wall_thickness = GameConfig.WALL_THICKNESS
@@ -44,3 +49,11 @@ func _add_wall(pos: Vector2, size: Vector2, color: Color):
 	static_body.add_child(visual)
 	
 	add_child(static_body)
+
+func _load_enemies():
+	bloodshot_eye_instance = BloodshotEye.new()
+	bloodshot_eye_instance.position = Vector2(
+		GameConfig.WALL_THICKNESS + GameConfig.GRID_SIZE * (GameConfig.GRID_COLUMNS + 1.0) / 2.0 - GameConfig.GRID_SIZE / 2.0,
+		GameConfig.GRID_SIZE / 2.0
+	)
+	add_child(bloodshot_eye_instance)

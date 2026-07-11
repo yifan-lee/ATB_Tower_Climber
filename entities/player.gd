@@ -17,10 +17,6 @@ func _setup_sprite():
     # 放大 4 倍以填满网格
     anim_sprite.scale = Vector2(2, 2)
     
-    # 向上偏移贴图，使得角色的脚底（贴图底部）与玩家所在格子的底部对齐
-    # 避免贴图向下超出碰撞体而插进墙壁或者被 UI 裁剪掉
-    # anim_sprite.offset = Vector2(0, -8)
-    
     add_child(anim_sprite)
     anim_sprite.play("idle")
 
