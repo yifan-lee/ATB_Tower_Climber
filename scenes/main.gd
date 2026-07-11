@@ -38,7 +38,7 @@ func _load_initial_scenes():
     # 将玩家放置在屏幕中央 (基于 GameConfig 配置的尺寸)
     player_instance.position = Vector2(
 		GameConfig.WALL_THICKNESS + GameConfig.GRID_SIZE * (GameConfig.GRID_COLUMNS + 1.0) / 2.0 - GameConfig.GRID_SIZE / 2.0,
-		GameConfig.WALL_THICKNESS + GameConfig.GRID_SIZE * (GameConfig.GRID_ROWS - 1.0) - GameConfig.GRID_SIZE / 2.0
+		GameConfig.WALL_THICKNESS + GameConfig.GRID_SIZE * GameConfig.GRID_ROWS - GameConfig.GRID_SIZE / 2.0
 	)
     
     # 将玩家也添加到 GameContainer，它与地图是分离的！
