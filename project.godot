@@ -16,12 +16,12 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameConfig="*uid://c7e28f2p212wc"
+GameConfig="*uid://pnb5saoyorbu"
 
 [display]
 
-window/size/viewport_width=320
-window/size/viewport_height=320
+window/size/viewport_width=800
+window/size/viewport_height=800
 window/stretch/mode="viewport"
 
 [physics]

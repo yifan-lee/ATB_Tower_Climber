@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://ci25wxhsgc2bv"]
+
+[ext_resource type="PackedScene" uid="uid://j01an2kkaxic" path="res://scenes/UIContainer.tscn" id="1_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://bi221imxwrnjd" path="res://scenes/GameContainer.tscn" id="2_sugp2"]
+[ext_resource type="Script" uid="uid://b67ah4ymnqrcq" path="res://scenes/main.gd" id="1_script"]
+
+[node name="Main" type="Node2D" unique_id=17128758]
+script = ExtResource("1_script")
+
+[node name="UIContainer" parent="." unique_id=1373395498 instance=ExtResource("1_0wfyh")]
+
+[node name="GameContainer" parent="." unique_id=1491299785 instance=ExtResource("2_sugp2")]
+clip_contents = true
