@@ -6,6 +6,9 @@ var tile_map: TileMap
 # 基类预留一个空的 map_data，等待子类去覆盖它
 var map_data = []
 
+# 楼梯配置字典。由各个具体楼层在_init()中自定义填充
+var stairs_config = {}
+
 # 预加载你需要用到的敌人脚本
 const BloodshotEye = preload("res://entities/enemy/bloodshot_eye.gd")
 
@@ -20,6 +23,9 @@ func _ready():
 
 	_setup_tilemap()
 	_build_map_from_data()
+
+	# 监听玩家的移动踩踏事件
+	EventBus.player_stepped.connect(_on_player_stepped)
 
 func _create_boundaries():
 	var wall_thickness = GameConfig.WALL_THICKNESS
@@ -86,9 +92,6 @@ func _build_map_from_data():
 				_spawn_enemy(BloodshotEye, x, y)
 
 
-# ==========================================
-# 辅助函数：根据网格坐标生成实体
-# ==========================================
 func _spawn_enemy(enemy_class, grid_x: int, grid_y: int):
 	var enemy_instance = enemy_class.new()
 	
@@ -103,3 +106,11 @@ func _spawn_enemy(enemy_class, grid_x: int, grid_y: int):
 	enemy_instance.position = Vector2(pixel_x, pixel_y)
 	
 	add_child(enemy_instance)
+
+
+func _on_player_stepped(grid_pos: Vector2i):
+	# 查字典：玩家当前踩的格子，是不是配置好的楼梯入口？
+	if stairs_config.has(grid_pos):
+		var config = stairs_config[grid_pos]
+		# 发送切换地图请求
+		EventBus.request_map_change.emit(config["target_scene"], config["spawn_grid"])

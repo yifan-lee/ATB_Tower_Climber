@@ -6,6 +6,7 @@ extends CharacterBody2D
 var anim_sprite: AnimatedSprite2D
 
 func _ready():
+	z_index = 10 # 强制让玩家渲染在最上层，避免被新加载的地图背景遮挡
 	_setup_sprite()
 	_setup_collision()
 
@@ -62,6 +63,9 @@ func _try_move(direction: Vector2):
 		# 没有撞墙，执行瞬间移动
 		position += motion
 		anim_sprite.play("walk")
+		var grid_x = int(position.x / GameConfig.GRID_SIZE)
+		var grid_y = int(position.y / GameConfig.GRID_SIZE)
+		EventBus.player_stepped.emit(Vector2i(grid_x, grid_y))
 	else:
 		# 撞墙了，播放待机动画
 		anim_sprite.play("idle")

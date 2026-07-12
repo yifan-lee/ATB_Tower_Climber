@@ -14,6 +14,7 @@ var player_instance: CharacterBody2D
 func _ready():
 	_setup_containers()
 	_load_initial_scenes()
+	EventBus.request_map_change.connect(_on_map_change_requested)
 
 func _setup_containers():
 	# 动态设置 GameContainer 尺寸
@@ -43,3 +44,19 @@ func _load_initial_scenes():
 	
 	# 将玩家也添加到 GameContainer，它与地图是分离的！
 	game_container.add_child(player_instance)
+
+func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
+	# 1. 销毁旧地图
+	if current_map != null:
+		current_map.queue_free()
+		
+	# 2. 纯代码动态加载并实例化新地图
+	var NewMapClass = load(target_scene_path)
+	current_map = NewMapClass.new()
+	game_container.add_child(current_map)
+	
+	# 3. 将玩家精准传送到新地图的指定网格位置
+	player_instance.position = Vector2(
+		GameConfig.WALL_THICKNESS + spawn_grid_pos.x * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0),
+		GameConfig.WALL_THICKNESS + spawn_grid_pos.y * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0)
+	)
