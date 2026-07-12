@@ -13,7 +13,7 @@ func _ready():
         100,
         "res://assets/sprites/player/blonde_man_animations.tres",
         [
-
+            ''
         ]
     )
     
@@ -23,9 +23,9 @@ func _ready():
         50,
         50,
         60,
-        "res://assets/sprites/enemy/bloodshot_eye_animations.tres",
+        "res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres",
         [
-
+            ''
         ]
     )
 

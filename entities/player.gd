@@ -11,15 +11,8 @@ func _ready():
 	_setup_collision()
 
 func _setup_sprite():
-	anim_sprite = AnimatedSprite2D.new()
-	# 加载你在编辑器切好的 4x8 动画资源
-	anim_sprite.sprite_frames = load("res://assets/sprites/player/blonde_man_animations.tres")
-	
-	# 放大 4 倍以填满网格
-	anim_sprite.scale = Vector2(2, 2)
-	
+	anim_sprite = GameConfig.create_scaled_anim_sprite("res://assets/sprites/player/blonde_man_animations.tres", GameConfig.GRID_SIZE)
 	add_child(anim_sprite)
-	anim_sprite.play("idle")
 
 func _setup_collision():
 	var collision = CollisionShape2D.new()
@@ -80,3 +73,4 @@ func _handle_interaction(collider: Object):
 		return
 	elif collider.is_in_group("enemy"):
 		EventBus.show_system_message.emit("MSG_HIT_ENEMY")
+		EventBus.encounter_monster.emit(collider.monster_id)

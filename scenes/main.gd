@@ -4,6 +4,8 @@ extends Node
 const MapFloor1 = preload("res://scenes/maps/floor_1.gd")
 const InfoPanel = preload("res://ui/info_panel.gd")
 const Player = preload("res://entities/player.gd") # 预加载玩家脚本
+const BattleScene = preload("res://scenes/battle.gd")
+var current_battle: Node = null
 
 @onready var game_container = $GameContainer
 @onready var ui_container = $UIContainer
@@ -15,6 +17,8 @@ func _ready():
 	_setup_containers()
 	_load_initial_scenes()
 	EventBus.request_map_change.connect(_on_map_change_requested)
+	EventBus.encounter_monster.connect(_on_encounter_monster)
+	EventBus.battle_ended.connect(_on_battle_ended)
 
 func _setup_containers():
 	# 动态设置 GameContainer 尺寸
@@ -60,3 +64,34 @@ func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2
 		GameConfig.WALL_THICKNESS + spawn_grid_pos.x * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0),
 		GameConfig.WALL_THICKNESS + spawn_grid_pos.y * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0)
 	)
+
+
+# 进入战斗
+func _on_encounter_monster(monster_id: String):
+	# 1. 暂停并隐藏探索地图和玩家
+	if current_map:
+		current_map.hide()
+		current_map.process_mode = Node.PROCESS_MODE_DISABLED
+	if player_instance:
+		player_instance.hide()
+		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
+		
+	# 2. 实例化并加载战斗场景
+	current_battle = BattleScene.new()
+	current_battle.setup(monster_id) # 注入遭遇的怪物ID
+	game_container.add_child(current_battle)
+
+# 退出战斗
+func _on_battle_ended():
+	# 1. 销毁战斗场景
+	if current_battle:
+		current_battle.queue_free()
+		current_battle = null
+		
+	# 2. 恢复并显示探索地图和玩家 (完美保留在原位！)
+	if current_map:
+		current_map.show()
+		current_map.process_mode = Node.PROCESS_MODE_INHERIT
+	if player_instance:
+		player_instance.show()
+		player_instance.process_mode = Node.PROCESS_MODE_INHERIT

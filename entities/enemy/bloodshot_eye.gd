@@ -2,6 +2,7 @@
 extends CharacterBody2D
 
 var anim_sprite: AnimatedSprite2D
+var monster_id: String = "bloodshot_eye"
 
 func _ready():
     add_to_group("enemy")
@@ -10,15 +11,8 @@ func _ready():
 
 
 func _setup_sprite():
-    anim_sprite = AnimatedSprite2D.new()
-    # 加载你在编辑器切好的 4x8 动画资源
-    anim_sprite.sprite_frames = load("res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres")
-    
-    # 放大 4 倍以填满网格
-    anim_sprite.scale = Vector2(4, 4)
-    
+    anim_sprite = GameConfig.create_scaled_anim_sprite("res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres", GameConfig.GRID_SIZE)
     add_child(anim_sprite)
-    anim_sprite.play("idle")
 
 
 func _setup_collision():
