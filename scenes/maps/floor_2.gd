@@ -6,11 +6,11 @@ var bloodshot_eye_instance: CharacterBody2D
 
 var tile_map: TileMap
 var map_data = [
-	[0, 0, 0, 0, 2],
-	[0, 0, 0, 0, 1],
-	[0, 1, 1, 1, 1],
-	[0, 0, 0, 1, 1],
-	[1, 1, 0, 1, 1]
+	[2, 0, 1, 0, 2],
+	[0, 0, 1, 0, 0],
+	[0, 1, 1, 1, 0],
+	[0, 0, 0, 0, 0],
+	[0, 0, 0, 1, 1]
 ]
 
 # 1 is wall; 2 is ladder
@@ -83,10 +83,8 @@ func _build_map_from_data():
 			# 如果数组里写的是 1，我们就放置一块墙壁
 			if map_data[y][x] == 1:
 				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
-				
-			# 未来如果你想加楼梯，只需在 map_data 里写 2
-			# elif map_data[y][x] == 2:
-			#     tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(楼梯的X坐标, 楼梯的Y坐标))
+			elif map_data[y][x] == 2:
+			    tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 3))
 
 
 func _load_enemies():
