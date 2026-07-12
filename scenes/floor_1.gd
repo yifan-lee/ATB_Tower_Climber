@@ -4,6 +4,17 @@ extends Node2D
 const BloodshotEye = preload("res://entities/enemy/bloodshot_eye.gd") # 预加载敌人脚本
 var bloodshot_eye_instance: CharacterBody2D
 
+var tile_map: TileMap
+var map_data = [
+	[0, 0, 0, 0, 2],
+	[0, 0, 0, 0, 1],
+	[0, 1, 1, 1, 1],
+	[0, 0, 0, 1, 1],
+	[1, 1, 0, 1, 1]
+]
+
+# 1 is wall; 2 is ladder
+
 func _ready():
 	var floor_bg = ColorRect.new()
 	# 动态调用地图区域宽高
@@ -12,6 +23,8 @@ func _ready():
 	add_child(floor_bg)
 	
 	_create_boundaries()
+	_setup_tilemap()
+	_build_map_from_data()
 	_load_enemies()
 
 func _create_boundaries():
@@ -49,6 +62,32 @@ func _add_wall(pos: Vector2, size: Vector2, color: Color):
 	static_body.add_child(visual)
 	
 	add_child(static_body)
+
+
+func _setup_tilemap():
+	tile_map = TileMap.new()
+
+	# 1. 纯代码加载我们在编辑器做好的图集资源
+	tile_map.tile_set = load("res://assets/tilesets/wall.tres")
+	
+	# 2. 放大 4 倍，使得 16x16 的素材刚好填满 64x64 的逻辑格子
+	tile_map.scale = Vector2(4, 4)
+	
+	add_child(tile_map)
+
+
+func _build_map_from_data():
+	# 遍历我们的二维数组
+	for y in range(map_data.size()):
+		for x in range(map_data[y].size()):
+			# 如果数组里写的是 1，我们就放置一块墙壁
+			if map_data[y][x] == 1:
+				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
+				
+			# 未来如果你想加楼梯，只需在 map_data 里写 2
+			# elif map_data[y][x] == 2:
+			#     tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(楼梯的X坐标, 楼梯的Y坐标))
+
 
 func _load_enemies():
 	bloodshot_eye_instance = BloodshotEye.new()

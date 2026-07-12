@@ -17,12 +17,17 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameConfig="*uid://pnb5saoyorbu"
+EventBus="*uid://cxi7xgq07lxsl"
 
 [display]
 
 window/size/viewport_width=800
 window/size/viewport_height=800
 window/stretch/mode="viewport"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locale/texts.zh_CN.translation")
 
 [physics]
 

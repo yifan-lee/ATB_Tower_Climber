@@ -4,6 +4,7 @@ extends CharacterBody2D
 var anim_sprite: AnimatedSprite2D
 
 func _ready():
+    add_to_group("enemy")
     _setup_sprite()
     _setup_collision()
 
@@ -14,7 +15,7 @@ func _setup_sprite():
     anim_sprite.sprite_frames = load("res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres")
     
     # 放大 4 倍以填满网格
-    anim_sprite.scale = Vector2(2, 2)
+    anim_sprite.scale = Vector2(4, 4)
     
     add_child(anim_sprite)
     anim_sprite.play("idle")
