@@ -1,4 +1,7 @@
 keys,zh_CN,en_US
 MSG_WELCOME,欢迎来到 TT 塔，勇者！,"Welcome to TT Tower, Hero!"
-MSG_HIT_WALL,哎哟！前面是一堵墙。,Ouch! It's a wall.
+MSG_HIT_WALL,哎哟！前面是一堵墙。,"Ouch! It's a wall."
 MSG_HIT_ENEMY,遭遇敌人，开始战斗！,"Encountered an enemy, battle begins!"
+MSG_PLAYER_TURN,玩家回合,"Player's Turn"
+MSG_ENEMY_TURN,怪物回合,"Enemy's Turn"
+MSG_BATTLE_CONTINUE,战斗继续,"Battle Continue"

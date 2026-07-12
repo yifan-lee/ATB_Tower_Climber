@@ -5,6 +5,22 @@ var player_stats: Stats
 var enemy_stats: Stats
 var enemy_id: String
 
+# --- ATB 进度条相关变量 ---
+var bar_bg: ColorRect
+const BAR_WIDTH = GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE
+
+var p_pointer: AnimatedSprite2D
+var e_pointer: AnimatedSprite2D
+
+var p_progress: float = 0.0
+var e_progress: float = 0.0
+
+var p_speed_px: float = 0.0
+var e_speed_px: float = 0.0
+
+var is_action_paused: bool = false
+var ready_character: String = "" # 记录当前是谁走到了终点 ("player" 或 "enemy")
+
 func setup(enemy_id: String):
 	player_stats = EntityDB.get_stats("player")
 	enemy_stats = EntityDB.get_stats(enemy_id)
@@ -21,13 +37,29 @@ func _ready():
 	_build_middle_stats()
 	_build_bottom_animations()
 
+	# 计算 ATB 移动速度 (像素/秒)
+	p_speed_px = BAR_WIDTH * (100.0 + player_stats.spd) / 400.0
+	e_speed_px = BAR_WIDTH * (100.0 + enemy_stats.spd) / 400.0
+
 
 func _build_top_progress_bar():
 	var bar_bg = ColorRect.new()
-	bar_bg.size = Vector2(GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE, GameConfig.GRID_SIZE / 2)
+	bar_bg.size = Vector2(BAR_WIDTH, GameConfig.GRID_SIZE / 4)
 	bar_bg.position = Vector2(GameConfig.GRID_SIZE / 2, GameConfig.GRID_SIZE / 2) # 居中留白
 	bar_bg.color = Color(0.3, 0.3, 0.3)
 	add_child(bar_bg)
+
+	# 玩家指针 (进度条上方)
+	p_pointer = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE / 2)
+	p_pointer.play("static") # 使用静止动画
+	p_pointer.position = Vector2(0, -GameConfig.GRID_SIZE / 4) # 放在进度条上边缘
+	bar_bg.add_child(p_pointer)
+
+	# 怪物指针 (进度条上)
+	e_pointer = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE / 2)
+	e_pointer.play("static") # 使用静止动画
+	e_pointer.position = Vector2(0, GameConfig.GRID_SIZE / 4)
+	bar_bg.add_child(e_pointer)
 
 func _build_middle_stats():
 	var hbox = HBoxContainer.new()
@@ -74,5 +106,57 @@ func _build_bottom_animations():
 	add_child(e_anim)
 
 func _input(event):
-	if event.is_action_pressed("ui_cancel"): # ui_cancel 默认绑定的是 ESC 键
+	# 1. 逃跑 (ESC)
+	if event.is_action_pressed("ui_cancel"):
 		EventBus.battle_ended.emit()
+
+	# 2. 纯代码监听键盘数字 "1" 键
+	# 确保是按下状态且不是长按产生的重复触发 (echo)
+	if event is InputEventKey and event.keycode == KEY_1 and event.is_pressed() and not event.is_echo():
+		# 只有在游戏暂停（有人走到终点）时，按 1 才有反应
+		if is_action_paused:
+			_execute_action_and_resume()
+
+func _process(delta):
+	# 如果有人走到终点了，暂停进度条
+	if is_action_paused:
+		return
+		
+	# 累加进度
+	p_progress += p_speed_px * delta
+	e_progress += e_speed_px * delta
+	
+	# 判断玩家是否到达终点
+	if p_progress >= BAR_WIDTH:
+		p_progress = BAR_WIDTH
+		is_action_paused = true
+		ready_character = "player"
+		EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
+		
+	# 判断怪物是否到达终点（如果同时到达，玩家优先）
+	elif e_progress >= BAR_WIDTH:
+		e_progress = BAR_WIDTH
+		is_action_paused = true
+		ready_character = "enemy"
+		EventBus.show_system_message.emit("MSG_ENEMY_TURN") # 通知 UI 显示怪物回合
+		
+	# 实时更新指针的 X 坐标
+	p_pointer.position.x = p_progress
+	e_pointer.position.x = e_progress
+
+
+func _execute_action_and_resume():
+	# 这里预留给你以后写具体的攻击扣血逻辑
+	# 比如：如果是 player，就放个攻击特效；如果是 enemy，就扣玩家的血
+	# 动作执行完毕，重置当前行动者的进度条
+	if ready_character == "player":
+		p_progress = 0.0
+	elif ready_character == "enemy":
+		e_progress = 0.0
+		
+	# 清空状态，恢复游戏流动
+	ready_character = ""
+	is_action_paused = false
+	
+	# 通知下方 UI 进度条继续
+	EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")

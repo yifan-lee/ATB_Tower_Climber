@@ -8,7 +8,7 @@ class_name Stats
 @export var def: int = 100
 @export var spd: int = 100
 @export var anim_path: String
-@export var skills: Array[String] = ['']
+@export var skills: Array[String] = ['normal_attack']
 
 
 func setup(n: String, hp: int, a: int, d: int, s: int, anim: String, sk: Array[String]) -> Stats:
