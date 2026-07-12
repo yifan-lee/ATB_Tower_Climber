@@ -11,3 +11,8 @@ signal player_stepped(grid_pos: Vector2i)
 
 # [新增] 请求主程序切换地图 (参数：目标场景路径, 玩家出生的网格坐标)
 signal request_map_change(target_scene_path: String, spawn_grid_pos: Vector2i)
+
+
+signal encounter_enemy(entity_id: String)
+
+signal battle_ended()
