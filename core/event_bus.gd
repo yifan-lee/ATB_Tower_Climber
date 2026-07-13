@@ -16,3 +16,7 @@ signal request_map_change(target_scene_path: String, spawn_grid_pos: Vector2i)
 signal encounter_monster(entity_id: String)
 
 signal battle_ended()
+
+
+signal show_skill_menu(skills: Array) # 通知 UI 开启技能菜单
+signal player_skill_chosen(skill: Skill) # UI 通知主逻辑玩家选了哪个技能

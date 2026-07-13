@@ -5,3 +5,9 @@ MSG_HIT_ENEMY,遭遇敌人，开始战斗！,"Encountered an enemy, battle begin
 MSG_PLAYER_TURN,玩家回合,"Player's Turn"
 MSG_ENEMY_TURN,怪物回合,"Enemy's Turn"
 MSG_BATTLE_CONTINUE,战斗继续,"Battle Continue"
+SKILL_BASIC_ATK_NAME,普通攻击,Attack
+SKILL_BASIC_ATK_DESC,对敌人造成基础伤害。,Deals basic damage to the enemy.
+SKILL_HEAVY_NAME,重击,Heavy Strike
+SKILL_HEAVY_DESC,奋力一击，造成巨额伤害，冷却3秒。,A powerful blow. Cooldown: 3 seconds.
+SKILL_FIREBALL_NAME,火球术,Fireball.
+SKILL_FIREBALL_DESC,对敌人造成巨额伤害，冷却5秒,Fireball. Cooldown: 5 seconds.

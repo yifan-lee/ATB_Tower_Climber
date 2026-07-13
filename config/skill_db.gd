@@ -5,11 +5,19 @@ extends Node
 var db: Dictionary = {}
 
 func _ready():
-    db['normal_attack'] = Skill.new().setup(
-        "normal_attack",
-        50,
-        0.0
+    db["basic_atk"] = Skill.new().setup(
+        "SKILL_BASIC_ATK_NAME", 0, 0, "SKILL_BASIC_ATK_DESC"
+    )
+    db["heavy_strike"] = Skill.new().setup(
+        "SKILL_HEAVY_NAME", 15, 3, "SKILL_HEAVY_DESC"
+    )
+    db["fireball"] = Skill.new().setup(
+        "SKILL_FIREBALL_NAME", 50, 8, "SKILL_FIREBALL_DESC"
     )
 
 func get_skill(id: String) -> Skill:
-    return db.get(id)
+    if db.has(id):
+        return db[id].duplicate(true)
+    else:
+        push_error("找不到技能 ID: " + id)
+        return null

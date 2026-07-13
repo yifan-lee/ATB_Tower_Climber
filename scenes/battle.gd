@@ -21,6 +21,10 @@ var e_speed_px: float = 0.0
 var is_action_paused: bool = false
 var ready_character: String = "" # 记录当前是谁走到了终点 ("player" 或 "enemy")
 
+
+var p_hp_label: Label
+var e_hp_label: Label
+
 func setup(enemy_id: String):
 	player_stats = EntityDB.get_stats("player")
 	enemy_stats = EntityDB.get_stats(enemy_id)
@@ -41,6 +45,7 @@ func _ready():
 	p_speed_px = BAR_WIDTH * (100.0 + player_stats.spd) / 400.0
 	e_speed_px = BAR_WIDTH * (100.0 + enemy_stats.spd) / 400.0
 
+	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
 
 func _build_top_progress_bar():
 	var bar_bg = ColorRect.new()
@@ -69,17 +74,23 @@ func _build_middle_stats():
 	hbox.add_theme_constant_override("separation", GameConfig.GRID_SIZE) # 左右间距
 	add_child(hbox)
 
-	hbox.add_child(_create_stat_panel(player_stats))
-	hbox.add_child(_create_stat_panel(enemy_stats))
+	hbox.add_child(_create_stat_panel(player_stats, true))
+	hbox.add_child(_create_stat_panel(enemy_stats, false))
 
-func _create_stat_panel(stats: Stats) -> VBoxContainer:
+func _create_stat_panel(stats: Stats, is_player: bool) -> VBoxContainer:
 	var vbox = VBoxContainer.new()
 	vbox.add_child(_create_label(stats.entity_name, Color(1, 1, 0))) # 名字标黄
-	vbox.add_child(_create_label("HP: " + str(stats.max_hp) + "/" + str(stats.max_hp)))
+	var hp_lbl = _create_label("HP: " + str(stats.current_hp) + "/" + str(stats.max_hp))
+	vbox.add_child(hp_lbl)
+	if is_player:
+		p_hp_label = hp_lbl
+	else:
+		e_hp_label = hp_lbl
 	vbox.add_child(_create_label("ATK: " + str(stats.atk)))
 	vbox.add_child(_create_label("DEF: " + str(stats.def)))
 	vbox.add_child(_create_label("SPD: " + str(stats.spd)))
 	return vbox
+
 
 func _create_label(text: String, color: Color = Color.WHITE) -> Label:
 	var lbl = Label.new()
@@ -105,17 +116,17 @@ func _build_bottom_animations():
 	)
 	add_child(e_anim)
 
-func _input(event):
-	# 1. 逃跑 (ESC)
-	if event.is_action_pressed("ui_cancel"):
-		EventBus.battle_ended.emit()
+# func _input(event):
+# 	# 1. 逃跑 (ESC)
+# 	if event.is_action_pressed("ui_cancel"):
+# 		EventBus.battle_ended.emit()
 
-	# 2. 纯代码监听键盘数字 "1" 键
-	# 确保是按下状态且不是长按产生的重复触发 (echo)
-	if event is InputEventKey and event.keycode == KEY_1 and event.is_pressed() and not event.is_echo():
-		# 只有在游戏暂停（有人走到终点）时，按 1 才有反应
-		if is_action_paused:
-			_execute_action_and_resume()
+# 	# 2. 纯代码监听键盘数字 "1" 键
+# 	# 确保是按下状态且不是长按产生的重复触发 (echo)
+# 	if event is InputEventKey and event.keycode == KEY_1 and event.is_pressed() and not event.is_echo():
+# 		# 只有在游戏暂停（有人走到终点）时，按 1 才有反应
+# 		if is_action_paused:
+# 			_execute_action_and_resume()
 
 func _process(delta):
 	# 如果有人走到终点了，暂停进度条
@@ -132,6 +143,7 @@ func _process(delta):
 		is_action_paused = true
 		ready_character = "player"
 		EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
+		EventBus.show_skill_menu.emit(player_stats.skills)
 		
 	# 判断怪物是否到达终点（如果同时到达，玩家优先）
 	elif e_progress >= BAR_WIDTH:
@@ -139,24 +151,66 @@ func _process(delta):
 		is_action_paused = true
 		ready_character = "enemy"
 		EventBus.show_system_message.emit("MSG_ENEMY_TURN") # 通知 UI 显示怪物回合
+		get_tree().create_timer(1.0).timeout.connect(_enemy_action)
 		
 	# 实时更新指针的 X 坐标
 	p_pointer.position.x = p_progress
 	e_pointer.position.x = e_progress
 
+func _on_player_skill_chosen(skill: Skill):
+	# 将刚选的技能进入CD
+	skill.current_cd = skill.max_cd
+	# 执行战斗逻辑
+	_execute_skill(player_stats, enemy_stats, skill)
 
-func _execute_action_and_resume():
-	# 这里预留给你以后写具体的攻击扣血逻辑
-	# 比如：如果是 player，就放个攻击特效；如果是 enemy，就扣玩家的血
-	# 动作执行完毕，重置当前行动者的进度条
-	if ready_character == "player":
+func _enemy_action():
+	# 5. 怪物默认只会使用普通攻击（数组里的第0个技能）
+	# 以后如果你想加 AI，只需在这里写逻辑去选别的 index
+	var chosen_skill = enemy_stats.skills[0]
+	_execute_skill(enemy_stats, player_stats, chosen_skill)
+
+func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
+	# 4. 伤害公式：攻击方攻击力 + 技能伤害 - 防御方防御力
+	# 使用 max(1, ...) 确保即使防御很高，也能强制扣 1 点血
+	var final_damage = max(1, attacker.atk + skill.damage - defender.def)
+	
+	# 扣血并防止出现负数血量
+	defender.current_hp = max(0, defender.current_hp - final_damage)
+	
+	# 刷新上方战斗面板的文字
+	p_hp_label.text = "HP: " + str(player_stats.current_hp) + "/" + str(player_stats.max_hp)
+	e_hp_label.text = "HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.max_hp)
+	
+	if defender.current_hp <= 0:
+		EventBus.battle_ended.emit()
+		return
+		
+	# 可以在这里发信号让 UI 显示 "玩家使用了 重击，造成了 15 点伤害！"
+	# 这里为了简便，直接恢复战斗进度条
+	_resume_battle(attacker == player_stats)
+
+func _resume_battle(was_player: bool):
+	# 谁刚攻击完，谁的进度条清零
+	if was_player:
 		p_progress = 0.0
-	elif ready_character == "enemy":
+	else:
 		e_progress = 0.0
 		
-	# 清空状态，恢复游戏流动
-	ready_character = ""
 	is_action_paused = false
-	
-	# 通知下方 UI 进度条继续
 	EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")
+
+# func _execute_action_and_resume():
+# 	# 这里预留给你以后写具体的攻击扣血逻辑
+# 	# 比如：如果是 player，就放个攻击特效；如果是 enemy，就扣玩家的血
+# 	# 动作执行完毕，重置当前行动者的进度条
+# 	if ready_character == "player":
+# 		p_progress = 0.0
+# 	elif ready_character == "enemy":
+# 		e_progress = 0.0
+		
+# 	# 清空状态，恢复游戏流动
+# 	ready_character = ""
+# 	is_action_paused = false
+	
+# 	# 通知下方 UI 进度条继续
+# 	EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")
