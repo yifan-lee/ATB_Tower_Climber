@@ -3,17 +3,27 @@ extends Node
 
 const MapFloor1 = preload("res://scenes/maps/floor_1.gd")
 const InfoPanel = preload("res://ui/info_panel.gd")
-const Player = preload("res://entities/player.gd") # 预加载玩家脚本
+const Player = preload("res://entities/player.gd")
 const BattleScene = preload("res://scenes/battle.gd")
+
+
+var game_container: Control
+var ui_container: Control
+
 var current_battle: Node = null
-
-@onready var game_container = $GameContainer
-@onready var ui_container = $UIContainer
-
 var current_map: Node2D
 var player_instance: CharacterBody2D
 
 func _ready():
+	# 完全用代码动态创建容器，告别在 tscn 里拖拽节点
+	game_container = Control.new()
+	game_container.name = "GameContainer"
+	add_child(game_container)
+	
+	ui_container = Control.new()
+	ui_container.name = "UIContainer"
+	add_child(ui_container)
+
 	_setup_containers()
 	_load_initial_scenes()
 	EventBus.request_map_change.connect(_on_map_change_requested)
@@ -45,11 +55,8 @@ func _load_initial_scenes():
 	
 	# 3. 独立加载玩家角色
 	player_instance = Player.new()
-	# 将玩家放置在屏幕中央 (基于 GameConfig 配置的尺寸)
-	player_instance.position = Vector2(
-		GameConfig.WALL_THICKNESS + GameConfig.GRID_SIZE * (GameConfig.GRID_COLUMNS + 1.0) / 2.0 - GameConfig.GRID_SIZE / 2.0,
-		GameConfig.WALL_THICKNESS + GameConfig.GRID_SIZE * GameConfig.GRID_ROWS - GameConfig.GRID_SIZE / 2.0
-	)
+	# 将玩家放置在屏幕底部的中间网格
+	player_instance.position = GameConfig.get_pixel_position(GameConfig.GRID_COLUMNS / 2, GameConfig.GRID_ROWS - 1)
 	
 	# 将玩家也添加到 GameContainer，它与地图是分离的！
 	game_container.add_child(player_instance)
@@ -72,10 +79,7 @@ func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2
 		loaded_maps[target_scene_path] = current_map
 	
 	# 3. 将玩家精准传送到新地图的指定网格位置
-	player_instance.position = Vector2(
-		GameConfig.WALL_THICKNESS + spawn_grid_pos.x * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0),
-		GameConfig.WALL_THICKNESS + spawn_grid_pos.y * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0)
-	)
+	player_instance.position = GameConfig.get_pixel_position(spawn_grid_pos.x, spawn_grid_pos.y)
 
 
 # 进入战斗

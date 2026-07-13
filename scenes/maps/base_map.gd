@@ -96,14 +96,7 @@ func _spawn_enemy(enemy_class, grid_x: int, grid_y: int):
 	var enemy_instance = enemy_class.new()
 	
 	# 坐标转换：将网格坐标(如 x:2, y:2) 转换为真实的像素坐标。
-	# 正确的逻辑应该是加上半个格子的大小 (+32)，而不是减去 (-32)
-	var pixel_x = grid_x * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0) + GameConfig.WALL_THICKNESS
-	var pixel_y = grid_y * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0) + GameConfig.WALL_THICKNESS
-	
-	# 因为我们用了 TileMap，外圈的墙也是画在网格里的，
-	# 所以直接按照网格算出来的 pixel_x 和 pixel_y 已经是绝对准确的，
-	# 不需要再像以前那样加上复杂的 WALL_THICKNESS 偏移计算了！
-	enemy_instance.position = Vector2(pixel_x, pixel_y)
+	enemy_instance.position = GameConfig.get_pixel_position(grid_x, grid_y)
 	
 	add_child(enemy_instance)
 

@@ -4,9 +4,9 @@ extends Node
 
 # 网格系统设定
 const GRID_SIZE: int = 64
-const GRID_COLUMNS: int = 5 # 320 / 64
-const GRID_ROWS: int = 5 # 320 / 64
-const WALL_THICKNESS: int = 0
+const GRID_COLUMNS: int = 11 # 320 / 64
+const GRID_ROWS: int = 11 # 320 / 64
+const WALL_THICKNESS: int = 32
 
 
 # 屏幕尺寸设定
@@ -22,8 +22,15 @@ const MAX_FLOOR: int = 3
 
 
 # ==========================================
-# 全局工具函数：自动按目标尺寸缩放生成动画精灵
+# 全局工具函数
 # ==========================================
+
+# 将网格坐标转换为屏幕实际像素坐标（中心点）
+func get_pixel_position(grid_x: int, grid_y: int) -> Vector2:
+	var pixel_x = grid_x * GRID_SIZE + (GRID_SIZE / 2.0) + WALL_THICKNESS
+	var pixel_y = grid_y * GRID_SIZE + (GRID_SIZE / 2.0) + WALL_THICKNESS
+	return Vector2(pixel_x, pixel_y)
+
 func create_scaled_anim_sprite(anim_path: String, target_size: float = GRID_SIZE, anim_name: String = "idle") -> AnimatedSprite2D:
 	var anim = AnimatedSprite2D.new()
 	anim.sprite_frames = load(anim_path)
