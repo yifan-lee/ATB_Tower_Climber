@@ -76,7 +76,7 @@ func _on_show_skill_menu(skills: Array):
         var lbl = Label.new()
         # 如果冷却没好，显示CD
         if skill.current_cd > 0:
-            lbl.text = "   " + tr(skill.skill_name) + " (CD:" + str(skill.current_cd) + ")"
+            lbl.text = "   " + tr(skill.skill_name) + " (CD:" + str(ceil(skill.current_cd)) + ")"
             lbl.modulate = Color(0.5, 0.5, 0.5) # 置灰
         else:
             lbl.text = "   " + tr(skill.skill_name)
@@ -110,7 +110,7 @@ func _input(event):
         _update_menu_cursor()
     elif event.is_action_pressed("ui_accept"): # 默认是空格或回车
         var chosen_skill = available_skills[current_selection]
-        if chosen_skill.current_cd == 0:
+        if chosen_skill.current_cd <= 0:
             is_menu_active = false
             # 向主战斗逻辑发送玩家的决定！
             EventBus.player_skill_chosen.emit(chosen_skill)

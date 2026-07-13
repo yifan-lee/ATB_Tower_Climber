@@ -137,6 +137,17 @@ func _process(delta):
 	p_progress += p_speed_px * delta
 	e_progress += e_speed_px * delta
 	
+	# 技能冷却
+	if player_stats.skills != null:
+		for skill in player_stats.skills:
+			if skill.current_cd > 0:
+				skill.current_cd = max(0.0, skill.current_cd - delta)
+				
+	if enemy_stats.skills != null:
+		for skill in enemy_stats.skills:
+			if skill.current_cd > 0:
+				skill.current_cd = max(0.0, skill.current_cd - delta)
+	
 	# 判断玩家是否到达终点
 	if p_progress >= BAR_WIDTH:
 		p_progress = BAR_WIDTH

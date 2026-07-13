@@ -22,8 +22,8 @@ func _ready():
     
     db['bloodshot_eye'] = Stats.new().setup(
         "BloodshotEye",
-        100,
-        100,
+        400,
+        400,
         50,
         50,
         60,
