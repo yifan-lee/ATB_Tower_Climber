@@ -116,17 +116,6 @@ func _build_bottom_animations():
 	)
 	add_child(e_anim)
 
-# func _input(event):
-# 	# 1. 逃跑 (ESC)
-# 	if event.is_action_pressed("ui_cancel"):
-# 		EventBus.battle_ended.emit()
-
-# 	# 2. 纯代码监听键盘数字 "1" 键
-# 	# 确保是按下状态且不是长按产生的重复触发 (echo)
-# 	if event is InputEventKey and event.keycode == KEY_1 and event.is_pressed() and not event.is_echo():
-# 		# 只有在游戏暂停（有人走到终点）时，按 1 才有反应
-# 		if is_action_paused:
-# 			_execute_action_and_resume()
 
 func _process(delta):
 	# 如果有人走到终点了，暂停进度条
@@ -183,7 +172,7 @@ func _enemy_action():
 func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
 	# 4. 伤害公式：攻击方攻击力 + 技能伤害 - 防御方防御力
 	# 使用 max(1, ...) 确保即使防御很高，也能强制扣 1 点血
-	var final_damage = max(1, attacker.atk + skill.damage - defender.def)
+	var final_damage = max(1, attacker.atk * skill.damage / defender.def)
 	
 	# 扣血并防止出现负数血量
 	defender.current_hp = max(0, defender.current_hp - final_damage)
@@ -193,7 +182,10 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
 	e_hp_label.text = "HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.max_hp)
 	
 	if defender.current_hp <= 0:
-		EventBus.battle_ended.emit()
+		if defender == enemy_stats:
+			EventBus.battle_ended.emit("win")
+		else:
+			EventBus.battle_ended.emit("lose")
 		return
 		
 	# 可以在这里发信号让 UI 显示 "玩家使用了 重击，造成了 15 点伤害！"
@@ -209,19 +201,3 @@ func _resume_battle(was_player: bool):
 		
 	is_action_paused = false
 	EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")
-
-# func _execute_action_and_resume():
-# 	# 这里预留给你以后写具体的攻击扣血逻辑
-# 	# 比如：如果是 player，就放个攻击特效；如果是 enemy，就扣玩家的血
-# 	# 动作执行完毕，重置当前行动者的进度条
-# 	if ready_character == "player":
-# 		p_progress = 0.0
-# 	elif ready_character == "enemy":
-# 		e_progress = 0.0
-		
-# 	# 清空状态，恢复游戏流动
-# 	ready_character = ""
-# 	is_action_paused = false
-	
-# 	# 通知下方 UI 进度条继续
-# 	EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")

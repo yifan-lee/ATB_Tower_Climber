@@ -29,14 +29,19 @@ func _setup_containers():
 	ui_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.INFO_AREA_HEIGHT)
 	ui_container.position = Vector2(0, GameConfig.EXPLORE_AREA_HEIGHT)
 
+var loaded_maps: Dictionary = {}
+var current_enemy_node: Node = null
+
 func _load_initial_scenes():
 	# 1. 加载下方 UI
 	var info_panel = InfoPanel.new()
 	ui_container.add_child(info_panel)
 	
 	# 2. 加载地图 1 楼
+	var initial_map_path = "res://scenes/maps/floor_1.gd"
 	current_map = MapFloor1.new()
 	game_container.add_child(current_map)
+	loaded_maps[initial_map_path] = current_map
 	
 	# 3. 独立加载玩家角色
 	player_instance = Player.new()
@@ -50,14 +55,21 @@ func _load_initial_scenes():
 	game_container.add_child(player_instance)
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
-	# 1. 销毁旧地图
+	# 1. 隐藏旧地图，不再销毁
 	if current_map != null:
-		current_map.queue_free()
+		current_map.hide()
+		current_map.process_mode = Node.PROCESS_MODE_DISABLED
 		
-	# 2. 纯代码动态加载并实例化新地图
-	var NewMapClass = load(target_scene_path)
-	current_map = NewMapClass.new()
-	game_container.add_child(current_map)
+	# 2. 从缓存加载新地图，如果没有则实例化
+	if loaded_maps.has(target_scene_path):
+		current_map = loaded_maps[target_scene_path]
+		current_map.show()
+		current_map.process_mode = Node.PROCESS_MODE_INHERIT
+	else:
+		var NewMapClass = load(target_scene_path)
+		current_map = NewMapClass.new()
+		game_container.add_child(current_map)
+		loaded_maps[target_scene_path] = current_map
 	
 	# 3. 将玩家精准传送到新地图的指定网格位置
 	player_instance.position = Vector2(
@@ -67,7 +79,9 @@ func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2
 
 
 # 进入战斗
-func _on_encounter_monster(monster_id: String):
+func _on_encounter_monster(monster_id: String, monster_node: Node = null):
+	current_enemy_node = monster_node
+	
 	# 1. 暂停并隐藏探索地图和玩家
 	if current_map:
 		current_map.hide()
@@ -82,13 +96,18 @@ func _on_encounter_monster(monster_id: String):
 	game_container.add_child(current_battle)
 
 # 退出战斗
-func _on_battle_ended():
+func _on_battle_ended(result: String = ""):
 	# 1. 销毁战斗场景
 	if current_battle:
 		current_battle.queue_free()
 		current_battle = null
 		
-	# 2. 恢复并显示探索地图和玩家 (完美保留在原位！)
+	# 2. 如果战斗胜利，则直接销毁缓存地图里的怪物节点
+	if result == "win" and current_enemy_node != null:
+		current_enemy_node.queue_free()
+	current_enemy_node = null
+		
+	# 3. 恢复并显示探索地图和玩家 (完美保留在原位！)
 	if current_map:
 		current_map.show()
 		current_map.process_mode = Node.PROCESS_MODE_INHERIT

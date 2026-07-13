@@ -13,9 +13,9 @@ signal player_stepped(grid_pos: Vector2i)
 signal request_map_change(target_scene_path: String, spawn_grid_pos: Vector2i)
 
 
-signal encounter_monster(entity_id: String)
+signal encounter_monster(entity_id: String, monster_node: Node)
 
-signal battle_ended()
+signal battle_ended(result: String)
 
 
 signal show_skill_menu(skills: Array) # 通知 UI 开启技能菜单

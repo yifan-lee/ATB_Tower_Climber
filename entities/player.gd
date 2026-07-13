@@ -73,4 +73,4 @@ func _handle_interaction(collider: Object):
 		return
 	elif collider.is_in_group("enemy"):
 		EventBus.show_system_message.emit("MSG_HIT_ENEMY")
-		EventBus.encounter_monster.emit(collider.monster_id)
+		EventBus.encounter_monster.emit(collider.monster_id, collider)
