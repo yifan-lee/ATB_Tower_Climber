@@ -23,7 +23,11 @@ func _ready():
         ],
         {
             "hp_potion": 5,
-            "mp_potion": 3
+            "mp_potion": 3,
+            "iron_sword": 1,
+            "iron_helm": 1,
+            "tree_branch": 1,
+            "jy_sword": 1
         }
     )
     

@@ -45,8 +45,8 @@ func _ready():
 	_build_bottom_animations()
 
 	# 计算 ATB 移动速度 (像素/秒)
-	p_speed_px = BAR_WIDTH * (100.0 + player_stats.spd) / 400.0
-	e_speed_px = BAR_WIDTH * (100.0 + enemy_stats.spd) / 400.0
+	p_speed_px = BAR_WIDTH * (100.0 + player_stats.get_total_spd()) / 400.0
+	e_speed_px = BAR_WIDTH * (100.0 + enemy_stats.get_total_spd()) / 400.0
 
 	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
 	
@@ -85,17 +85,17 @@ func _create_stat_panel(stats: Stats, is_player: bool) -> VBoxContainer:
 	var vbox = VBoxContainer.new()
 	vbox.add_child(_create_label(stats.entity_name, Color(1, 1, 0))) # 名字标黄
 	var hp_lbl = _create_label(
-		"HP: " + str(stats.current_hp) + "/" + str(stats.max_hp) + "\n" +
-		"MP: " + str(stats.current_mp) + "/" + str(stats.max_mp)
+		"HP: " + str(stats.current_hp) + "/" + str(stats.get_total_max_hp()) + "\n" +
+		"MP: " + str(stats.current_mp) + "/" + str(stats.get_total_max_mp())
 	)
 	vbox.add_child(hp_lbl)
 	if is_player:
 		p_hp_label = hp_lbl
 	else:
 		e_hp_label = hp_lbl
-	vbox.add_child(_create_label("ATK: " + str(stats.atk)))
-	vbox.add_child(_create_label("DEF: " + str(stats.def)))
-	vbox.add_child(_create_label("SPD: " + str(stats.spd)))
+	vbox.add_child(_create_label("ATK: " + str(stats.get_total_atk())))
+	vbox.add_child(_create_label("DEF: " + str(stats.get_total_def())))
+	vbox.add_child(_create_label("SPD: " + str(stats.get_total_spd())))
 	return vbox
 
 
@@ -152,7 +152,7 @@ func _process(delta):
 		EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
 		var skills_info = []
 		for skill in player_stats.skills:
-			var estimated_dmg = _get_attack_damage(player_stats.atk, enemy_stats.def, skill.damage)
+			var estimated_dmg = _get_attack_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), skill.damage)
 			skills_info.append({
 				"skill": skill,
 				"estimated_damage": int(estimated_dmg)
@@ -185,19 +185,19 @@ func _enemy_action():
 	_execute_skill(enemy_stats, player_stats, chosen_skill)
 
 func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
-	var final_damage = _get_attack_damage(attacker.atk, defender.def, skill.damage)
+	var final_damage = _get_attack_damage(attacker.get_total_atk(), defender.get_total_def(), skill.damage)
 	
 	# 扣血并防止出现负数血量
 	defender.current_hp = max(0, defender.current_hp - final_damage)
 	
 	# 刷新上方战斗面板的文字
 	p_hp_label.text = (
-		"HP: " + str(player_stats.current_hp) + "/" + str(player_stats.max_hp) + "\n" +
-		"MP: " + str(player_stats.current_mp) + "/" + str(player_stats.max_mp)
+		"HP: " + str(player_stats.current_hp) + "/" + str(player_stats.get_total_max_hp()) + "\n" +
+		"MP: " + str(player_stats.current_mp) + "/" + str(player_stats.get_total_max_mp())
 	)
 	e_hp_label.text = (
-		"HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.max_hp) + "\n" +
-		"MP: " + str(enemy_stats.current_mp) + "/" + str(enemy_stats.max_mp)
+		"HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.get_total_max_hp()) + "\n" +
+		"MP: " + str(enemy_stats.current_mp) + "/" + str(enemy_stats.get_total_max_mp())
 	)
 	
 	if defender.current_hp <= 0:

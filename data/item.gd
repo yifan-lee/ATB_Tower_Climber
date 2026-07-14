@@ -2,14 +2,13 @@
 extends Resource
 class_name Item
 
-enum ItemType {
-	POTION,
-	EQUIPMENT
-}
+enum ItemType { POTION, EQUIPMENT, KEY_ITEM }
+enum EquipSlot { NONE, HEAD, CHEST, LEGS, FEET, LEFT_HAND, RIGHT_HAND, ACCESSORY }
 
 @export var item_id: String
 @export var item_name: String
 @export var type: ItemType
+@export var equip_slot: EquipSlot = EquipSlot.NONE
 @export var effect_hp: int = 0
 @export var effect_mp: int = 0
 @export var effect_atk: int = 0
@@ -17,7 +16,7 @@ enum ItemType {
 @export var effect_spd: int = 0
 @export var description: String
 
-func setup(id: String, n: String, t: ItemType, hp: int, mp: int, desc: String, atk: int = 0, def: int = 0, spd: int = 0) -> Item:
+func setup(id: String, n: String, t: ItemType, hp: int, mp: int, desc: String, atk: int = 0, def: int = 0, spd: int = 0, slot: EquipSlot = EquipSlot.NONE) -> Item:
 	item_id = id
 	item_name = n
 	type = t
@@ -27,6 +26,7 @@ func setup(id: String, n: String, t: ItemType, hp: int, mp: int, desc: String, a
 	effect_def = def
 	effect_spd = spd
 	description = desc
+	equip_slot = slot
 	return self
 
 func get_effects() -> Dictionary:

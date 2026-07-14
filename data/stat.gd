@@ -13,6 +13,15 @@ class_name Stats
 @export var anim_path: String
 @export var skills: Array[Skill]
 @export var inventory: Dictionary = {}
+@export var equipment: Dictionary = {
+	Item.EquipSlot.HEAD: null,
+	Item.EquipSlot.CHEST: null,
+	Item.EquipSlot.LEGS: null,
+	Item.EquipSlot.FEET: null,
+	Item.EquipSlot.LEFT_HAND: null,
+	Item.EquipSlot.RIGHT_HAND: null,
+	Item.EquipSlot.ACCESSORY: null
+}
 
 func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int, anim: String, sk: Array[Skill], inv: Dictionary = {}) -> Stats:
 	entity_name = n
@@ -27,3 +36,38 @@ func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: i
 	skills = sk
 	inventory = inv
 	return self
+
+func get_total_max_hp() -> int:
+	var total = max_hp
+	for slot in equipment:
+		if equipment[slot] != null:
+			total += equipment[slot].effect_hp
+	return total
+
+func get_total_max_mp() -> int:
+	var total = max_mp
+	for slot in equipment:
+		if equipment[slot] != null:
+			total += equipment[slot].effect_mp
+	return total
+
+func get_total_atk() -> int:
+	var total = atk
+	for slot in equipment:
+		if equipment[slot] != null:
+			total += equipment[slot].effect_atk
+	return total
+
+func get_total_def() -> int:
+	var total = def
+	for slot in equipment:
+		if equipment[slot] != null:
+			total += equipment[slot].effect_def
+	return total
+
+func get_total_spd() -> int:
+	var total = spd
+	for slot in equipment:
+		if equipment[slot] != null:
+			total += equipment[slot].effect_spd
+	return total

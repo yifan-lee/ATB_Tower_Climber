@@ -25,4 +25,21 @@ ITEM_HP_POTION_NAME,恢复药剂,Health Potion
 ITEM_HP_POTION_DESC,恢复50点生命值,Restore 50 HP
 ITEM_MP_POTION_NAME,魔法药剂,Mana Potion
 ITEM_MP_POTION_DESC,恢复50点魔法值,Restore 50 MP
+SLOT_HEAD,头盔,Head
+SLOT_CHEST,身体,Body
+SLOT_LEGS,腿部,Legs
+SLOT_FEET,脚,Feet
+SLOT_LEFT_HAND,左手,Left Hand
+SLOT_RIGHT_HAND,右手,Right Hand
+SLOT_ACCESSORY,饰品,Accessory
+EQUIPMENT_IRON_HELM,铁头盔,Iron Helmet
+EQUIPMENT_IRON_HELM_DESC,一顶普通的铁头盔,An ordinary iron helmet
+EQUIPMENT_IRON_SWORD,铁剑,Iron Sword
+EQUIPMENT_IRON_SWORD_DESC,一把普通的铁剑,An ordinary iron sword
+EQUIPMENT_JY_SWORD,绝世好剑,Peerless Sword
+EQUIPMENT_JY_SWORD_DESC,提升大量攻击力,Increases attack power
+EQUIPMENT_TREE_BRANCH,树枝,Tree Branch
+EQUIPMENT_TREE_BRANCH_DESC,树枝，增加一点攻击力,A tree branch increases attack power
+EQUIPMENT_SWIFT_BOOTS,疾风靴,Swift Boots
+EQUIPMENT_SWIFT_BOOTS_DESC,轻盈的靴子,Light boots
 MSG_USED_ITEM,使用了,"Used "

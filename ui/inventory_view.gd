@@ -116,6 +116,9 @@ func _refresh_items():
 			if item_data.type == target_type:
 				current_items.append({"id": item_id, "data": item_data, "count": count})
 				
+	if target_type == Item.ItemType.EQUIPMENT:
+		current_items.sort_custom(func(a, b): return a.data.equip_slot < b.data.equip_slot)
+				
 	for i in range(current_items.size()):
 		var lbl = Label.new()
 		var itm = current_items[i]
@@ -205,8 +208,35 @@ func _use_item(item_dict):
 	if item_data.type == Item.ItemType.POTION:
 		if player_stats.inventory[id] > 0:
 			player_stats.inventory[id] -= 1
-			player_stats.current_hp = min(player_stats.max_hp, player_stats.current_hp + item_data.effect_hp)
-			player_stats.current_mp = min(player_stats.max_mp, player_stats.current_mp + item_data.effect_mp)
+			player_stats.current_hp = min(player_stats.get_total_max_hp(), player_stats.current_hp + item_data.effect_hp)
+			player_stats.current_mp = min(player_stats.get_total_max_mp(), player_stats.current_mp + item_data.effect_mp)
 			EventBus.show_system_message.emit(["MSG_USED_ITEM", item_data.item_name])
+			EventBus.player_stats_changed.emit()
+			_refresh_items()
+	elif item_data.type == Item.ItemType.EQUIPMENT:
+		if player_stats.inventory[id] > 0:
+			var slot = item_data.equip_slot
+			var old_equip = player_stats.equipment[slot]
+			var delta_hp = item_data.effect_hp - (old_equip.effect_hp if old_equip else 0)
+			var delta_mp = item_data.effect_mp - (old_equip.effect_mp if old_equip else 0)
+			
+			if old_equip != null:
+				var old_id = old_equip.item_id
+				if player_stats.inventory.has(old_id):
+					player_stats.inventory[old_id] += 1
+				else:
+					player_stats.inventory[old_id] = 1
+					
+			player_stats.inventory[id] -= 1
+			player_stats.equipment[slot] = item_data
+			
+			player_stats.current_hp = max(1, player_stats.current_hp + delta_hp)
+			player_stats.current_mp = max(0, player_stats.current_mp + delta_mp)
+			
+			# Cap to max just in case
+			player_stats.current_hp = min(player_stats.current_hp, player_stats.get_total_max_hp())
+			player_stats.current_mp = min(player_stats.current_mp, player_stats.get_total_max_mp())
+			
+			EventBus.show_system_message.emit(["MSG_EQUIPPED", item_data.item_name])
 			EventBus.player_stats_changed.emit()
 			_refresh_items()
