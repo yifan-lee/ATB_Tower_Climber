@@ -26,8 +26,11 @@ var p_hp_label: Label
 var e_hp_label: Label
 
 func setup(enemy_id: String):
+	# 玩家共享全局属性，血量能在战斗之间继承
 	player_stats = EntityDB.get_stats("player")
-	enemy_stats = EntityDB.get_stats(enemy_id)
+	
+	# 怪物从数据库拿出来时深拷贝一份，这样每个怪物血量互相独立
+	enemy_stats = EntityDB.get_stats(enemy_id).duplicate(true)
 	
 	
 func _ready():
