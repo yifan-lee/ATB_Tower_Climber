@@ -14,6 +14,9 @@ func _ready():
     db["fireball"] = Skill.new().setup(
         "SKILL_FIREBALL_NAME", 100, 8, "SKILL_FIREBALL_DESC"
     )
+    db["one_hit"] = Skill.new().setup(
+        "SKILL_ONE_HIT_NAME", 9999, 0, "SKILL_ONE_HIT_DESC"
+    )
 
 func get_skill(id: String) -> Skill:
     if db.has(id):

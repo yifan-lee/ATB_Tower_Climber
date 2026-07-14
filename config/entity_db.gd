@@ -17,6 +17,7 @@ func _ready():
             SkillDB.get_skill("basic_atk"),
             SkillDB.get_skill("heavy_strike"),
             SkillDB.get_skill("fireball"),
+            SkillDB.get_skill("one_hit"),
         ]
     )
     

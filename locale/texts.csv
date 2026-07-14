@@ -11,4 +11,6 @@ SKILL_HEAVY_NAME,重击,Heavy Strike
 SKILL_HEAVY_DESC,奋力一击，造成巨额伤害，冷却3秒。,A powerful blow. Cooldown: 3 seconds.
 SKILL_FIREBALL_NAME,火球术,Fireball.
 SKILL_FIREBALL_DESC,对怪物造成巨额伤害，冷却5秒,Fireball. Cooldown: 5 seconds.
+SKILL_ONE_HIT_NAME,一击必杀,One Hit Kill
+SKILL_ONE_HIT_DESC,秒杀怪物,Kill Enemy
 DISPLAY_DAMAGE,伤害：,"Damage: " 

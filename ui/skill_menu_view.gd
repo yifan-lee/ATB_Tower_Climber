@@ -13,21 +13,35 @@ func _ready():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	visible = false # 初始隐藏
+
+	_setup_skill_list_box()
+	_setup_desc_label_box()
 	
+
+	EventBus.show_skill_menu.connect(_on_show_skill_menu)
+	EventBus.battle_ended.connect(_on_hide_skill_menu)
+
+func _setup_skill_list_box():
 	skill_list_box = VBoxContainer.new()
 	skill_list_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	skill_list_box.size_flags_vertical = Control.SIZE_FILL
+	skill_list_box.alignment = BoxContainer.ALIGNMENT_BEGIN
+	
 	add_child(skill_list_box)
 
+func _setup_desc_label_box():
 	skill_desc_label = Label.new()
 	skill_desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	skill_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	skill_desc_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	add_child(skill_desc_label)
-	
-	EventBus.show_skill_menu.connect(_on_show_skill_menu)
-	EventBus.hide_skill_menu.connect(_on_hide_skill_menu)
+	skill_desc_label.size_flags_vertical = Control.SIZE_FILL
 
-func _on_hide_skill_menu():
+	# 文本向上对齐
+	skill_desc_label.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	skill_desc_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART # 自动换行防止穿帮
+
+	# 直接塞进本脚本的 HBoxContainer 里
+	add_child(skill_desc_label)
+
+func _on_hide_skill_menu(_result: String = ""):
 	is_menu_active = false
 	visible = false
 

@@ -49,6 +49,7 @@ func _ready():
 	e_speed_px = BAR_WIDTH * (100.0 + enemy_stats.spd) / 400.0
 
 	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
+	
 
 func _build_top_progress_bar():
 	var bar_bg = ColorRect.new()
