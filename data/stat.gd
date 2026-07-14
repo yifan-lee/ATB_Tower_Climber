@@ -12,9 +12,9 @@ class_name Stats
 @export var spd: int = 100
 @export var anim_path: String
 @export var skills: Array[Skill]
+@export var inventory: Dictionary = {}
 
-
-func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int, anim: String, sk: Array[Skill]) -> Stats:
+func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int, anim: String, sk: Array[Skill], inv: Dictionary = {}) -> Stats:
 	entity_name = n
 	max_hp = hp
 	current_hp = chp
@@ -25,4 +25,5 @@ func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: i
 	spd = s
 	anim_path = anim
 	skills = sk
+	inventory = inv
 	return self

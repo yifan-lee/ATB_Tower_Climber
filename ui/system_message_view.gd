@@ -11,6 +11,12 @@ func _ready():
 	
 	EventBus.show_system_message.connect(_on_show_system_message)
 
-func _on_show_system_message(msg_key: String):
+func _on_show_system_message(msg_data: Variant):
 	show()
-	text = tr(msg_key)
+	if typeof(msg_data) == TYPE_STRING:
+		text = tr(msg_data)
+	elif typeof(msg_data) == TYPE_ARRAY:
+		var final_text = ""
+		for part in msg_data:
+			final_text += tr(part)
+		text = final_text

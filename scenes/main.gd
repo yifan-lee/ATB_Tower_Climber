@@ -98,23 +98,40 @@ func _set_map_active(map_node: Node2D, active: bool):
 
 # 进入战斗
 func _on_encounter_monster(monster_id: String, monster_node: Node = null):
+	current_state = AppState.BATTLE
 	current_enemy_node = monster_node
 	
 	# 1. 暂停并隐藏探索地图和玩家
+	_pause_map_and_player()
 	if current_map:
 		current_map.hide()
-		current_map.process_mode = Node.PROCESS_MODE_DISABLED
 	if player_instance:
 		player_instance.hide()
-		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
 		
 	# 2. 实例化并加载战斗场景
 	current_battle = BattleScene.new()
 	current_battle.setup(monster_id) # 注入遭遇的怪物ID
 	game_container.add_child(current_battle)
 
+enum AppState {MAP, BATTLE, INVENTORY}
+var current_state: AppState = AppState.MAP
+
+func _input(event):
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_B:
+			if current_state == AppState.MAP:
+				current_state = AppState.INVENTORY
+				_pause_map_and_player()
+				EventBus.show_inventory.emit()
+		elif event.keycode == KEY_C or event.keycode == KEY_ESCAPE:
+			if current_state == AppState.INVENTORY:
+				current_state = AppState.MAP
+				_resume_map_and_player()
+				EventBus.hide_inventory.emit()
+
 # 退出战斗
 func _on_battle_ended(result: String = ""):
+	current_state = AppState.MAP
 	# 1. 销毁战斗场景
 	if current_battle:
 		current_battle.queue_free()
@@ -126,6 +143,15 @@ func _on_battle_ended(result: String = ""):
 	current_enemy_node = null
 		
 	# 3. 恢复并显示探索地图和玩家 (完美保留在原位！)
+	_resume_map_and_player()
+
+func _pause_map_and_player():
+	if current_map:
+		current_map.process_mode = Node.PROCESS_MODE_DISABLED
+	if player_instance:
+		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
+
+func _resume_map_and_player():
 	if current_map:
 		current_map.show()
 		current_map.process_mode = Node.PROCESS_MODE_INHERIT

@@ -20,7 +20,11 @@ func _ready():
             SkillDB.get_skill("heavy_strike"),
             SkillDB.get_skill("fireball"),
             SkillDB.get_skill("one_hit"),
-        ]
+        ],
+        {
+            "hp_potion": 5,
+            "mp_potion": 3
+        }
     )
     
     db['bloodshot_eye'] = Stats.new().setup(

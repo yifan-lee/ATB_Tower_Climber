@@ -37,6 +37,9 @@ func _ready():
 	# 监听现成的战斗全局事件
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
+	EventBus.show_inventory.connect(_on_show_inventory)
+	EventBus.hide_inventory.connect(_on_hide_inventory)
+	EventBus.player_stats_changed.connect(_update_stats)
 
 func _create_label(text: String, color: Color = Color.WHITE) -> Label:
 	var lbl = Label.new()
@@ -55,5 +58,12 @@ func _on_encounter_monster(_id: String, _node: Node):
 	visible = false
 
 func _on_battle_ended(_result: String):
+	_update_stats()
+	visible = true
+
+func _on_show_inventory():
+	visible = false
+
+func _on_hide_inventory():
 	_update_stats()
 	visible = true

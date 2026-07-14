@@ -3,7 +3,7 @@ extends Node
 
 # 之前如果写了移动请求信号可以保留，这里新增：
 # 发送系统消息的信号，参数是要翻译的文本 Key
-signal show_system_message(msg_key: String)
+signal show_system_message(msg_data: Variant)
 
 
 # [新增] 玩家成功移动到了一个新的网格坐标
@@ -21,3 +21,9 @@ signal battle_ended(result: String)
 signal show_skill_menu(skills_info: Array) # 通知 UI 开启技能菜单，包含技能和预计伤害
 # signal hide_skill_menu() # 通知 UI 开启技能菜单
 signal player_skill_chosen(skill: Skill) # UI 通知主逻辑玩家选了哪个技能
+
+# --- 物品系统相关信号 ---
+signal show_inventory()
+signal hide_inventory()
+signal inventory_input(event: InputEvent)
+signal player_stats_changed()

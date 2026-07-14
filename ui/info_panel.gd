@@ -4,6 +4,7 @@ extends Panel
 const SystemMessageView = preload("res://ui/system_message_view.gd")
 const SkillMenuView = preload("res://ui/skill_menu_view.gd")
 const StatInfoView = preload("res://ui/stat_info_view.gd")
+const InventoryView = preload("res://ui/inventory_view.gd")
 
 func _ready():
 	# 让整个 Panel 填满 UIContainer 的大小
@@ -25,6 +26,9 @@ func _ready():
 
 	var stat_info_view = StatInfoView.new()
 	content_vbox.add_child(stat_info_view)
+	
+	var inventory_view = InventoryView.new()
+	content_vbox.add_child(inventory_view)
 	
 	var skill_menu = SkillMenuView.new()
 	content_vbox.add_child(skill_menu)

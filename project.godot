@@ -15,6 +15,7 @@ config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
+ItemDB="*res://config/item_db.gd"
 
 GameConfig="*uid://pnb5saoyorbu"
 EventBus="*uid://cxi7xgq07lxsl"
@@ -23,8 +24,8 @@ EntityDB="*uid://d2d4lcb4ig0xt"
 
 [display]
 
-window/size/viewport_width=800
-window/size/viewport_height=800
+window/size/viewport_width=1600
+window/size/viewport_height=1600
 window/stretch/mode="viewport"
 
 [internationalization]

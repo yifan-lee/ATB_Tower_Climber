@@ -17,3 +17,12 @@ DISPLAY_DAMAGE,伤害：,"Damage: "
 DISPLAY_MANA_COST,魔法消耗：,"MP Cost: " 
 DISPLAY_CD,冷却：,"CD: " 
 DISPLAY_ESTIMATED_DAMAGE,预估伤害：,"Estimated Damage: " 
+CATEGORY_TITLE,分类,Category
+ITEM_TITLE,物品,Items
+CATEGORY_POTION,药品,Potions
+CATEGORY_EQUIP,装备,Equipment
+ITEM_HP_POTION_NAME,恢复药剂,Health Potion
+ITEM_HP_POTION_DESC,恢复50点生命值,Restore 50 HP
+ITEM_MP_POTION_NAME,魔法药剂,Mana Potion
+ITEM_MP_POTION_DESC,恢复50点魔法值,Restore 50 MP
+MSG_USED_ITEM,使用了,"Used "

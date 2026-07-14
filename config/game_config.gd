@@ -4,8 +4,8 @@ extends Node
 
 # 网格系统设定
 const GRID_SIZE: int = 64
-const GRID_COLUMNS: int = 5 # 320 / 64
-const GRID_ROWS: int = 5 # 320 / 64
+const GRID_COLUMNS: int = 9 # 320 / 64
+const GRID_ROWS: int = 9 # 320 / 64
 const WALL_THICKNESS: int = 32
 
 
