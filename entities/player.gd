@@ -56,9 +56,8 @@ func _try_move(direction: Vector2):
 		# 没有撞墙，执行瞬间移动
 		position += motion
 		anim_sprite.play("walk")
-		var grid_x = int(position.x / GameConfig.GRID_SIZE)
-		var grid_y = int(position.y / GameConfig.GRID_SIZE)
-		EventBus.player_stepped.emit(Vector2i(grid_x, grid_y))
+		var grid_pos = GameConfig.get_grid_position(position)
+		EventBus.player_stepped.emit(grid_pos)
 	else:
 		# 撞墙了，播放待机动画
 		anim_sprite.play("idle")

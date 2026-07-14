@@ -15,7 +15,6 @@ var current_map: Node2D
 var player_instance: CharacterBody2D
 
 func _ready():
-	# 完全用代码动态创建容器，告别在 tscn 里拖拽节点
 	game_container = Control.new()
 	game_container.name = "GameContainer"
 	add_child(game_container)
@@ -32,12 +31,12 @@ func _ready():
 
 func _setup_containers():
 	# 动态设置 GameContainer 尺寸
-	game_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.EXPLORE_AREA_HEIGHT)
+	game_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
 	game_container.position = Vector2(0, 0)
 	
 	# 动态设置 UIContainer 尺寸和位置
-	ui_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.INFO_AREA_HEIGHT)
-	ui_container.position = Vector2(0, GameConfig.EXPLORE_AREA_HEIGHT)
+	ui_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.UI_AREA_HEIGHT)
+	ui_container.position = Vector2(0, GameConfig.GAME_AREA_HEIGHT)
 
 var loaded_maps: Dictionary = {}
 var current_enemy_node: Node = null
@@ -56,30 +55,45 @@ func _load_initial_scenes():
 	# 3. 独立加载玩家角色
 	player_instance = Player.new()
 	# 将玩家放置在屏幕底部的中间网格
-	player_instance.position = GameConfig.get_pixel_position(GameConfig.GRID_COLUMNS / 2, GameConfig.GRID_ROWS - 1)
+	player_instance.position = GameConfig.get_game_area_pixel_position(2, 4)
 	
 	# 将玩家也添加到 GameContainer，它与地图是分离的！
 	game_container.add_child(player_instance)
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
-	# 1. 隐藏旧地图，不再销毁
+	# 1. 挂起旧地图（为了解决隐形墙Bug，这里必须从树上拔除碰撞体）
 	if current_map != null:
-		current_map.hide()
-		current_map.process_mode = Node.PROCESS_MODE_DISABLED
+		_set_map_active(current_map, false)
 		
 	# 2. 从缓存加载新地图，如果没有则实例化
 	if loaded_maps.has(target_scene_path):
 		current_map = loaded_maps[target_scene_path]
-		current_map.show()
-		current_map.process_mode = Node.PROCESS_MODE_INHERIT
+		_set_map_active(current_map, true)
 	else:
 		var NewMapClass = load(target_scene_path)
 		current_map = NewMapClass.new()
-		game_container.add_child(current_map)
 		loaded_maps[target_scene_path] = current_map
+		_set_map_active(current_map, true)
 	
 	# 3. 将玩家精准传送到新地图的指定网格位置
-	player_instance.position = GameConfig.get_pixel_position(spawn_grid_pos.x, spawn_grid_pos.y)
+	player_instance.position = GameConfig.get_game_area_pixel_position(spawn_grid_pos.x, spawn_grid_pos.y)
+
+# 封装一个极简的函数，代替原来的 hide() / show()
+# 为什么不用 hide()？因为在 Godot 中，hide() 只能隐藏贴图，**无法禁用静态墙壁(TileMap)的物理碰撞**！
+func _set_map_active(map_node: Node2D, active: bool):
+	if active:
+		if map_node.get_parent() == null:
+			game_container.add_child(map_node)
+		map_node.show()
+		map_node.process_mode = Node.PROCESS_MODE_INHERIT
+		# 确保玩家显示在地图上层
+		if player_instance and player_instance.get_parent() == game_container:
+			game_container.move_child(player_instance, -1)
+	else:
+		if map_node.get_parent() != null:
+			game_container.remove_child(map_node) # 只有 remove_child 才能彻底拔除物理隐形墙！
+		map_node.hide()
+		map_node.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 # 进入战斗

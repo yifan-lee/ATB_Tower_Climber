@@ -16,7 +16,7 @@ func _ready():
 	# 只要子类一运行，就会自动执行这些通用代码
 	var floor_bg = ColorRect.new()
 	# 动态调用地图区域宽高
-	floor_bg.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.EXPLORE_AREA_HEIGHT)
+	floor_bg.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
 	floor_bg.color = Color(0.8, 0.9, 0.8)
 	add_child(floor_bg)
 	_create_boundaries()
@@ -24,13 +24,21 @@ func _ready():
 	_setup_tilemap()
 	_build_map_from_data()
 
-	# 监听玩家的移动踩踏事件
-	EventBus.player_stepped.connect(_on_player_stepped)
+# 只有当旧地图挂载到场景树上时，才监听玩家脚步声；
+# 当它被 remove_child 扔到缓存里时，立刻断开监听！
+# 这从根本上杜绝了隐形地图抢听信号、或者在同一帧内连续互相传送的终极 Bug。
+func _enter_tree():
+	if not EventBus.player_stepped.is_connected(_on_player_stepped):
+		EventBus.player_stepped.connect(_on_player_stepped)
+
+func _exit_tree():
+	if EventBus.player_stepped.is_connected(_on_player_stepped):
+		EventBus.player_stepped.disconnect(_on_player_stepped)
 
 func _create_boundaries():
 	var wall_thickness = GameConfig.WALL_THICKNESS
 	var width = GameConfig.SCREEN_WIDTH
-	var height = GameConfig.EXPLORE_AREA_HEIGHT
+	var height = GameConfig.GAME_AREA_HEIGHT
 	var wall_color = Color(0.3, 0.3, 0.4)
 	
 	# 上边界 (中心点 X: 宽度一半, Y: 墙厚一半)
@@ -73,6 +81,9 @@ func _setup_tilemap():
 	# 2. 放大 4 倍，使得 16x16 的素材刚好填满 64x64 的逻辑格子
 	tile_map.scale = Vector2(4, 4)
 	
+	# 3. 偏移使得 TileMap 从墙壁内部起始
+	tile_map.position = Vector2(GameConfig.WALL_THICKNESS, GameConfig.WALL_THICKNESS)
+	
 	add_child(tile_map)
 
 
@@ -80,23 +91,20 @@ func _build_map_from_data():
 	for y in range(map_data.size()):
 		for x in range(map_data[y].size()):
 			var cell_value = map_data[y][x]
-			
+			var pixel_position: Vector2 = GameConfig.get_game_area_pixel_position(x, y)
 			if cell_value == 1:
-				# 绘制墙壁 [cite: 45]
 				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
 			elif cell_value == 2:
-				# 绘制楼梯 [cite: 45]
 				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 3))
 			elif cell_value == 11:
-				# 遇到 11，生成大眼球怪物
-				_spawn_enemy(BloodshotEye, x, y)
+				_spawn_enemy(BloodshotEye, pixel_position)
 
 
-func _spawn_enemy(enemy_class, grid_x: int, grid_y: int):
+func _spawn_enemy(enemy_class, pixel_position: Vector2):
 	var enemy_instance = enemy_class.new()
 	
 	# 坐标转换：将网格坐标(如 x:2, y:2) 转换为真实的像素坐标。
-	enemy_instance.position = GameConfig.get_pixel_position(grid_x, grid_y)
+	enemy_instance.position = pixel_position
 	
 	add_child(enemy_instance)
 

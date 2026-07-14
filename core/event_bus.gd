@@ -19,4 +19,5 @@ signal battle_ended(result: String)
 
 
 signal show_skill_menu(skills: Array) # 通知 UI 开启技能菜单
+signal hide_skill_menu() # 通知 UI 开启技能菜单
 signal player_skill_chosen(skill: Skill) # UI 通知主逻辑玩家选了哪个技能
