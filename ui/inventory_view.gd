@@ -1,9 +1,11 @@
 # res://ui/inventory_view.gd
-extends HBoxContainer
+extends PanelContainer
 
 var player_stats: Stats
 var category_list_box: VBoxContainer
 var item_list_box: VBoxContainer
+var desc_label: RichTextLabel
+var hbox: HBoxContainer
 
 enum FocusSide {CATEGORY, ITEMS}
 var current_focus: FocusSide = FocusSide.CATEGORY
@@ -21,12 +23,22 @@ func _ready():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
+	var style = StyleBoxFlat.new()
+	style.bg_color = Color(0, 0, 0, 0.95)
+	add_theme_stylebox_override("panel", style)
+	
+	# Create an HBoxContainer for layout
+	hbox = HBoxContainer.new()
+	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	add_child(hbox)
+	
 	player_stats = EntityDB.get_stats("player")
 	
 	# Left panel
 	var left_panel = VBoxContainer.new()
 	left_panel.custom_minimum_size = Vector2(150, 0)
-	add_child(left_panel)
+	hbox.add_child(left_panel)
 	
 	left_panel.add_child(_create_title("CATEGORY_TITLE"))
 	category_list_box = VBoxContainer.new()
@@ -35,7 +47,7 @@ func _ready():
 	# Right panel
 	var right_panel = VBoxContainer.new()
 	right_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_child(right_panel)
+	hbox.add_child(right_panel)
 	
 	right_panel.add_child(_create_title("ITEM_TITLE"))
 	
@@ -46,6 +58,13 @@ func _ready():
 	
 	item_list_box = VBoxContainer.new()
 	scroll.add_child(item_list_box)
+	
+	# Description Box
+	desc_label = RichTextLabel.new()
+	desc_label.bbcode_enabled = true
+	desc_label.custom_minimum_size = Vector2(0, 80)
+	desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_panel.add_child(desc_label)
 	
 	EventBus.show_inventory.connect(_on_show_inventory)
 	EventBus.hide_inventory.connect(_on_hide_inventory)
@@ -66,6 +85,7 @@ func _on_show_inventory():
 
 func _on_hide_inventory():
 	visible = false
+	EventBus.clear_preview.emit()
 
 func _refresh_categories():
 	for child in category_list_box.get_children():
@@ -127,15 +147,25 @@ func _update_cursors():
 			category_labels[i].text = "   " + category_labels[i].text
 			category_labels[i].modulate = Color(0.6, 0.6, 0.6)
 			
-	# Update item labels
+	# Update item labels and description
+	desc_label.text = ""
+	var item_previewed = false
 	for i in range(item_labels.size()):
 		item_labels[i].text = item_labels[i].text.trim_prefix("   ").trim_prefix("> ")
 		if i == item_index and current_focus == FocusSide.ITEMS:
 			item_labels[i].text = "> " + item_labels[i].text
 			item_labels[i].modulate = Color(1, 1, 1)
+			
+			var itm_data = current_items[i].data
+			desc_label.text = "[color=yellow]" + tr(itm_data.item_name) + "[/color]\n" + tr(itm_data.description)
+			EventBus.preview_item.emit(itm_data)
+			item_previewed = true
 		else:
 			item_labels[i].text = "   " + item_labels[i].text
 			item_labels[i].modulate = Color(0.6, 0.6, 0.6)
+
+	if not item_previewed:
+		EventBus.clear_preview.emit()
 
 func _input(event):
 	if not visible:

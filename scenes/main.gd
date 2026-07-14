@@ -5,6 +5,7 @@ const MapFloor1 = preload("res://scenes/maps/floor_1.gd")
 const InfoPanel = preload("res://ui/info_panel.gd")
 const Player = preload("res://entities/player.gd")
 const BattleScene = preload("res://scenes/battle.gd")
+const InventoryView = preload("res://ui/inventory_view.gd")
 
 
 var game_container: Control
@@ -13,6 +14,7 @@ var ui_container: Control
 var current_battle: Node = null
 var current_map: Node2D
 var player_instance: CharacterBody2D
+var inventory_view: Control
 
 func _ready():
 	game_container = Control.new()
@@ -59,6 +61,12 @@ func _load_initial_scenes():
 	
 	# 将玩家也添加到 GameContainer，它与地图是分离的！
 	game_container.add_child(player_instance)
+	
+	# 4. 加载背包层 (覆盖在 GameContainer 最上层)
+	inventory_view = InventoryView.new()
+	# 设置锚点为全屏
+	inventory_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	game_container.add_child(inventory_view)
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
 	# 1. 挂起旧地图（为了解决隐形墙Bug，这里必须从树上拔除碰撞体）
@@ -89,6 +97,9 @@ func _set_map_active(map_node: Node2D, active: bool):
 		# 确保玩家显示在地图上层
 		if player_instance and player_instance.get_parent() == game_container:
 			game_container.move_child(player_instance, -1)
+		# 确保背包界面在最顶层（覆盖地图和玩家）
+		if inventory_view and inventory_view.get_parent() == game_container:
+			game_container.move_child(inventory_view, -1)
 	else:
 		if map_node.get_parent() != null:
 			game_container.remove_child(map_node) # 只有 remove_child 才能彻底拔除物理隐形墙！
@@ -150,6 +161,7 @@ func _pause_map_and_player():
 		current_map.process_mode = Node.PROCESS_MODE_DISABLED
 	if player_instance:
 		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
+		player_instance.hide()
 
 func _resume_map_and_player():
 	if current_map:

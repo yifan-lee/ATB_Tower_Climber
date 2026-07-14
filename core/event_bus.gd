@@ -5,6 +5,9 @@ extends Node
 # 发送系统消息的信号，参数是要翻译的文本 Key
 signal show_system_message(msg_data: Variant)
 
+# 物品预览信号
+signal preview_item(item_data: Resource)
+signal clear_preview()
 
 # [新增] 玩家成功移动到了一个新的网格坐标
 signal player_stepped(grid_pos: Vector2i)

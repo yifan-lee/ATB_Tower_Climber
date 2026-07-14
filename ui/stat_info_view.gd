@@ -3,11 +3,11 @@ extends HBoxContainer
 
 var player_stats: Stats
 
-var hp_lbl: Label
-var mp_lbl: Label
-var atk_lbl: Label
-var def_lbl: Label
-var spd_lbl: Label
+var hp_lbl: RichTextLabel
+var mp_lbl: RichTextLabel
+var atk_lbl: RichTextLabel
+var def_lbl: RichTextLabel
+var spd_lbl: RichTextLabel
 
 func _ready():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -17,9 +17,12 @@ func _ready():
 	
 	var vbox = VBoxContainer.new()
 	vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_child(vbox) # 修复了原先没有 add_child 的问题
+	add_child(vbox)
 
-	vbox.add_child(_create_label(player_stats.entity_name, Color(1, 1, 0)))
+	var name_lbl = _create_label(player_stats.entity_name)
+	name_lbl.add_theme_color_override("default_color", Color(1, 1, 0))
+	vbox.add_child(name_lbl)
+	
 	hp_lbl = _create_label("")
 	mp_lbl = _create_label("")
 	atk_lbl = _create_label("")
@@ -34,17 +37,17 @@ func _ready():
 
 	_update_stats()
 
-	# 监听现成的战斗全局事件
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
-	EventBus.show_inventory.connect(_on_show_inventory)
-	EventBus.hide_inventory.connect(_on_hide_inventory)
 	EventBus.player_stats_changed.connect(_update_stats)
+	EventBus.preview_item.connect(_on_preview_item)
+	EventBus.clear_preview.connect(_on_clear_preview)
 
-func _create_label(text: String, color: Color = Color.WHITE) -> Label:
-	var lbl = Label.new()
+func _create_label(text: String) -> RichTextLabel:
+	var lbl = RichTextLabel.new()
+	lbl.bbcode_enabled = true
+	lbl.fit_content = true
 	lbl.text = text
-	lbl.add_theme_color_override("font_color", color)
 	return lbl
 
 func _update_stats():
@@ -54,16 +57,41 @@ func _update_stats():
 	def_lbl.text = "DEF: " + str(player_stats.def)
 	spd_lbl.text = "SPD: " + str(player_stats.spd)
 
+func _on_preview_item(item_data: Resource):
+	_update_stats() # Reset to base state first
+	
+	var stat_labels = {
+		"hp": hp_lbl,
+		"mp": mp_lbl,
+		"atk": atk_lbl,
+		"def": def_lbl,
+		"spd": spd_lbl
+	}
+	
+	var effects = item_data.get_effects()
+	
+	for stat_name in effects.keys():
+		var val = effects[stat_name]
+		var lbl = stat_labels[stat_name]
+		
+		# Limit potion healing to max capacity
+		if item_data.type == Item.ItemType.POTION and (stat_name == "hp" or stat_name == "mp"):
+			var max_val = player_stats.max_hp if stat_name == "hp" else player_stats.max_mp
+			var cur_val = player_stats.current_hp if stat_name == "hp" else player_stats.current_mp
+			val = min(val, max_val - cur_val)
+			if val <= 0: continue
+			
+		if val > 0:
+			lbl.text += " [color=green](+" + str(val) + ")[/color]"
+		elif val < 0:
+			lbl.text += " [color=red](" + str(val) + ")[/color]"
+
+func _on_clear_preview():
+	_update_stats()
+
 func _on_encounter_monster(_id: String, _node: Node):
 	visible = false
 
 func _on_battle_ended(_result: String):
-	_update_stats()
-	visible = true
-
-func _on_show_inventory():
-	visible = false
-
-func _on_hide_inventory():
 	_update_stats()
 	visible = true
