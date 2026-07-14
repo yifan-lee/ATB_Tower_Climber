@@ -31,7 +31,7 @@ func setup(enemy_id: String):
 	
 	
 func _ready():
-	custom_minimum_size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.EXPLORE_AREA_HEIGHT)
+	custom_minimum_size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
 	var bg = ColorRect.new()
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.color = Color(0.1, 0.1, 0.15)
@@ -104,7 +104,7 @@ func _build_bottom_animations():
 	var p_anim = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE * 2)
 	p_anim.position = Vector2(
 		GameConfig.GRID_SIZE + GameConfig.WALL_THICKNESS,
-		GameConfig.EXPLORE_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
+		GameConfig.GAME_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
 	)
 	add_child(p_anim)
 	
@@ -112,7 +112,7 @@ func _build_bottom_animations():
 	var e_anim = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE * 2)
 	e_anim.position = Vector2(
 		GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE - GameConfig.WALL_THICKNESS,
-		GameConfig.EXPLORE_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
+		GameConfig.GAME_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
 	)
 	add_child(e_anim)
 
