@@ -87,10 +87,13 @@ func _setup_tilemap():
 	add_child(tile_map)
 
 
+var map_items = {} # 存储当前地图上的物品信息，格式为 { Vector2i(x,y): {"id": item_id, "node": sprite} }
+
 func _build_map_from_data():
 	for y in range(map_data.size()):
 		for x in range(map_data[y].size()):
 			var cell_value = str(map_data[y][x])
+			var grid_pos = Vector2i(x, y)
 			var pixel_position: Vector2 = GameConfig.get_game_area_pixel_position(x, y)
 			
 			match cell_value:
@@ -105,48 +108,27 @@ func _build_map_from_data():
 				_:
 					# 如果是其他字符串，检查是不是物品
 					if ItemDB.db.has(cell_value):
-						_spawn_item(cell_value, pixel_position)
+						_spawn_item(cell_value, grid_pos, pixel_position)
 
-func _spawn_item(item_id: String, pixel_position: Vector2):
+func _spawn_item(item_id: String, grid_pos: Vector2i, pixel_position: Vector2):
 	var item_data = ItemDB.get_item(item_id)
 	if not item_data: return
 	
-	var area = Area2D.new()
-	area.add_to_group("item")
-	area.set_meta("item_id", item_id)
-	area.position = pixel_position
-	
-	var collision = CollisionShape2D.new()
-	var rect = RectangleShape2D.new()
-	# 稍微缩小一点判定范围，确保只有玩家走进去才触发
-	rect.size = Vector2(GameConfig.GRID_SIZE * 0.5, GameConfig.GRID_SIZE * 0.5)
-	collision.shape = rect
-	area.add_child(collision)
-	
+	# 纯视觉表现，不再需要任何物理节点！
 	var sprite = Sprite2D.new()
 	if item_data.icon:
 		sprite.texture = item_data.icon
 		var orig_size = sprite.texture.get_size()
 		var target_size = GameConfig.GRID_SIZE
 		sprite.scale = Vector2(target_size / orig_size.x, target_size / orig_size.y)
-	area.add_child(sprite)
+	sprite.position = pixel_position
+	add_child(sprite)
 	
-	area.body_entered.connect(func(body):
-		if body.name == "Player" or body == get_tree().get_first_node_in_group("player"):
-			_on_player_pickup_item(area, item_id, item_data)
-	)
-	
-	add_child(area)
-
-func _on_player_pickup_item(area: Area2D, item_id: String, item_data: Item):
-	var stats = EntityDB.get_stats("player")
-	if stats.inventory.has(item_id):
-		stats.inventory[item_id] += 1
-	else:
-		stats.inventory[item_id] = 1
-	
-	EventBus.show_system_message.emit(["MSG_GOT_ITEM", item_data.item_name])
-	area.queue_free()
+	# 将物品信息注册到地图字典中
+	map_items[grid_pos] = {
+		"id": item_id,
+		"node": sprite
+	}
 
 
 func _spawn_enemy(enemy_class, pixel_position: Vector2):
@@ -164,3 +146,22 @@ func _on_player_stepped(grid_pos: Vector2i):
 		var config = stairs_config[grid_pos]
 		# 发送切换地图请求
 		EventBus.request_map_change.emit(config["target_scene"], config["spawn_grid"])
+		
+	# 查字典：玩家当前踩的格子，有没有物品？
+	if map_items.has(grid_pos):
+		var item_info = map_items[grid_pos]
+		var item_id = item_info["id"]
+		var item_data = ItemDB.get_item(item_id)
+		
+		# 添加到背包
+		var stats = EntityDB.get_stats("player")
+		if stats.inventory.has(item_id):
+			stats.inventory[item_id] += 1
+		else:
+			stats.inventory[item_id] = 1
+			
+		EventBus.show_system_message.emit(["MSG_GOT_ITEM", item_data.item_name])
+		
+		# 销毁节点并从字典中移除
+		item_info["node"].queue_free()
+		map_items.erase(grid_pos)
