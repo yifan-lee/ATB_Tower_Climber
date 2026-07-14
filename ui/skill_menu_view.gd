@@ -45,18 +45,19 @@ func _on_hide_skill_menu(_result: String = ""):
 	is_menu_active = false
 	visible = false
 
-func _on_show_skill_menu(skills: Array):
+func _on_show_skill_menu(skills_info: Array):
 	visible = true
 	is_menu_active = true
 
 	_clear_skill_buttons()
 	
-	available_skills = skills
+	available_skills = skills_info
 	current_selection = 0
 	
 	# 纯代码动态生成技能条目
-	for i in range(skills.size()):
-		var skill = skills[i]
+	for i in range(skills_info.size()):
+		var info = skills_info[i]
+		var skill = info.skill
 		var lbl = Label.new()
 		if skill.current_cd > 0:
 			lbl.text = "   " + tr(skill.skill_name) + " (CD:" + str(ceil(skill.current_cd)) + ")"
@@ -76,10 +77,17 @@ func _clear_skill_buttons():
 
 func _update_menu_cursor():
 	for i in range(available_skills.size()):
-		var skill = available_skills[i]
+		var info = available_skills[i]
+		var skill = info.skill
 		if i == current_selection:
 			skill_labels[i].text = "> " + skill_labels[i].text.trim_prefix("   ").trim_prefix("> ")
-			skill_desc_label.text = tr(skill.description) + "\n" + tr("DISPLAY_DAMAGE") + str(skill.damage)
+			skill_desc_label.text = (
+				tr(skill.description) + "\n" +
+				tr("DISPLAY_DAMAGE") + str(skill.damage) + "\n" +
+				tr("DISPLAY_MANA_COST") + str(skill.mana_cost) + "\n" +
+				tr("DISPLAY_CD") + str(skill.max_cd) + "\n" +
+				tr("DISPLAY_ESTIMATED_DAMAGE") + str(info.estimated_damage)
+			)
 		else:
 			skill_labels[i].text = "   " + skill_labels[i].text.trim_prefix("   ").trim_prefix("> ")
 
@@ -94,7 +102,7 @@ func _input(event):
 		current_selection = min(available_skills.size() - 1, current_selection + 1)
 		_update_menu_cursor()
 	elif event.is_action_pressed("ui_accept"):
-		var chosen_skill = available_skills[current_selection]
+		var chosen_skill = available_skills[current_selection].skill
 		if chosen_skill.current_cd <= 0:
 			is_menu_active = false
 			EventBus.player_skill_chosen.emit(chosen_skill)

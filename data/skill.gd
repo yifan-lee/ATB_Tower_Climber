@@ -5,12 +5,14 @@ class_name Skill
 @export var skill_name: String
 @export var damage: int
 @export var max_cd: float
+@export var mana_cost: int = 0
 @export var current_cd: float = 0.0
 @export var description: String
 
-func setup(n: String, dmg: int, cd: float, desc: String) -> Skill:
+func setup(n: String, dmg: int, cd: float, mc: int, desc: String) -> Skill:
     skill_name = n
     damage = dmg
     max_cd = cd
+    mana_cost = mc
     description = desc
     return self

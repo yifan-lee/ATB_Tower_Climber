@@ -4,6 +4,7 @@ extends HBoxContainer
 var player_stats: Stats
 
 var hp_lbl: Label
+var mp_lbl: Label
 var atk_lbl: Label
 var def_lbl: Label
 var spd_lbl: Label
@@ -20,11 +21,13 @@ func _ready():
 
 	vbox.add_child(_create_label(player_stats.entity_name, Color(1, 1, 0)))
 	hp_lbl = _create_label("")
+	mp_lbl = _create_label("")
 	atk_lbl = _create_label("")
 	def_lbl = _create_label("")
 	spd_lbl = _create_label("")
 
 	vbox.add_child(hp_lbl)
+	vbox.add_child(mp_lbl)
 	vbox.add_child(atk_lbl)
 	vbox.add_child(def_lbl)
 	vbox.add_child(spd_lbl)
@@ -43,6 +46,7 @@ func _create_label(text: String, color: Color = Color.WHITE) -> Label:
 
 func _update_stats():
 	hp_lbl.text = "HP: " + str(player_stats.current_hp) + "/" + str(player_stats.max_hp)
+	mp_lbl.text = "MP: " + str(player_stats.current_mp) + "/" + str(player_stats.max_mp)
 	atk_lbl.text = "ATK: " + str(player_stats.atk)
 	def_lbl.text = "DEF: " + str(player_stats.def)
 	spd_lbl.text = "SPD: " + str(player_stats.spd)

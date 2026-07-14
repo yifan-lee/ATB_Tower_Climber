@@ -84,7 +84,10 @@ func _build_middle_stats():
 func _create_stat_panel(stats: Stats, is_player: bool) -> VBoxContainer:
 	var vbox = VBoxContainer.new()
 	vbox.add_child(_create_label(stats.entity_name, Color(1, 1, 0))) # 名字标黄
-	var hp_lbl = _create_label("HP: " + str(stats.current_hp) + "/" + str(stats.max_hp))
+	var hp_lbl = _create_label(
+		"HP: " + str(stats.current_hp) + "/" + str(stats.max_hp) + "\n" +
+		"MP: " + str(stats.current_mp) + "/" + str(stats.max_mp)
+	)
 	vbox.add_child(hp_lbl)
 	if is_player:
 		p_hp_label = hp_lbl
@@ -147,7 +150,15 @@ func _process(delta):
 		is_action_paused = true
 		ready_character = "player"
 		EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
-		EventBus.show_skill_menu.emit(player_stats.skills)
+		var skills_info = []
+		for skill in player_stats.skills:
+			var estimated_dmg = _get_attack_damage(player_stats.atk, enemy_stats.def, skill.damage)
+			skills_info.append({
+				"skill": skill,
+				"estimated_damage": int(estimated_dmg)
+			})
+			
+		EventBus.show_skill_menu.emit(skills_info)
 		
 	# 判断怪物是否到达终点（如果同时到达，玩家优先）
 	elif e_progress >= BAR_WIDTH:
@@ -174,16 +185,20 @@ func _enemy_action():
 	_execute_skill(enemy_stats, player_stats, chosen_skill)
 
 func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
-	# 4. 伤害公式：攻击方攻击力 + 技能伤害 - 防御方防御力
-	# 使用 max(1, ...) 确保即使防御很高，也能强制扣 1 点血
-	var final_damage = max(1, attacker.atk * skill.damage * (100.0 / (100.0 + defender.def)))
+	var final_damage = _get_attack_damage(attacker.atk, defender.def, skill.damage)
 	
 	# 扣血并防止出现负数血量
 	defender.current_hp = max(0, defender.current_hp - final_damage)
 	
 	# 刷新上方战斗面板的文字
-	p_hp_label.text = "HP: " + str(player_stats.current_hp) + "/" + str(player_stats.max_hp)
-	e_hp_label.text = "HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.max_hp)
+	p_hp_label.text = (
+		"HP: " + str(player_stats.current_hp) + "/" + str(player_stats.max_hp) + "\n" +
+		"MP: " + str(player_stats.current_mp) + "/" + str(player_stats.max_mp)
+	)
+	e_hp_label.text = (
+		"HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.max_hp) + "\n" +
+		"MP: " + str(enemy_stats.current_mp) + "/" + str(enemy_stats.max_mp)
+	)
 	
 	if defender.current_hp <= 0:
 		if defender == enemy_stats:
@@ -195,6 +210,9 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
 	# 可以在这里发信号让 UI 显示 "玩家使用了 重击，造成了 15 点伤害！"
 	# 这里为了简便，直接恢复战斗进度条
 	_resume_battle(attacker == player_stats)
+
+func _get_attack_damage(atk: int, def: int, skill_damage: int) -> float:
+	return max(1, atk / 100.0 * skill_damage * (100.0 / (100.0 + def)))
 
 func _resume_battle(was_player: bool):
 	# 谁刚攻击完，谁的进度条清零

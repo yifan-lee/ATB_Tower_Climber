@@ -8,9 +8,12 @@ MSG_BATTLE_CONTINUE,战斗继续,"Battle Continue"
 SKILL_BASIC_ATK_NAME,普通攻击,Attack
 SKILL_BASIC_ATK_DESC,对怪物造成基础伤害。,Deals basic damage to the enemy.
 SKILL_HEAVY_NAME,重击,Heavy Strike
-SKILL_HEAVY_DESC,奋力一击，造成巨额伤害，冷却3秒。,A powerful blow. Cooldown: 3 seconds.
+SKILL_HEAVY_DESC,奋力一击，造成巨额伤害。,A powerful blow.
 SKILL_FIREBALL_NAME,火球术,Fireball.
-SKILL_FIREBALL_DESC,对怪物造成巨额伤害，冷却5秒,Fireball. Cooldown: 5 seconds.
+SKILL_FIREBALL_DESC,对怪物造成巨额伤害。,Fireball.
 SKILL_ONE_HIT_NAME,一击必杀,One Hit Kill
-SKILL_ONE_HIT_DESC,秒杀怪物,Kill Enemy
+SKILL_ONE_HIT_DESC,秒杀怪物。,Kill Enemy.
 DISPLAY_DAMAGE,伤害：,"Damage: " 
+DISPLAY_MANA_COST,魔法消耗：,"MP Cost: " 
+DISPLAY_CD,冷却：,"CD: " 
+DISPLAY_ESTIMATED_DAMAGE,预估伤害：,"Estimated Damage: " 
