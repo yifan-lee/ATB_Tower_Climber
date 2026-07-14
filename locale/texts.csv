@@ -44,3 +44,5 @@ EQUIPMENT_TREE_BRANCH_DESC,树枝,A tree branch
 EQUIPMENT_SWIFT_BOOTS,疾风靴,Swift Boots
 EQUIPMENT_SWIFT_BOOTS_DESC,轻盈的靴子,Light boots
 MSG_USED_ITEM,使用了,"Used "
+MSG_GOT_ITEM,获得了,"Got "
+MSG_EQUIPPED,装备了,"Equipped "

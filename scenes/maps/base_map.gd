@@ -90,14 +90,63 @@ func _setup_tilemap():
 func _build_map_from_data():
 	for y in range(map_data.size()):
 		for x in range(map_data[y].size()):
-			var cell_value = map_data[y][x]
+			var cell_value = str(map_data[y][x])
 			var pixel_position: Vector2 = GameConfig.get_game_area_pixel_position(x, y)
-			if cell_value == 1:
-				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
-			elif cell_value == 2:
-				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 3))
-			elif cell_value == 11:
-				_spawn_enemy(BloodshotEye, pixel_position)
+			
+			match cell_value:
+				"wall":
+					tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
+				"stairs":
+					tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 3))
+				"eye":
+					_spawn_enemy(BloodshotEye, pixel_position)
+				"", "0":
+					pass # empty space
+				_:
+					# 如果是其他字符串，检查是不是物品
+					if ItemDB.db.has(cell_value):
+						_spawn_item(cell_value, pixel_position)
+
+func _spawn_item(item_id: String, pixel_position: Vector2):
+	var item_data = ItemDB.get_item(item_id)
+	if not item_data: return
+	
+	var area = Area2D.new()
+	area.add_to_group("item")
+	area.set_meta("item_id", item_id)
+	area.position = pixel_position
+	
+	var collision = CollisionShape2D.new()
+	var rect = RectangleShape2D.new()
+	# 稍微缩小一点判定范围，确保只有玩家走进去才触发
+	rect.size = Vector2(GameConfig.GRID_SIZE * 0.5, GameConfig.GRID_SIZE * 0.5)
+	collision.shape = rect
+	area.add_child(collision)
+	
+	var sprite = Sprite2D.new()
+	if item_data.icon:
+		sprite.texture = item_data.icon
+		var orig_size = sprite.texture.get_size()
+		var target_size = GameConfig.GRID_SIZE
+		sprite.scale = Vector2(target_size / orig_size.x, target_size / orig_size.y)
+	area.add_child(sprite)
+	
+	area.body_entered.connect(func(body):
+		if body.name == "Player" or body == get_tree().get_first_node_in_group("player"):
+			_on_player_pickup_item(area, item_id, item_data)
+	)
+	
+	add_child(area)
+
+func _on_player_pickup_item(area: Area2D, item_id: String, item_data: Item):
+	var stats = EntityDB.get_stats("player")
+	if stats.inventory.has(item_id):
+		stats.inventory[item_id] += 1
+	else:
+		stats.inventory[item_id] = 1
+	
+	EventBus.show_system_message.emit(["MSG_GOT_ITEM", item_data.item_name])
+	area.queue_free()
 
 
 func _spawn_enemy(enemy_class, pixel_position: Vector2):

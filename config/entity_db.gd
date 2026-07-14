@@ -22,12 +22,12 @@ func _ready():
             SkillDB.get_skill("one_hit"),
         ],
         {
-            "hp_potion": 5,
-            "mp_potion": 3,
-            "iron_sword": 1,
-            "iron_helm": 1,
-            "tree_branch": 1,
-            "jy_sword": 1
+            # "hp_potion": 5,
+            # "mp_potion": 3,
+            # "iron_sword": 1,
+            # "iron_helm": 1,
+            # "tree_branch": 1,
+            # "jy_sword": 1
         }
     )
     
@@ -45,7 +45,7 @@ func _ready():
             SkillDB.get_skill("basic_atk"),
         ],
         {}, # Empty inventory
-        5   # Level 5
+        5 # Level 5
     )
 
 func get_stats(id: String) -> Stats:

@@ -6,6 +6,7 @@ extends CharacterBody2D
 var anim_sprite: AnimatedSprite2D
 
 func _ready():
+	add_to_group("player")
 	z_index = 10 # 强制让玩家渲染在最上层，避免被新加载的地图背景遮挡
 	_setup_sprite()
 	_setup_collision()
