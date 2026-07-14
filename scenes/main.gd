@@ -6,6 +6,7 @@ const InfoPanel = preload("res://ui/info_panel.gd")
 const Player = preload("res://entities/player.gd")
 const BattleScene = preload("res://scenes/battle.gd")
 const InventoryView = preload("res://ui/inventory_view.gd")
+const LevelUpView = preload("res://ui/level_up_view.gd")
 
 
 var game_container: Control
@@ -15,6 +16,7 @@ var current_battle: Node = null
 var current_map: Node2D
 var player_instance: CharacterBody2D
 var inventory_view: Control
+var level_up_view: Control
 
 func _ready():
 	game_container = Control.new()
@@ -30,6 +32,16 @@ func _ready():
 	EventBus.request_map_change.connect(_on_map_change_requested)
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
+	EventBus.show_level_up.connect(_on_level_up_shown)
+	EventBus.hide_level_up.connect(_on_level_up_hidden)
+
+func _on_level_up_shown():
+	current_state = AppState.INVENTORY # Reuse inventory state to block map input
+	_pause_map_and_player()
+
+func _on_level_up_hidden():
+	current_state = AppState.MAP
+	_resume_map_and_player()
 
 func _setup_containers():
 	# 动态设置 GameContainer 尺寸
@@ -67,6 +79,11 @@ func _load_initial_scenes():
 	# 设置锚点为全屏
 	inventory_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	game_container.add_child(inventory_view)
+	
+	# 5. 加载升级层
+	level_up_view = LevelUpView.new()
+	level_up_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	game_container.add_child(level_up_view)
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
 	# 1. 挂起旧地图（为了解决隐形墙Bug，这里必须从树上拔除碰撞体）
@@ -155,6 +172,10 @@ func _on_battle_ended(result: String = ""):
 		
 	# 3. 恢复并显示探索地图和玩家 (完美保留在原位！)
 	_resume_map_and_player()
+
+	var player_stats = EntityDB.get_stats("player")
+	if player_stats.stat_points > 0:
+		EventBus.show_level_up.emit()
 
 func _pause_map_and_player():
 	if current_map:

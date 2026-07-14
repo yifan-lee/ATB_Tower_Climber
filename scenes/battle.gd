@@ -202,6 +202,9 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
 	
 	if defender.current_hp <= 0:
 		if defender == enemy_stats:
+			var gained_exp = enemy_stats.get_exp_yield()
+			player_stats.gain_exp(gained_exp)
+			EventBus.show_system_message.emit(["MSG_GAINED_EXP", str(gained_exp)])
 			EventBus.battle_ended.emit("win")
 		else:
 			EventBus.battle_ended.emit("lose")

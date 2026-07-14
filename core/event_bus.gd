@@ -30,3 +30,7 @@ signal show_inventory()
 signal hide_inventory()
 signal inventory_input(event: InputEvent)
 signal player_stats_changed()
+
+# --- 升级系统相关信号 ---
+signal show_level_up()
+signal hide_level_up()

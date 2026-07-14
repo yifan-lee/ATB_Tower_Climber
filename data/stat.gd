@@ -23,7 +23,13 @@ class_name Stats
 	Item.EquipSlot.ACCESSORY: null
 }
 
-func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int, anim: String, sk: Array[Skill], inv: Dictionary = {}) -> Stats:
+@export var level: int = 1
+@export var exp: int = 0
+@export var max_exp: int = 100
+@export var stat_points: int = 0
+@export var exp_yield: int = -1 # -1 means use formula based on level
+
+func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int, anim: String, sk: Array[Skill], inv: Dictionary = {}, lvl: int = 1) -> Stats:
 	entity_name = n
 	max_hp = hp
 	current_hp = chp
@@ -35,7 +41,32 @@ func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: i
 	anim_path = anim
 	skills = sk
 	inventory = inv
+	level = lvl
+	max_exp = level * 100
 	return self
+
+func get_exp_yield() -> int:
+	if exp_yield != -1:
+		return exp_yield
+	return level * 20
+
+# Future interface for recovering on level up (currently disabled by user request)
+func recover_on_level_up():
+	pass
+	# current_hp = get_total_max_hp()
+	# current_mp = get_total_max_mp()
+
+func gain_exp(amount: int) -> bool:
+	exp += amount
+	var leveled_up = false
+	while exp >= max_exp:
+		exp -= max_exp
+		level += 1
+		max_exp = level * 100
+		stat_points += 5
+		leveled_up = true
+		recover_on_level_up()
+	return leveled_up
 
 func get_total_max_hp() -> int:
 	var total = max_hp

@@ -1,6 +1,7 @@
 keys,zh_CN,en_US
 MSG_WELCOME,欢迎来到 TT 塔，勇者！,"Welcome to TT Tower, Hero!"
 MSG_HIT_WALL,哎哟！前面是一堵墙。,"Ouch! It's a wall."
+MSG_GAINED_EXP,获得经验：,"Gained EXP: "
 MSG_HIT_ENEMY,遭遇怪物，开始战斗！,"Encountered an enemy, battle begins!"
 MSG_PLAYER_TURN,玩家回合,"Player's Turn"
 MSG_ENEMY_TURN,怪物回合,"Enemy's Turn"
@@ -22,9 +23,9 @@ ITEM_TITLE,物品,Items
 CATEGORY_POTION,药品,Potions
 CATEGORY_EQUIP,装备,Equipment
 ITEM_HP_POTION_NAME,恢复药剂,Health Potion
-ITEM_HP_POTION_DESC,恢复50点生命值,Restore 50 HP
+ITEM_HP_POTION_DESC,恢复生命值,Restore HP
 ITEM_MP_POTION_NAME,魔法药剂,Mana Potion
-ITEM_MP_POTION_DESC,恢复50点魔法值,Restore 50 MP
+ITEM_MP_POTION_DESC,恢复魔法值,Restore MP
 SLOT_HEAD,头盔,Head
 SLOT_CHEST,身体,Body
 SLOT_LEGS,腿部,Legs
@@ -39,7 +40,7 @@ EQUIPMENT_IRON_SWORD_DESC,一把普通的铁剑,An ordinary iron sword
 EQUIPMENT_JY_SWORD,绝世好剑,Peerless Sword
 EQUIPMENT_JY_SWORD_DESC,提升大量攻击力,Increases attack power
 EQUIPMENT_TREE_BRANCH,树枝,Tree Branch
-EQUIPMENT_TREE_BRANCH_DESC,树枝，增加一点攻击力,A tree branch increases attack power
+EQUIPMENT_TREE_BRANCH_DESC,树枝,A tree branch
 EQUIPMENT_SWIFT_BOOTS,疾风靴,Swift Boots
 EQUIPMENT_SWIFT_BOOTS_DESC,轻盈的靴子,Light boots
 MSG_USED_ITEM,使用了,"Used "

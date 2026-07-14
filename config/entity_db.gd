@@ -43,7 +43,9 @@ func _ready():
         "res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres",
         [
             SkillDB.get_skill("basic_atk"),
-        ]
+        ],
+        {}, # Empty inventory
+        5   # Level 5
     )
 
 func get_stats(id: String) -> Stats:

@@ -3,6 +3,8 @@ extends HBoxContainer
 
 var player_stats: Stats
 
+var name_lbl: RichTextLabel
+var exp_lbl: RichTextLabel
 var hp_lbl: RichTextLabel
 var mp_lbl: RichTextLabel
 var atk_lbl: RichTextLabel
@@ -26,9 +28,12 @@ func _ready():
 	stat_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(stat_vbox)
 
-	var name_lbl = _create_label(player_stats.entity_name)
+	name_lbl = _create_label("")
 	name_lbl.add_theme_color_override("default_color", Color(1, 1, 0))
 	stat_vbox.add_child(name_lbl)
+	
+	exp_lbl = _create_label("")
+	stat_vbox.add_child(exp_lbl)
 	
 	hp_lbl = _create_label("")
 	mp_lbl = _create_label("")
@@ -83,6 +88,9 @@ func _get_slot_name(slot: Item.EquipSlot) -> String:
 	return "UNKNOWN"
 
 func _update_stats():
+	name_lbl.text = player_stats.entity_name + " LV." + str(player_stats.level)
+	exp_lbl.text = "EXP: " + str(player_stats.exp) + " / " + str(player_stats.max_exp)
+	
 	hp_lbl.text = "HP: " + str(player_stats.current_hp) + "/" + str(player_stats.get_total_max_hp())
 	mp_lbl.text = "MP: " + str(player_stats.current_mp) + "/" + str(player_stats.get_total_max_mp())
 	atk_lbl.text = "ATK: " + str(player_stats.get_total_atk())
