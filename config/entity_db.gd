@@ -1,0 +1,37 @@
+# res://config/entity_db.gd
+extends Node
+
+# 存储所有角色和怪物的数据表
+var db: Dictionary = {}
+
+func _ready():
+    db['player'] = Stats.new().setup(
+        "TooTwo",
+        500,
+        500,
+        100,
+        100,
+        100,
+        "res://assets/sprites/player/blonde_man_animations.tres",
+        [
+            SkillDB.get_skill("basic_atk"),
+            SkillDB.get_skill("heavy_strike"),
+            SkillDB.get_skill("fireball"),
+        ]
+    )
+    
+    db['bloodshot_eye'] = Stats.new().setup(
+        "BloodshotEye",
+        400,
+        400,
+        50,
+        50,
+        60,
+        "res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres",
+        [
+            SkillDB.get_skill("basic_atk"),
+        ]
+    )
+
+func get_stats(id: String) -> Stats:
+    return db.get(id)

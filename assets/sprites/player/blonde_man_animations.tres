@@ -1,0 +1,84 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cncc0gybqm44s"]
+
+[ext_resource type="Texture2D" uid="uid://c6p147cb0hf3" path="res://assets/sprites/player/blonde_man.png" id="1_181h4"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e1wu4"]
+atlas = ExtResource("1_181h4")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ioyor"]
+atlas = ExtResource("1_181h4")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ryxtg"]
+atlas = ExtResource("1_181h4")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tbww0"]
+atlas = ExtResource("1_181h4")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_181h4"]
+atlas = ExtResource("1_181h4")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_et8nf"]
+atlas = ExtResource("1_181h4")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_71kxm"]
+atlas = ExtResource("1_181h4")
+region = Rect2(32, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yr141"]
+atlas = ExtResource("1_181h4")
+region = Rect2(64, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0dcvl"]
+atlas = ExtResource("1_181h4")
+region = Rect2(96, 128, 32, 32)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e1wu4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ioyor")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ryxtg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tbww0")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_181h4")
+}],
+"loop": 1,
+"name": &"static",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_et8nf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_71kxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yr141")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0dcvl")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 5.0
+}]

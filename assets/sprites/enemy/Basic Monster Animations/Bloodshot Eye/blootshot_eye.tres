@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://b47wh2wvwqaga"]
+
+[ext_resource type="Texture2D" uid="uid://xs478and53s0" path="res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/BloodshotEye.png" id="1_vs4mf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ve2u"]
+atlas = ExtResource("1_vs4mf")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v6dw3"]
+atlas = ExtResource("1_vs4mf")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_44cax"]
+atlas = ExtResource("1_vs4mf")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kdhxg"]
+atlas = ExtResource("1_vs4mf")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vs4mf"]
+atlas = ExtResource("1_vs4mf")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ve2u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v6dw3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_44cax")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kdhxg")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vs4mf")
+}],
+"loop": 1,
+"name": &"static",
+"speed": 5.0
+}]

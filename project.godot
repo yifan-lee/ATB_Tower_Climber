@@ -16,13 +16,20 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-GameConfig="*uid://c7e28f2p212wc"
+GameConfig="*uid://pnb5saoyorbu"
+EventBus="*uid://cxi7xgq07lxsl"
+SkillDB="*uid://c72hcka0dy8tx"
+EntityDB="*uid://d2d4lcb4ig0xt"
 
 [display]
 
-window/size/viewport_width=320
-window/size/viewport_height=320
+window/size/viewport_width=800
+window/size/viewport_height=800
 window/stretch/mode="viewport"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://locale/texts.zh_CN.translation")
 
 [physics]
 
