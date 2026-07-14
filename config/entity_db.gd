@@ -7,8 +7,8 @@ var db: Dictionary = {}
 func _ready():
     db['player'] = Stats.new().setup(
         "TooTwo",
-        500,
-        500,
+        10000,
+        10000,
         100,
         100,
         100,
@@ -23,8 +23,8 @@ func _ready():
     
     db['bloodshot_eye'] = Stats.new().setup(
         "BloodshotEye",
-        400,
-        400,
+        1000,
+        1000,
         50,
         50,
         60,

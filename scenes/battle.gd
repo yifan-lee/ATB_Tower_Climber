@@ -176,7 +176,7 @@ func _enemy_action():
 func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
 	# 4. 伤害公式：攻击方攻击力 + 技能伤害 - 防御方防御力
 	# 使用 max(1, ...) 确保即使防御很高，也能强制扣 1 点血
-	var final_damage = max(1, attacker.atk * skill.damage / defender.def)
+	var final_damage = max(1, attacker.atk * skill.damage * (100.0 / (100.0 + defender.def)))
 	
 	# 扣血并防止出现负数血量
 	defender.current_hp = max(0, defender.current_hp - final_damage)

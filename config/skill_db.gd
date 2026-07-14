@@ -6,13 +6,13 @@ var db: Dictionary = {}
 
 func _ready():
     db["basic_atk"] = Skill.new().setup(
-        "SKILL_BASIC_ATK_NAME", 20, 0, "SKILL_BASIC_ATK_DESC"
+        "SKILL_BASIC_ATK_NAME", 1, 0, "SKILL_BASIC_ATK_DESC"
     )
     db["heavy_strike"] = Skill.new().setup(
-        "SKILL_HEAVY_NAME", 50, 3, "SKILL_HEAVY_DESC"
+        "SKILL_HEAVY_NAME", 2, 3, "SKILL_HEAVY_DESC"
     )
     db["fireball"] = Skill.new().setup(
-        "SKILL_FIREBALL_NAME", 100, 8, "SKILL_FIREBALL_DESC"
+        "SKILL_FIREBALL_NAME", 5, 8, "SKILL_FIREBALL_DESC"
     )
     db["one_hit"] = Skill.new().setup(
         "SKILL_ONE_HIT_NAME", 9999, 0, "SKILL_ONE_HIT_DESC"
