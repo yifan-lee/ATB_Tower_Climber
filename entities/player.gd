@@ -23,22 +23,17 @@ func _setup_collision():
 	collision.shape = rect
 	add_child(collision)
 
-func _physics_process(_delta):
+func _unhandled_input(event):
 	var direction = Vector2.ZERO
 	
-	# 只监听键盘的单次按下
-	if Input.is_action_just_pressed("ui_right"):
+	if event.is_action_pressed("ui_right"):
 		direction = Vector2.RIGHT
-		# facing_direction = "right"
-	elif Input.is_action_just_pressed("ui_left"):
+	elif event.is_action_pressed("ui_left"):
 		direction = Vector2.LEFT
-		# facing_direction = "left"
-	elif Input.is_action_just_pressed("ui_down"):
+	elif event.is_action_pressed("ui_down"):
 		direction = Vector2.DOWN
-		# facing_direction = "down"
-	elif Input.is_action_just_pressed("ui_up"):
+	elif event.is_action_pressed("ui_up"):
 		direction = Vector2.UP
-		# facing_direction = "up"
 		
 	if direction != Vector2.ZERO:
 		_try_move(direction)

@@ -18,6 +18,11 @@ var player_instance: CharacterBody2D
 var inventory_view: Control
 var level_up_view: Control
 
+var initial_player_position_x: int = 0
+var initial_player_position_y: int = 0
+
+var overlay_layer: CanvasLayer
+
 func _ready():
 	game_container = Control.new()
 	game_container.name = "GameContainer"
@@ -27,8 +32,14 @@ func _ready():
 	ui_container.name = "UIContainer"
 	add_child(ui_container)
 
+	overlay_layer = CanvasLayer.new()
+	overlay_layer.name = "OverlayLayer"
+	overlay_layer.layer = 100 # Ensure it's always on top
+	add_child(overlay_layer)
+
 	_setup_containers()
 	_load_initial_scenes()
+
 	EventBus.request_map_change.connect(_on_map_change_requested)
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
@@ -69,21 +80,26 @@ func _load_initial_scenes():
 	# 3. 独立加载玩家角色
 	player_instance = Player.new()
 	# 将玩家放置在屏幕底部的中间网格
-	player_instance.position = GameConfig.get_game_area_pixel_position(2, 4)
+	player_instance.position = GameConfig.get_game_area_pixel_position(
+		initial_player_position_x, initial_player_position_y
+	)
 	
 	# 将玩家也添加到 GameContainer，它与地图是分离的！
 	game_container.add_child(player_instance)
 	
-	# 4. 加载背包层 (覆盖在 GameContainer 最上层)
+	# 4. 加载背包层 (挂载到 CanvasLayer，保证永远在最上层！)
 	inventory_view = InventoryView.new()
-	# 设置锚点为全屏
-	inventory_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	game_container.add_child(inventory_view)
+	inventory_view.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	inventory_view.position = Vector2(0, 0)
+	inventory_view.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
+	overlay_layer.add_child(inventory_view)
 	
-	# 5. 加载升级层
+	# 5. 加载升级层 (挂载到 CanvasLayer，保证永远在最上层！)
 	level_up_view = LevelUpView.new()
-	level_up_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	game_container.add_child(level_up_view)
+	level_up_view.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	level_up_view.position = Vector2(0, 0)
+	level_up_view.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
+	overlay_layer.add_child(level_up_view)
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
 	# 1. 挂起旧地图（为了解决隐形墙Bug，这里必须从树上拔除碰撞体）
@@ -111,15 +127,12 @@ func _set_map_active(map_node: Node2D, active: bool):
 			game_container.add_child(map_node)
 		map_node.show()
 		map_node.process_mode = Node.PROCESS_MODE_INHERIT
-		# 确保玩家显示在地图上层
+		# 确保玩家显示在地图上层（地图加入后，玩家应在其之上）
 		if player_instance and player_instance.get_parent() == game_container:
 			game_container.move_child(player_instance, -1)
-		# 确保背包界面在最顶层（覆盖地图和玩家）
-		if inventory_view and inventory_view.get_parent() == game_container:
-			game_container.move_child(inventory_view, -1)
 	else:
 		if map_node.get_parent() != null:
-			game_container.remove_child(map_node) # 只有 remove_child 才能彻底拔除物理隐形墙！
+			game_container.remove_child(map_node) # 彻底拔除物理隐形墙！
 		map_node.hide()
 		map_node.process_mode = Node.PROCESS_MODE_DISABLED
 
