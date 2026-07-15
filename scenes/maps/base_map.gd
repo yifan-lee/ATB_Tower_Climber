@@ -89,6 +89,9 @@ func _setup_tilemap():
 
 var map_items = {} # 存储当前地图上的物品信息，格式为 { Vector2i(x,y): {"id": item_id, "node": sprite} }
 
+# 新的泛用敌人预加载
+const BaseEnemy = preload("res://entities/enemy/base_enemy.gd")
+
 func _build_map_from_data():
 	for y in range(map_data.size()):
 		for x in range(map_data[y].size()):
@@ -96,19 +99,20 @@ func _build_map_from_data():
 			var grid_pos = Vector2i(x, y)
 			var pixel_position: Vector2 = GameConfig.get_game_area_pixel_position(x, y)
 			
-			match cell_value:
-				"wall":
-					tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
-				"stairs":
-					tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 3))
-				"eye":
-					_spawn_enemy(BloodshotEye, pixel_position)
-				"", "0":
-					pass # empty space
-				_:
-					# 如果是其他字符串，检查是不是物品
-					if ItemDB.db.has(cell_value):
-						_spawn_item(cell_value, grid_pos, pixel_position)
+			if cell_value == "wall":
+				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 6))
+			elif cell_value == "stairs":
+				tile_map.set_cell(0, Vector2i(x, y), 0, Vector2i(16, 3))
+			elif cell_value == "" or cell_value == "0":
+				pass
+			else:
+				# 动态判断：如果在实体数据库中，那就是怪
+				if EntityDB.db.has(cell_value):
+					_spawn_enemy(cell_value, pixel_position)
+				# 动态判断：如果在物品数据库中，那就是道具
+				elif ItemDB.db.has(cell_value):
+					_spawn_item(cell_value, grid_pos, pixel_position)
+
 
 func _spawn_item(item_id: String, grid_pos: Vector2i, pixel_position: Vector2):
 	var item_data = ItemDB.get_item(item_id)
@@ -131,12 +135,11 @@ func _spawn_item(item_id: String, grid_pos: Vector2i, pixel_position: Vector2):
 	}
 
 
-func _spawn_enemy(enemy_class, pixel_position: Vector2):
-	var enemy_instance = enemy_class.new()
-	
-	# 坐标转换：将网格坐标(如 x:2, y:2) 转换为真实的像素坐标。
+func _spawn_enemy(monster_id: String, pixel_position: Vector2):
+	var enemy_instance = BaseEnemy.new()
+	# 赋予基类灵魂！
+	enemy_instance.setup(monster_id)
 	enemy_instance.position = pixel_position
-	
 	add_child(enemy_instance)
 
 

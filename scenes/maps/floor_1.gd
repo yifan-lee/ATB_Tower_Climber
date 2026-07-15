@@ -4,13 +4,13 @@ extends "res://scenes/maps/base_map.gd"
 func _init() -> void:
 	map_data = [
 		["", "", "wall", "", "", "", "", "", ""],
-		["", "eye", "wall", "", "wall", "wall", "wall", "wall", ""],
+		["", "bloodshot_eye", "wall", "", "wall", "wall", "wall", "wall", ""],
 		["", "", "", "", "wall", "iron_sword", "", "wall", ""],
 		["wall", "wall", "wall", "", "wall", "wall", "", "wall", ""],
 		["", "", "", "", "", "", "", "wall", ""],
 		["", "wall", "wall", "wall", "wall", "wall", "wall", "wall", ""],
 		["", "wall", "", "", "", "", "", "", ""],
-		["", "wall", "", "eye", "", "", "hp_potion", "", ""],
+		["", "wall", "", "bloodshot_eye", "", "", "hp_potion", "", ""],
 		["", "", "", "", "", "", "", "", "stairs"] # 连通2楼的楼梯
 	]
 	

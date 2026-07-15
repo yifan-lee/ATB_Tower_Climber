@@ -7,7 +7,7 @@ func _init() -> void:
 		["", "wall", "wall", "", "wall", "", "wall", "wall", "wall"],
 		["iron_helm", "wall", "", "", "", "", "", "", ""],
 		["", "wall", "", "wall", "wall", "wall", "wall", "", "wall"],
-		["", "", "", "wall", "eye", "wall", "", "", ""],
+		["", "", "", "wall", "bloodshot_eye", "wall", "", "", ""],
 		["wall", "wall", "", "wall", "wall", "wall", "wall", "", "wall"],
 		["hp_potion", "", "", "", "", "", "", "", ""],
 		["", "wall", "", "wall", "wall", "", "wall", "wall", "wall"],

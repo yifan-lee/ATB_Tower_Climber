@@ -6,9 +6,9 @@ func _init() -> void:
 		["stairs", "", "", "", "wall", "", "", "", "stairs"],
 		# (0, 0) 去5楼 | (8, 0) 回3楼
 		["wall", "wall", "wall", "", "wall", "", "wall", "wall", ""],
-		["hp_potion", "", "wall", "", "", "", "eye", "wall", ""],
+		["hp_potion", "", "wall", "", "", "", "bloodshot_eye", "wall", ""],
 		["wall", "", "wall", "wall", "wall", "wall", "", "wall", ""],
-		["", "", "", "", "eye", "wall", "", "", ""],
+		["", "", "", "", "bloodshot_eye", "wall", "", "", ""],
 		["", "wall", "wall", "wall", "", "wall", "wall", "wall", "wall"],
 		["", "wall", "hp_potion", "wall", "", "", "", "", ""],
 		["", "wall", "", "wall", "wall", "wall", "wall", "wall", ""],

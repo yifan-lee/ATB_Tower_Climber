@@ -6,10 +6,10 @@ func _init() -> void:
 		["", "", "", "", "wall", "swift_boots", "", "", ""],
 		["wall", "wall", "wall", "", "", "wall", "wall", "wall", "wall"],
 		["", "", "wall", "", "", "", "", "", ""],
-		["", "", "wall", "wall", "wall", "wall", "wall", "eye", "wall"],
+		["", "", "wall", "wall", "wall", "wall", "wall", "bloodshot_eye", "wall"],
 		["", "", "", "", "", "", "wall", "", "wall"],
 		["wall", "wall", "wall", "wall", "wall", "", "wall", "", "wall"],
-		["", "", "eye", "", "wall", "", "", "", ""],
+		["", "", "bloodshot_eye", "", "wall", "", "", "", ""],
 		["", "", "wall", "", "wall", "wall", "wall", "", ""],
 		["stairs", "", "wall", "", "", "", "", "", "stairs"]
 		# (8, 8) 楼梯回1楼 | (0, 8) 楼梯去3楼

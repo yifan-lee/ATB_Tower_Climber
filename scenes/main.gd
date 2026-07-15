@@ -46,13 +46,6 @@ func _ready():
 	EventBus.show_level_up.connect(_on_level_up_shown)
 	EventBus.hide_level_up.connect(_on_level_up_hidden)
 
-func _on_level_up_shown():
-	current_state = AppState.INVENTORY # Reuse inventory state to block map input
-	_pause_map_and_player()
-
-func _on_level_up_hidden():
-	current_state = AppState.MAP
-	_resume_map_and_player()
 
 func _setup_containers():
 	# 动态设置 GameContainer 尺寸
@@ -79,12 +72,9 @@ func _load_initial_scenes():
 	
 	# 3. 独立加载玩家角色
 	player_instance = Player.new()
-	# 将玩家放置在屏幕底部的中间网格
 	player_instance.position = GameConfig.get_game_area_pixel_position(
 		initial_player_position_x, initial_player_position_y
 	)
-	
-	# 将玩家也添加到 GameContainer，它与地图是分离的！
 	game_container.add_child(player_instance)
 	
 	# 4. 加载背包层 (挂载到 CanvasLayer，保证永远在最上层！)
@@ -100,6 +90,37 @@ func _load_initial_scenes():
 	level_up_view.position = Vector2(0, 0)
 	level_up_view.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
 	overlay_layer.add_child(level_up_view)
+
+enum AppState {MAP, BATTLE, INVENTORY}
+var current_state: AppState = AppState.MAP
+
+func _input(event):
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_B:
+			if current_state == AppState.MAP:
+				current_state = AppState.INVENTORY
+				_pause_map_and_player()
+				EventBus.show_inventory.emit()
+		elif event.keycode == KEY_C or event.keycode == KEY_ESCAPE:
+			if current_state == AppState.INVENTORY:
+				current_state = AppState.MAP
+				_resume_map_and_player()
+				EventBus.hide_inventory.emit()
+
+func _pause_map_and_player():
+	if current_map:
+		current_map.process_mode = Node.PROCESS_MODE_DISABLED
+	if player_instance:
+		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
+		player_instance.hide()
+
+func _resume_map_and_player():
+	if current_map:
+		current_map.show()
+		current_map.process_mode = Node.PROCESS_MODE_INHERIT
+	if player_instance:
+		player_instance.show()
+		player_instance.process_mode = Node.PROCESS_MODE_INHERIT
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
 	# 1. 挂起旧地图（为了解决隐形墙Bug，这里必须从树上拔除碰撞体）
@@ -144,31 +165,12 @@ func _on_encounter_monster(monster_id: String, monster_node: Node = null):
 	
 	# 1. 暂停并隐藏探索地图和玩家
 	_pause_map_and_player()
-	if current_map:
-		current_map.hide()
-	if player_instance:
-		player_instance.hide()
 		
 	# 2. 实例化并加载战斗场景
 	current_battle = BattleScene.new()
 	current_battle.setup(monster_id) # 注入遭遇的怪物ID
 	game_container.add_child(current_battle)
 
-enum AppState {MAP, BATTLE, INVENTORY}
-var current_state: AppState = AppState.MAP
-
-func _input(event):
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_B:
-			if current_state == AppState.MAP:
-				current_state = AppState.INVENTORY
-				_pause_map_and_player()
-				EventBus.show_inventory.emit()
-		elif event.keycode == KEY_C or event.keycode == KEY_ESCAPE:
-			if current_state == AppState.INVENTORY:
-				current_state = AppState.MAP
-				_resume_map_and_player()
-				EventBus.hide_inventory.emit()
 
 # 退出战斗
 func _on_battle_ended(result: String = ""):
@@ -190,17 +192,11 @@ func _on_battle_ended(result: String = ""):
 	if player_stats.stat_points > 0:
 		EventBus.show_level_up.emit()
 
-func _pause_map_and_player():
-	if current_map:
-		current_map.process_mode = Node.PROCESS_MODE_DISABLED
-	if player_instance:
-		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
-		player_instance.hide()
 
-func _resume_map_and_player():
-	if current_map:
-		current_map.show()
-		current_map.process_mode = Node.PROCESS_MODE_INHERIT
-	if player_instance:
-		player_instance.show()
-		player_instance.process_mode = Node.PROCESS_MODE_INHERIT
+func _on_level_up_shown():
+	current_state = AppState.INVENTORY # Reuse inventory state to block map input
+	_pause_map_and_player()
+
+func _on_level_up_hidden():
+	current_state = AppState.MAP
+	_resume_map_and_player()
