@@ -6,6 +6,7 @@ var available_points: int = 0
 
 var temp_allocations: Dictionary = {
 	"hp": 0,
+	"mp": 0,
 	"atk": 0,
 	"def": 0,
 	"spd": 0
@@ -14,13 +15,14 @@ var temp_allocations: Dictionary = {
 # UI nodes
 var points_label: Label
 var hp_label: Label
+var mp_label: Label
 var atk_label: Label
 var def_label: Label
 var spd_label: Label
 var confirm_label: Label
 
 var current_selection_index: int = 0
-const MAX_SELECTION_INDEX = 4 # 0:hp, 1:atk, 2:def, 3:spd, 4:confirm
+const MAX_SELECTION_INDEX = 5 # 0:hp, 1:mp, 2:atk, 3:def, 4:spd, 5:confirm
 
 func _ready():
 	visible = false
@@ -55,6 +57,7 @@ func _ready():
 	vbox.add_child(spacer)
 	
 	hp_label = _create_stat_row(vbox)
+	mp_label = _create_stat_row(vbox)
 	atk_label = _create_stat_row(vbox)
 	def_label = _create_stat_row(vbox)
 	spd_label = _create_stat_row(vbox)
@@ -87,6 +90,7 @@ func _on_show():
 	
 	temp_allocations = {
 		"hp": 0,
+		"mp": 0,
 		"atk": 0,
 		"def": 0,
 		"spd": 0
@@ -102,11 +106,12 @@ func _update_ui():
 	points_label.text = "Stat Points: " + str(available_points)
 	
 	_update_row(hp_label, 0, "HP", player_stats.max_hp, temp_allocations["hp"], 10)
-	_update_row(atk_label, 1, "ATK", player_stats.atk, temp_allocations["atk"], 1)
-	_update_row(def_label, 2, "DEF", player_stats.def, temp_allocations["def"], 1)
-	_update_row(spd_label, 3, "SPD", player_stats.spd, temp_allocations["spd"], 1)
+	_update_row(mp_label, 1, "MP", player_stats.max_mp, temp_allocations["mp"], 5)
+	_update_row(atk_label, 2, "ATK", player_stats.atk, temp_allocations["atk"], 1)
+	_update_row(def_label, 3, "DEF", player_stats.def, temp_allocations["def"], 1)
+	_update_row(spd_label, 4, "SPD", player_stats.spd, temp_allocations["spd"], 1)
 	
-	if current_selection_index == 4:
+	if current_selection_index == 5:
 		if available_points == 0:
 			confirm_label.add_theme_color_override("font_color", Color.YELLOW)
 			confirm_label.text = "> [ CONFIRM ] <"
@@ -163,9 +168,10 @@ func _input(event):
 func _handle_allocation(delta: int):
 	var key = ""
 	if current_selection_index == 0: key = "hp"
-	elif current_selection_index == 1: key = "atk"
-	elif current_selection_index == 2: key = "def"
-	elif current_selection_index == 3: key = "spd"
+	elif current_selection_index == 1: key = "mp"
+	elif current_selection_index == 2: key = "atk"
+	elif current_selection_index == 3: key = "def"
+	elif current_selection_index == 4: key = "spd"
 	else: return
 	
 	if delta > 0 and available_points > 0:
@@ -180,6 +186,8 @@ func _handle_allocation(delta: int):
 func _apply_allocations():
 	player_stats.max_hp += temp_allocations["hp"] * 10
 	player_stats.current_hp += temp_allocations["hp"] * 10 # Also heal by the amount gained
+	player_stats.max_mp += temp_allocations["mp"] * 5
+	player_stats.current_mp += temp_allocations["mp"] * 5
 	player_stats.atk += temp_allocations["atk"]
 	player_stats.def += temp_allocations["def"]
 	player_stats.spd += temp_allocations["spd"]

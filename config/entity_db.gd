@@ -7,10 +7,10 @@ var db: Dictionary = {}
 func _ready():
     db['player'] = Stats.new().setup(
         "TooTwo",
-        10000,
-        10000,
-        500,
-        500,
+        100,
+        100,
+        50,
+        50,
         100,
         100,
         100,
@@ -28,24 +28,25 @@ func _ready():
             # "iron_helm": 1,
             # "tree_branch": 1,
             # "jy_sword": 1
-        }
+        },
+        'as_hero_level'
     )
     
     db['bloodshot_eye'] = Stats.new().setup(
         "BloodshotEye",
-        1000,
-        1000,
+        100,
+        100,
         0,
         0,
         50,
-        50,
+        30,
         60,
         "res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres",
         [
             SkillDB.get_skill("basic_atk"),
         ],
         {}, # Empty inventory
-        5 # Level 5
+        'as_mob_level'
     )
 
 func get_stats(id: String) -> Stats:

@@ -29,7 +29,11 @@ class_name Stats
 @export var stat_points: int = 0
 @export var exp_yield: int = -1 # -1 means use formula based on level
 
-func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int, anim: String, sk: Array[Skill], inv: Dictionary = {}, lvl: int = 1) -> Stats:
+func setup(
+	n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int,
+	anim: String, sk: Array[Skill], inv: Dictionary = {},
+	entity_type: String = "as_mob_level"
+) -> Stats:
 	entity_name = n
 	max_hp = hp
 	current_hp = chp
@@ -41,14 +45,17 @@ func setup(n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: i
 	anim_path = anim
 	skills = sk
 	inventory = inv
-	level = lvl
-	max_exp = level * 100
+	var result = CombatFormula.evaluate_monster(hp, mp, a, d, s)
+	level = result[entity_type]
+	max_exp = CombatFormula.get_level_up_exp(level)
 	return self
+
+
 
 func get_exp_yield() -> int:
 	if exp_yield != -1:
 		return exp_yield
-	return level * 20
+	return CombatFormula.get_monster_exp_yield(max_hp, max_mp, atk, def, spd)
 
 # Future interface for recovering on level up (currently disabled by user request)
 func recover_on_level_up():
@@ -62,7 +69,7 @@ func gain_exp(amount: int) -> bool:
 	while exp >= max_exp:
 		exp -= max_exp
 		level += 1
-		max_exp = level * 100
+		max_exp = CombatFormula.get_level_up_exp(level)
 		stat_points += 5
 		leveled_up = true
 		recover_on_level_up()

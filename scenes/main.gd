@@ -112,14 +112,14 @@ func _pause_map_and_player():
 		current_map.process_mode = Node.PROCESS_MODE_DISABLED
 	if player_instance:
 		player_instance.process_mode = Node.PROCESS_MODE_DISABLED
-		player_instance.hide()
+		# player_instance.hide()
 
 func _resume_map_and_player():
 	if current_map:
-		current_map.show()
+		# current_map.show()
 		current_map.process_mode = Node.PROCESS_MODE_INHERIT
 	if player_instance:
-		player_instance.show()
+		# player_instance.show()
 		player_instance.process_mode = Node.PROCESS_MODE_INHERIT
 
 func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2i):
@@ -169,7 +169,7 @@ func _on_encounter_monster(monster_id: String, monster_node: Node = null):
 	# 2. 实例化并加载战斗场景
 	current_battle = BattleScene.new()
 	current_battle.setup(monster_id) # 注入遭遇的怪物ID
-	game_container.add_child(current_battle)
+	overlay_layer.add_child(current_battle)
 
 
 # 退出战斗

@@ -9,8 +9,6 @@ var map_data = []
 # 楼梯配置字典。由各个具体楼层在_init()中自定义填充
 var stairs_config = {}
 
-# 预加载你需要用到的敌人脚本
-const BloodshotEye = preload("res://entities/enemy/bloodshot_eye.gd")
 
 func _ready():
 	# 只要子类一运行，就会自动执行这些通用代码

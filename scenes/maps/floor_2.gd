@@ -4,7 +4,7 @@ extends "res://scenes/maps/base_map.gd"
 func _init() -> void:
 	map_data = [
 		["", "", "", "", "wall", "swift_boots", "", "", ""],
-		["wall", "wall", "wall", "", "", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "", "", "", "wall", "wall", "wall"],
 		["", "", "wall", "", "", "", "", "", ""],
 		["", "", "wall", "wall", "wall", "wall", "wall", "bloodshot_eye", "wall"],
 		["", "", "", "", "", "", "wall", "", "wall"],

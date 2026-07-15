@@ -1,0 +1,44 @@
+# res://core/combat_formula.gd
+class_name CombatFormula
+
+const BASE_PLAYER_CP: float = 320.0
+const CP_GROWTH_PER_LEVEL: float = 0.05
+
+const MULTIPLIER_MOB: float = 0.45 # 普通小怪战力是同级玩家的 45%
+const MULTIPLIER_ELITE: float = 0.75 # 精英怪 75%
+const MULTIPLIER_BOSS: float = 1.35 # Boss 135%
+const MULTIPLIER_HERO: float = 1.00 # 英雄 100%
+
+const HP_RATIO: float = 10.0
+const MP_RATIO: float = 5.0
+
+static func calculate_cp(hp: int, mp: int, atk: int, def: int, spd: int) -> float:
+	return float(atk + def + spd) + (float(hp) / HP_RATIO) + (float(mp) / MP_RATIO)
+
+static func _reverse_calculate_level(target_cp: float, rarity_multiplier: float) -> int:
+	var base_rarity_cp = BASE_PLAYER_CP * rarity_multiplier
+	var level_float = ((target_cp / base_rarity_cp) - 1.0) / CP_GROWTH_PER_LEVEL + 1.0
+	return maxi(1, roundi(level_float))
+
+static func evaluate_monster(hp: int, mp: int, atk: int, def: int, spd: int) -> Dictionary:
+	var cp = calculate_cp(hp, mp, atk, def, spd)
+	return {
+		"total_cp": cp,
+		"as_hero_level": _reverse_calculate_level(cp, MULTIPLIER_HERO),
+		"as_mob_level": _reverse_calculate_level(cp, MULTIPLIER_MOB),
+		"as_elite_level": _reverse_calculate_level(cp, MULTIPLIER_ELITE),
+		"as_boss_level": _reverse_calculate_level(cp, MULTIPLIER_BOSS)
+	}
+
+# 怪物掉落的经验值：战斗力除以 10
+static func get_monster_exp_yield(hp: int, mp: int, atk: int, def: int, spd: int) -> int:
+	var cp = calculate_cp(hp, mp, atk, def, spd)
+	return maxi(1, roundi(cp / 10.0))
+
+# 玩家升级需要的经验：50 + 当前等级 * 50
+static func get_level_up_exp(current_level: int) -> int:
+	return 50 + current_level * 50
+
+# 战斗伤害计算公式 (从 battle.gd 迁移过来)
+static func calculate_damage(atk: int, def: int, skill_damage: int) -> float:
+	return max(1, atk / 100.0 * skill_damage * (100.0 / (100.0 + def)))

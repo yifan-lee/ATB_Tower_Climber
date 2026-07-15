@@ -9,10 +9,10 @@ func _ready():
 		"SKILL_BASIC_ATK_NAME", 100, 0, 0, "SKILL_BASIC_ATK_DESC"
 	)
 	db["heavy_strike"] = Skill.new().setup(
-		"SKILL_HEAVY_NAME", 200, 3, 0, "SKILL_HEAVY_DESC"
+		"SKILL_HEAVY_NAME", 150, 3, 0, "SKILL_HEAVY_DESC"
 	)
 	db["fireball"] = Skill.new().setup(
-		"SKILL_FIREBALL_NAME", 500, 8, 0, "SKILL_FIREBALL_DESC"
+		"SKILL_FIREBALL_NAME", 200, 8, 15, "SKILL_FIREBALL_DESC"
 	)
 	db["one_hit"] = Skill.new().setup(
 		"SKILL_ONE_HIT_NAME", 999999, 0, 0, "SKILL_ONE_HIT_DESC"
