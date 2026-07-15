@@ -156,7 +156,7 @@ func _process(delta):
 		p_progress = BAR_WIDTH
 		is_action_paused = true
 		ready_character = "player"
-		EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
+		# EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
 		var skills_info = []
 		for skill in player_stats.skills:
 			var estimated_dmg = CombatFormula.calculate_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), skill.damage)
@@ -172,7 +172,7 @@ func _process(delta):
 		e_progress = BAR_WIDTH
 		is_action_paused = true
 		ready_character = "enemy"
-		EventBus.show_system_message.emit("MSG_ENEMY_TURN") # 通知 UI 显示怪物回合
+		# EventBus.show_system_message.emit("MSG_ENEMY_TURN") # 通知 UI 显示怪物回合
 		get_tree().create_timer(1.0).timeout.connect(_on_enemy_turn)
 		
 	# 实时更新指针的 X 坐标
@@ -183,7 +183,8 @@ func _on_player_skill_chosen(skill: Skill):
 	# 将刚选的技能进入CD
 	skill.current_cd = skill.max_cd
 	# 执行战斗逻辑
-	_execute_skill(player_stats, enemy_stats, skill)
+	var estimated_dmg = _execute_skill(player_stats, enemy_stats, skill)
+	EventBus.show_system_message.emit(["MSG_PLAYER_USED", skill.skill_name, "MSG_DAMAGE_CAUSED", str(estimated_dmg), "MSG_DAMAGE_POINT"])
 
 func _on_enemy_turn():
 	# 简单逻辑：随机释放不在CD内且MP足够的技能
@@ -192,17 +193,22 @@ func _on_enemy_turn():
 	if available_skills.size() > 0:
 		var chosen_skill = available_skills[randi() % available_skills.size()]
 		chosen_skill.current_cd = chosen_skill.max_cd
-		_execute_skill(enemy_stats, player_stats, chosen_skill)
+		var estimated_dmg = _execute_skill(enemy_stats, player_stats, chosen_skill)
+		EventBus.show_system_message.emit(["MSG_ENEMY_USED", chosen_skill.skill_name, "MSG_DAMAGE_CAUSED", str(estimated_dmg), "MSG_DAMAGE_POINT"])
 	else:
 		# 没有任何可用技能，强制使用基础攻击兜底（假设第一个是普攻且0消耗）
 		if enemy_stats.skills.size() > 0:
-			_execute_skill(enemy_stats, player_stats, enemy_stats.skills[0])
+			var chosen_skill = enemy_stats.skills[0]
+			var estimated_dmg = _execute_skill(enemy_stats, player_stats, chosen_skill)
+			EventBus.show_system_message.emit(["MSG_ENEMY_USED", chosen_skill.skill_name, "MSG_DAMAGE_CAUSED", str(estimated_dmg), "MSG_DAMAGE_POINT"])
 		else:
 			_resume_battle(false)
+			EventBus.show_system_message.emit(["MSG_ENEMY_SKIPPED"])
+		
 
-func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
+func _execute_skill(attacker: Stats, defender: Stats, skill: Skill) -> int:
 	attacker.current_mp = max(0, attacker.current_mp - skill.mana_cost)
-	var final_damage = CombatFormula.calculate_damage(attacker.get_total_atk(), defender.get_total_def(), skill.damage)
+	var final_damage = int(CombatFormula.calculate_damage(attacker.get_total_atk(), defender.get_total_def(), skill.damage))
 	
 	# 扣血并防止出现负数血量
 	defender.current_hp = max(0, defender.current_hp - final_damage)
@@ -225,11 +231,10 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill):
 			EventBus.battle_ended.emit("win")
 		else:
 			EventBus.battle_ended.emit("lose")
-		return
+		return final_damage
 		
-	# 可以在这里发信号让 UI 显示 "玩家使用了 重击，造成了 15 点伤害！"
-	# 这里为了简便，直接恢复战斗进度条
 	_resume_battle(attacker == player_stats)
+	return final_damage
 
 
 func _resume_battle(was_player: bool):

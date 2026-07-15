@@ -46,3 +46,8 @@ EQUIPMENT_SWIFT_BOOTS_DESC,轻盈的靴子,Light boots
 MSG_USED_ITEM,使用了,"Used "
 MSG_GOT_ITEM,获得了,"Got "
 MSG_EQUIPPED,装备了,"Equipped "
+MSG_PLAYER_USED,玩家使用了,"Player used "
+MSG_ENEMY_USED,敌人使用了,"Enemy used "
+MSG_DAMAGE_CAUSED,，造成了," for "
+MSG_DAMAGE_POINT,点伤害," damage."
+MSG_ENEMY_SKIPPED,敌人没有可用技能,"Enemy skipped turn"
