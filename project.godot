@@ -15,18 +15,22 @@ config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
-ItemDB="*res://config/item_db.gd"
 
 GameConfig="*uid://pnb5saoyorbu"
 EventBus="*uid://cxi7xgq07lxsl"
 SkillDB="*uid://c72hcka0dy8tx"
 EntityDB="*uid://d2d4lcb4ig0xt"
+ItemDB="*res://config/item_db.gd"
 
 [display]
 
 window/size/viewport_width=1600
 window/size/viewport_height=1600
 window/stretch/mode="viewport"
+
+[gui]
+
+theme/custom_font="uid://fmp67g4t8qlg"
 
 [internationalization]
 

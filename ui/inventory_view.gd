@@ -174,26 +174,26 @@ func _input(event):
 	if not visible:
 		return
 		
-	if event.is_action_pressed("ui_up"):
+	if GameConfig.is_action_move_up(event):
 		if current_focus == FocusSide.CATEGORY:
 			category_index = max(0, category_index - 1)
 			_refresh_items()
 		else:
 			item_index = max(0, item_index - 1)
 			_update_cursors()
-	elif event.is_action_pressed("ui_down"):
+	elif GameConfig.is_action_move_down(event):
 		if current_focus == FocusSide.CATEGORY:
 			category_index = min(categories.size() - 1, category_index + 1)
 			_refresh_items()
 		else:
 			item_index = min(current_items.size() - 1, item_index + 1)
 			_update_cursors()
-	elif event.is_action_pressed("ui_right"):
+	elif GameConfig.is_action_move_right(event):
 		if current_focus == FocusSide.CATEGORY and current_items.size() > 0:
 			current_focus = FocusSide.ITEMS
 			item_index = 0
 			_update_cursors()
-	elif event.is_action_pressed("ui_left"):
+	elif GameConfig.is_action_move_left(event):
 		if current_focus == FocusSide.ITEMS:
 			current_focus = FocusSide.CATEGORY
 			_update_cursors()

@@ -42,7 +42,7 @@ func _ready():
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
 	
 	var title = Label.new()
-	title.text = "=== LEVEL UP ===" # Will be updated/translated if needed
+	title.text = ("=== " + tr("MSG_LEVEL_UP") + " ===") # Will be updated/translated if needed
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_color_override("font_color", Color.YELLOW)
 	vbox.add_child(title)
@@ -67,7 +67,7 @@ func _ready():
 	vbox.add_child(spacer2)
 	
 	confirm_label = Label.new()
-	confirm_label.text = "[ CONFIRM ]"
+	confirm_label.text = "[ " + tr("MSG_CONFIRM") + " ]"
 	confirm_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(confirm_label)
 
@@ -111,19 +111,20 @@ func _update_ui():
 	_update_row(def_label, 3, "DEF", player_stats.def, temp_allocations["def"], 1)
 	_update_row(spd_label, 4, "SPD", player_stats.spd, temp_allocations["spd"], 1)
 	
+	var confirm_text = tr("MSG_CONFIRM")
 	if current_selection_index == 5:
 		if available_points == 0:
 			confirm_label.add_theme_color_override("font_color", Color.YELLOW)
-			confirm_label.text = "> [ CONFIRM ] <"
+			confirm_label.text = "> [ " + confirm_text + " ] <"
 		else:
 			confirm_label.add_theme_color_override("font_color", Color.DARK_GRAY)
-			confirm_label.text = "  [ CONFIRM ]  "
+			confirm_label.text = "  [ " + confirm_text + " ]  "
 	else:
 		if available_points == 0:
 			confirm_label.add_theme_color_override("font_color", Color.WHITE)
 		else:
 			confirm_label.add_theme_color_override("font_color", Color.DARK_GRAY)
-		confirm_label.text = "  [ CONFIRM ]  "
+		confirm_label.text = "  [ " + confirm_text + " ]  "
 
 func _update_row(lbl: Label, index: int, stat_name: String, base_val: int, allocated_pts: int, multiplier: int):
 	var prefix = "> " if current_selection_index == index else "  "
@@ -144,26 +145,25 @@ func _input(event):
 	if not visible:
 		return
 		
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode == KEY_UP:
-			current_selection_index = max(0, current_selection_index - 1)
-			_update_ui()
+	if GameConfig.is_action_move_up(event):
+		current_selection_index = max(0, current_selection_index - 1)
+		_update_ui()
+		accept_event()
+	elif GameConfig.is_action_move_down(event):
+		current_selection_index = min(MAX_SELECTION_INDEX, current_selection_index + 1)
+		_update_ui()
+		accept_event()
+	elif GameConfig.is_action_move_left(event):
+		_handle_allocation(-1)
+		accept_event()
+	elif GameConfig.is_action_move_right(event):
+		_handle_allocation(1)
+		accept_event()
+	elif event is InputEventKey and event.pressed and not event.echo and (event.keycode == KEY_ENTER or event.keycode == KEY_SPACE or event.keycode == KEY_Z):
+		if current_selection_index == MAX_SELECTION_INDEX and available_points == 0:
+			_apply_allocations()
+			EventBus.hide_level_up.emit()
 			accept_event()
-		elif event.keycode == KEY_DOWN:
-			current_selection_index = min(MAX_SELECTION_INDEX, current_selection_index + 1)
-			_update_ui()
-			accept_event()
-		elif event.keycode == KEY_LEFT:
-			_handle_allocation(-1)
-			accept_event()
-		elif event.keycode == KEY_RIGHT:
-			_handle_allocation(1)
-			accept_event()
-		elif event.keycode == KEY_ENTER or event.keycode == KEY_SPACE or event.keycode == KEY_Z:
-			if current_selection_index == MAX_SELECTION_INDEX and available_points == 0:
-				_apply_allocations()
-				EventBus.hide_level_up.emit()
-				accept_event()
 
 func _handle_allocation(delta: int):
 	var key = ""

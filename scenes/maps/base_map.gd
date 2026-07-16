@@ -17,21 +17,11 @@ func _ready():
 	floor_bg.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
 	floor_bg.color = Color(0.8, 0.9, 0.8)
 	add_child(floor_bg)
-	_create_boundaries()
 
+	_create_boundaries()
 	_setup_tilemap()
 	_build_map_from_data()
 
-# 只有当旧地图挂载到场景树上时，才监听玩家脚步声；
-# 当它被 remove_child 扔到缓存里时，立刻断开监听！
-# 这从根本上杜绝了隐形地图抢听信号、或者在同一帧内连续互相传送的终极 Bug。
-func _enter_tree():
-	if not EventBus.player_stepped.is_connected(_on_player_stepped):
-		EventBus.player_stepped.connect(_on_player_stepped)
-
-func _exit_tree():
-	if EventBus.player_stepped.is_connected(_on_player_stepped):
-		EventBus.player_stepped.disconnect(_on_player_stepped)
 
 func _create_boundaries():
 	var wall_thickness = GameConfig.WALL_THICKNESS
@@ -39,16 +29,9 @@ func _create_boundaries():
 	var height = GameConfig.GAME_AREA_HEIGHT
 	var wall_color = Color(0.3, 0.3, 0.4)
 	
-	# 上边界 (中心点 X: 宽度一半, Y: 墙厚一半)
 	_add_wall(Vector2(width / 2.0, wall_thickness / 2.0), Vector2(width, wall_thickness), wall_color)
-	
-	# 下边界 (中心点 X: 宽度一半, Y: 高度 - 墙厚一半)
 	_add_wall(Vector2(width / 2.0, height - wall_thickness / 2.0), Vector2(width, wall_thickness), wall_color)
-	
-	# 左边界 (中心点 X: 墙厚一半, Y: 高度一半)
 	_add_wall(Vector2(wall_thickness / 2.0, height / 2.0), Vector2(wall_thickness, height), wall_color)
-	
-	# 右边界 (中心点 X: 宽度 - 墙厚一半, Y: 高度一半)
 	_add_wall(Vector2(width - wall_thickness / 2.0, height / 2.0), Vector2(wall_thickness, height), wall_color)
 
 func _add_wall(pos: Vector2, size: Vector2, color: Color):
@@ -140,7 +123,17 @@ func _spawn_enemy(monster_id: String, pixel_position: Vector2):
 	enemy_instance.position = pixel_position
 	add_child(enemy_instance)
 
+# 只有当旧地图挂载到场景树上时，才监听玩家脚步声；
+# 当它被 remove_child 扔到缓存里时，立刻断开监听！
+# 这从根本上杜绝了隐形地图抢听信号、或者在同一帧内连续互相传送的终极 Bug。
+func _enter_tree():
+	if not EventBus.player_stepped.is_connected(_on_player_stepped):
+		EventBus.player_stepped.connect(_on_player_stepped)
 
+func _exit_tree():
+	if EventBus.player_stepped.is_connected(_on_player_stepped):
+		EventBus.player_stepped.disconnect(_on_player_stepped)
+		
 func _on_player_stepped(grid_pos: Vector2i):
 	# 查字典：玩家当前踩的格子，是不是配置好的楼梯入口？
 	if stairs_config.has(grid_pos):

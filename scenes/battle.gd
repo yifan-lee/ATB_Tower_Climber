@@ -183,28 +183,38 @@ func _on_player_skill_chosen(skill: Skill):
 	# 将刚选的技能进入CD
 	skill.current_cd = skill.max_cd
 	# 执行战斗逻辑
-	var estimated_dmg = _execute_skill(player_stats, enemy_stats, skill)
-	EventBus.show_system_message.emit(["MSG_PLAYER_USED", skill.skill_name, "MSG_DAMAGE_CAUSED", str(estimated_dmg), "MSG_DAMAGE_POINT"])
+	var actual_dmg = _execute_skill(player_stats, enemy_stats, skill)
+	EventBus.show_system_message.emit(["MSG_PLAYER_USED", skill.skill_name, "MSG_DAMAGE_CAUSED", str(actual_dmg), "MSG_DAMAGE_POINT"])
+	
+	if enemy_stats.current_hp <= 0:
+		var gained_exp = enemy_stats.get_exp_yield()
+		player_stats.gain_exp(gained_exp)
+		EventBus.show_system_message.emit(["MSG_GAINED_EXP", str(gained_exp)])
+		EventBus.battle_ended.emit("win")
+	else:
+		_resume_battle(true)
 
 func _on_enemy_turn():
-	# 简单逻辑：随机释放不在CD内且MP足够的技能
 	var available_skills = enemy_stats.skills.filter(func(s): return s.current_cd <= 0 and enemy_stats.current_mp >= s.mana_cost)
 	
+	var chosen_skill = null
 	if available_skills.size() > 0:
-		var chosen_skill = available_skills[randi() % available_skills.size()]
+		chosen_skill = available_skills[randi() % available_skills.size()]
+	elif enemy_stats.skills.size() > 0:
+		chosen_skill = enemy_stats.skills[0]
+		
+	if chosen_skill != null:
 		chosen_skill.current_cd = chosen_skill.max_cd
-		var estimated_dmg = _execute_skill(enemy_stats, player_stats, chosen_skill)
-		EventBus.show_system_message.emit(["MSG_ENEMY_USED", chosen_skill.skill_name, "MSG_DAMAGE_CAUSED", str(estimated_dmg), "MSG_DAMAGE_POINT"])
-	else:
-		# 没有任何可用技能，强制使用基础攻击兜底（假设第一个是普攻且0消耗）
-		if enemy_stats.skills.size() > 0:
-			var chosen_skill = enemy_stats.skills[0]
-			var estimated_dmg = _execute_skill(enemy_stats, player_stats, chosen_skill)
-			EventBus.show_system_message.emit(["MSG_ENEMY_USED", chosen_skill.skill_name, "MSG_DAMAGE_CAUSED", str(estimated_dmg), "MSG_DAMAGE_POINT"])
+		var actual_dmg = _execute_skill(enemy_stats, player_stats, chosen_skill)
+		EventBus.show_system_message.emit(["MSG_ENEMY_USED", chosen_skill.skill_name, "MSG_DAMAGE_CAUSED", str(actual_dmg), "MSG_DAMAGE_POINT"])
+		
+		if player_stats.current_hp <= 0:
+			EventBus.battle_ended.emit("lose")
 		else:
 			_resume_battle(false)
-			EventBus.show_system_message.emit(["MSG_ENEMY_SKIPPED"])
-		
+	else:
+		EventBus.show_system_message.emit(["MSG_ENEMY_SKIPPED"])
+		_resume_battle(false)
 
 func _execute_skill(attacker: Stats, defender: Stats, skill: Skill) -> int:
 	attacker.current_mp = max(0, attacker.current_mp - skill.mana_cost)
@@ -223,17 +233,6 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill) -> int:
 		"MP: " + str(enemy_stats.current_mp) + "/" + str(enemy_stats.get_total_max_mp())
 	)
 	
-	if defender.current_hp <= 0:
-		if defender == enemy_stats:
-			var gained_exp = enemy_stats.get_exp_yield()
-			player_stats.gain_exp(gained_exp)
-			EventBus.show_system_message.emit(["MSG_GAINED_EXP", str(gained_exp)])
-			EventBus.battle_ended.emit("win")
-		else:
-			EventBus.battle_ended.emit("lose")
-		return final_damage
-		
-	_resume_battle(attacker == player_stats)
 	return final_damage
 
 
@@ -245,4 +244,4 @@ func _resume_battle(was_player: bool):
 		e_progress = 0.0
 		
 	is_action_paused = false
-	EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")
+	# EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")

@@ -20,6 +20,10 @@ const UI_AREA_HEIGHT: int = SCREEN_HEIGHT - GAME_AREA_HEIGHT
 # 塔的总层数 (N)
 const MAX_FLOOR: int = 3
 
+# 控制设置
+# 如果为 true，则使用 WASD 移动；如果为 false，则使用方向键移动
+var use_wasd_movement: bool = false
+
 
 # ==========================================
 # 全局工具函数
@@ -41,6 +45,31 @@ func get_grid_position(pixel_pos: Vector2) -> Vector2i:
 	var grid_x = int((pixel_pos.x - WALL_THICKNESS) / GRID_SIZE)
 	var grid_y = int((pixel_pos.y - WALL_THICKNESS) / GRID_SIZE)
 	return Vector2i(grid_x, grid_y)
+
+# 输入检测辅助函数
+func is_action_move_up(event: InputEvent) -> bool:
+	if use_wasd_movement:
+		return event is InputEventKey and event.keycode == KEY_W and event.pressed and not event.echo
+	else:
+		return event.is_action_pressed("ui_up") or (event is InputEventKey and event.keycode == KEY_UP and event.pressed and not event.echo)
+
+func is_action_move_down(event: InputEvent) -> bool:
+	if use_wasd_movement:
+		return event is InputEventKey and event.keycode == KEY_S and event.pressed and not event.echo
+	else:
+		return event.is_action_pressed("ui_down") or (event is InputEventKey and event.keycode == KEY_DOWN and event.pressed and not event.echo)
+
+func is_action_move_left(event: InputEvent) -> bool:
+	if use_wasd_movement:
+		return event is InputEventKey and event.keycode == KEY_A and event.pressed and not event.echo
+	else:
+		return event.is_action_pressed("ui_left") or (event is InputEventKey and event.keycode == KEY_LEFT and event.pressed and not event.echo)
+
+func is_action_move_right(event: InputEvent) -> bool:
+	if use_wasd_movement:
+		return event is InputEventKey and event.keycode == KEY_D and event.pressed and not event.echo
+	else:
+		return event.is_action_pressed("ui_right") or (event is InputEventKey and event.keycode == KEY_RIGHT and event.pressed and not event.echo)
 
 func create_scaled_anim_sprite(anim_path: String, target_size: float = GRID_SIZE, anim_name: String = "idle") -> AnimatedSprite2D:
 	var anim = AnimatedSprite2D.new()

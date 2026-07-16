@@ -51,3 +51,5 @@ MSG_ENEMY_USED,敌人使用了,"Enemy used "
 MSG_DAMAGE_CAUSED,，造成了," for "
 MSG_DAMAGE_POINT,点伤害," damage."
 MSG_ENEMY_SKIPPED,敌人没有可用技能,"Enemy skipped turn"
+MSG_LEVEL_UP,升级,Level Up
+MSG_CONFIRM,确认,Confirm

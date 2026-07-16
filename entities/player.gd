@@ -26,13 +26,13 @@ func _setup_collision():
 func _unhandled_input(event):
 	var direction = Vector2.ZERO
 	
-	if event.is_action_pressed("ui_right"):
+	if GameConfig.is_action_move_right(event):
 		direction = Vector2.RIGHT
-	elif event.is_action_pressed("ui_left"):
+	elif GameConfig.is_action_move_left(event):
 		direction = Vector2.LEFT
-	elif event.is_action_pressed("ui_down"):
+	elif GameConfig.is_action_move_down(event):
 		direction = Vector2.DOWN
-	elif event.is_action_pressed("ui_up"):
+	elif GameConfig.is_action_move_up(event):
 		direction = Vector2.UP
 		
 	if direction != Vector2.ZERO:

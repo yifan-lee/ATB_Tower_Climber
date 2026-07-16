@@ -37,16 +37,16 @@ func _ready():
 	overlay_layer.layer = 100 # Ensure it's always on top
 	add_child(overlay_layer)
 
-	_setup_containers()
-	_load_initial_scenes()
-
 	EventBus.request_map_change.connect(_on_map_change_requested)
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
 	EventBus.show_level_up.connect(_on_level_up_shown)
 	EventBus.hide_level_up.connect(_on_level_up_hidden)
 
+	_setup_containers()
+	_load_initial_scenes()
 
+	
 func _setup_containers():
 	# 动态设置 GameContainer 尺寸
 	game_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)

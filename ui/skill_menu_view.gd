@@ -95,10 +95,10 @@ func _input(event):
 	if not is_menu_active:
 		return
 		
-	if event.is_action_pressed("ui_up"):
+	if GameConfig.is_action_move_up(event):
 		current_selection = max(0, current_selection - 1)
 		_update_menu_cursor()
-	elif event.is_action_pressed("ui_down"):
+	elif GameConfig.is_action_move_down(event):
 		current_selection = min(available_skills.size() - 1, current_selection + 1)
 		_update_menu_cursor()
 	elif event.is_action_pressed("ui_accept"):
