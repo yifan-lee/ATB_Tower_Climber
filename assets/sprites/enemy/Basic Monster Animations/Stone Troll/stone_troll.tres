@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dt3fll4mh5ya8"]
+
+[ext_resource type="Texture2D" uid="uid://d4icnknxsgsgy" path="res://assets/sprites/enemy/Basic Monster Animations/Stone Troll/StoneTroll.png" id="1_f7sqv"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6522r"]
+atlas = ExtResource("1_f7sqv")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55054"]
+atlas = ExtResource("1_f7sqv")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wjbhd"]
+atlas = ExtResource("1_f7sqv")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_swasm"]
+atlas = ExtResource("1_f7sqv")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8mfiu"]
+atlas = ExtResource("1_f7sqv")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6522r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55054")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wjbhd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_swasm")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8mfiu")
+}],
+"loop": 1,
+"name": &"static",
+"speed": 5.0
+}]

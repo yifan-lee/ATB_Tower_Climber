@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bpjhuxxtktyvs"]
+
+[ext_resource type="Texture2D" uid="uid://2f5uxh34umnb" path="res://assets/sprites/enemy/Basic Monster Animations/Red Cap/RedCap.png" id="1_ljxfw"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_daki3"]
+atlas = ExtResource("1_ljxfw")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lad07"]
+atlas = ExtResource("1_ljxfw")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gjb23"]
+atlas = ExtResource("1_ljxfw")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tclng"]
+atlas = ExtResource("1_ljxfw")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nppch"]
+atlas = ExtResource("1_ljxfw")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_daki3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lad07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gjb23")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tclng")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nppch")
+}],
+"loop": 1,
+"name": &"static",
+"speed": 5.0
+}]
