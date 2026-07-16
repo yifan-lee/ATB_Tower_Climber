@@ -28,6 +28,23 @@ func _init() -> void:
 		},
 	}
 
+var last_direction: Vector2i = Vector2i.ZERO
+
+func check_custom_move_rules(current_pos: Vector2i, target_pos: Vector2i, direction: Vector2i) -> bool:
+	if last_direction != Vector2i.ZERO:
+		var relative_left = Vector2i(last_direction.y, -last_direction.x)
+		var backward = -last_direction
+		
+		if direction == relative_left or direction == backward:
+			EventBus.show_system_message.emit("MSG_RULES_VIOLATED")
+			var player = get_tree().get_nodes_in_group("player")[0]
+			player.position = GameConfig.get_game_area_pixel_position(8, 10)
+			last_direction = Vector2i.ZERO
+			return false
+			
+	last_direction = direction
+	return true
+
 	# triggers_config = {
 	# 	Vector2i(5, 4): [ # 用中括号 [] 包裹起来，变成一个数组（Array）
 	# 		{
