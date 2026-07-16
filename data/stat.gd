@@ -70,7 +70,7 @@ func gain_exp(amount: int) -> bool:
 		exp -= max_exp
 		level += 1
 		max_exp = CombatFormula.get_level_up_exp(level)
-		stat_points += 5
+		stat_points += CombatFormula.STAT_POINTS_PER_LEVEL
 		leveled_up = true
 		recover_on_level_up()
 	return leveled_up

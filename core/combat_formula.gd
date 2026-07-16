@@ -11,6 +11,7 @@ const MULTIPLIER_HERO: float = 1.00 # 英雄 100%
 
 const HP_RATIO: float = 10.0
 const MP_RATIO: float = 5.0
+const STAT_POINTS_PER_LEVEL: int = 16
 
 static func calculate_cp(hp: int, mp: int, atk: int, def: int, spd: int) -> float:
 	return float(atk + def + spd) + (float(hp) / HP_RATIO) + (float(mp) / MP_RATIO)
