@@ -32,7 +32,7 @@ func _ready():
         'as_hero_level'
     )
     
-    db['bloodshot_eye'] = Stats.new().setup(
+    var bloodshot = Stats.new().setup(
         "BloodshotEye",
         500,
         500,
@@ -48,6 +48,8 @@ func _ready():
         {}, # Empty inventory
         'as_mob_level'
     )
+    bloodshot.exp_yield = 200
+    db['bloodshot_eye'] = bloodshot
 
 func get_stats(id: String) -> Stats:
     return db.get(id)

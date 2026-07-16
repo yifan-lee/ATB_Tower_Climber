@@ -32,7 +32,7 @@ class_name Stats
 func setup(
 	n: String, hp: int, chp: int, mp: int, cmp: int, a: int, d: int, s: int,
 	anim: String, sk: Array[Skill], inv: Dictionary = {},
-	entity_type: String = "as_mob_level"
+	entity_type: String = "as_mob_level",
 ) -> Stats:
 	entity_name = n
 	max_hp = hp
@@ -49,7 +49,6 @@ func setup(
 	level = result[entity_type]
 	max_exp = CombatFormula.get_level_up_exp(level)
 	return self
-
 
 
 func get_exp_yield() -> int:
