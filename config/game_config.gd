@@ -22,7 +22,7 @@ const MAX_FLOOR: int = 3
 
 # 控制设置
 # 如果为 true，则使用 WASD 移动；如果为 false，则使用方向键移动
-var use_wasd_movement: bool = false
+var use_wasd_movement: bool = true
 
 
 # ==========================================
