@@ -24,7 +24,7 @@ func _ready():
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0, 0, 0, 0.95)
+	style.bg_color = ThemeConfig.COLOR_UI_BG_SOLID
 	add_theme_stylebox_override("panel", style)
 	
 	# Create an HBoxContainer for layout
@@ -72,7 +72,7 @@ func _ready():
 func _create_title(text: String) -> Label:
 	var lbl = Label.new()
 	lbl.text = tr(text)
-	lbl.add_theme_color_override("font_color", Color(1, 1, 0)) # Yellow title
+	lbl.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT) # Highlight title
 	return lbl
 
 func _on_show_inventory():
@@ -142,13 +142,13 @@ func _update_cursors():
 		if i == category_index:
 			if current_focus == FocusSide.CATEGORY:
 				category_labels[i].text = "> " + category_labels[i].text
-				category_labels[i].modulate = Color(1, 1, 1)
+				category_labels[i].modulate = ThemeConfig.COLOR_TEXT_NORMAL
 			else:
 				category_labels[i].text = "   " + category_labels[i].text
-				category_labels[i].modulate = Color(0.6, 0.6, 0.6)
+				category_labels[i].modulate = ThemeConfig.COLOR_TEXT_DISABLED
 		else:
 			category_labels[i].text = "   " + category_labels[i].text
-			category_labels[i].modulate = Color(0.6, 0.6, 0.6)
+			category_labels[i].modulate = ThemeConfig.COLOR_TEXT_DISABLED
 			
 	# Update item labels and description
 	desc_label.text = ""
@@ -157,7 +157,7 @@ func _update_cursors():
 		item_labels[i].text = item_labels[i].text.trim_prefix("   ").trim_prefix("> ")
 		if i == item_index and current_focus == FocusSide.ITEMS:
 			item_labels[i].text = "> " + item_labels[i].text
-			item_labels[i].modulate = Color(1, 1, 1)
+			item_labels[i].modulate = ThemeConfig.COLOR_TEXT_NORMAL
 			
 			var itm_data = current_items[i].data
 			desc_label.text = "[color=yellow]" + tr(itm_data.item_name) + "[/color]\n" + tr(itm_data.description)
@@ -165,7 +165,7 @@ func _update_cursors():
 			item_previewed = true
 		else:
 			item_labels[i].text = "   " + item_labels[i].text
-			item_labels[i].modulate = Color(0.6, 0.6, 0.6)
+			item_labels[i].modulate = ThemeConfig.COLOR_TEXT_DISABLED
 
 	if not item_previewed:
 		EventBus.clear_preview.emit()

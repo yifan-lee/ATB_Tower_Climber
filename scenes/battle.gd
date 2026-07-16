@@ -41,7 +41,7 @@ func _ready():
 	custom_minimum_size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
 	var bg = ColorRect.new()
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0.1, 0.1, 0.15)
+	bg.color = ThemeConfig.COLOR_BATTLE_BG
 	add_child(bg)
 	
 	_build_top_progress_bar()
@@ -62,7 +62,7 @@ func _build_top_progress_bar():
 	var bar_bg = ColorRect.new()
 	bar_bg.size = Vector2(BAR_WIDTH, GameConfig.GRID_SIZE / 4)
 	bar_bg.position = Vector2(GameConfig.GRID_SIZE / 2, GameConfig.GRID_SIZE / 2) # 居中留白
-	bar_bg.color = Color(0.3, 0.3, 0.3)
+	bar_bg.color = ThemeConfig.COLOR_BAR_BG
 	add_child(bar_bg)
 
 	# 玩家指针 (进度条上方)
@@ -90,7 +90,7 @@ func _build_middle_stats():
 
 func _create_stat_panel(stats: Stats, is_player: bool) -> VBoxContainer:
 	var vbox = VBoxContainer.new()
-	vbox.add_child(_create_label(stats.entity_name, Color(1, 1, 0))) # 名字标黄
+	vbox.add_child(_create_label(stats.entity_name, ThemeConfig.COLOR_TEXT_HIGHLIGHT)) # 名字标黄
 	var hp_lbl = _create_label(
 		"HP: " + str(stats.current_hp) + "/" + str(stats.get_total_max_hp()) + "\n" +
 		"MP: " + str(stats.current_mp) + "/" + str(stats.get_total_max_mp())
@@ -106,7 +106,7 @@ func _create_stat_panel(stats: Stats, is_player: bool) -> VBoxContainer:
 	return vbox
 
 
-func _create_label(text: String, color: Color = Color.WHITE) -> Label:
+func _create_label(text: String, color: Color = ThemeConfig.COLOR_TEXT_NORMAL) -> Label:
 	var lbl = Label.new()
 	lbl.text = text
 	lbl.add_theme_color_override("font_color", color)

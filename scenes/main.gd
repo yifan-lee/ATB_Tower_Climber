@@ -18,8 +18,8 @@ var player_instance: CharacterBody2D
 var inventory_view: Control
 var level_up_view: Control
 
-var initial_player_position_x: int = 0
-var initial_player_position_y: int = 0
+var initial_player_position_x: int = 5
+var initial_player_position_y: int = 10
 
 var overlay_layer: CanvasLayer
 
@@ -182,7 +182,10 @@ func _on_battle_ended(result: String = ""):
 		
 	# 2. 如果战斗胜利，则直接销毁缓存地图里的怪物节点
 	if result == "win" and current_enemy_node != null:
-		current_enemy_node.queue_free()
+		if current_map and current_map.has_method("remove_entity_by_node"):
+			current_map.remove_entity_by_node(current_enemy_node)
+		else:
+			current_enemy_node.queue_free()
 	current_enemy_node = null
 		
 	# 3. 恢复并显示探索地图和玩家 (完美保留在原位！)

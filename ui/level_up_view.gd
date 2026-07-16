@@ -31,7 +31,7 @@ func _ready():
 	# Semi-transparent background
 	var bg = ColorRect.new()
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.color = Color(0, 0, 0, 0.8)
+	bg.color = ThemeConfig.COLOR_UI_BG_TRANSPARENT
 	add_child(bg)
 	
 	var vbox = VBoxContainer.new()
@@ -44,7 +44,7 @@ func _ready():
 	var title = Label.new()
 	title.text = ("=== " + tr("MSG_LEVEL_UP") + " ===") # Will be updated/translated if needed
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_color_override("font_color", Color.YELLOW)
+	title.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	vbox.add_child(title)
 	
 	points_label = Label.new()
@@ -114,16 +114,16 @@ func _update_ui():
 	var confirm_text = tr("MSG_CONFIRM")
 	if current_selection_index == 5:
 		if available_points == 0:
-			confirm_label.add_theme_color_override("font_color", Color.YELLOW)
+			confirm_label.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 			confirm_label.text = "> [ " + confirm_text + " ] <"
 		else:
-			confirm_label.add_theme_color_override("font_color", Color.DARK_GRAY)
+			confirm_label.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_DISABLED)
 			confirm_label.text = "  [ " + confirm_text + " ]  "
 	else:
 		if available_points == 0:
-			confirm_label.add_theme_color_override("font_color", Color.WHITE)
+			confirm_label.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_NORMAL)
 		else:
-			confirm_label.add_theme_color_override("font_color", Color.DARK_GRAY)
+			confirm_label.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_DISABLED)
 		confirm_label.text = "  [ " + confirm_text + " ]  "
 
 func _update_row(lbl: Label, index: int, stat_name: String, base_val: int, allocated_pts: int, multiplier: int):
@@ -137,9 +137,9 @@ func _update_row(lbl: Label, index: int, stat_name: String, base_val: int, alloc
 		
 	lbl.text = prefix + stat_name + ": " + str(current_total) + alloc_str + suffix
 	if current_selection_index == index:
-		lbl.add_theme_color_override("font_color", Color.YELLOW)
+		lbl.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	else:
-		lbl.add_theme_color_override("font_color", Color.WHITE)
+		lbl.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_NORMAL)
 
 func _input(event):
 	if not visible:

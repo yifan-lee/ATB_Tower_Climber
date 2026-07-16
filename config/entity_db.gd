@@ -15,6 +15,7 @@ func _ready():
         100,
         100,
         "res://assets/sprites/player/blonde_man_animations.tres",
+        # "res://assets/sprites/player/warrior.tres",
         [
             SkillDB.get_skill("basic_atk"),
             SkillDB.get_skill("heavy_strike"),

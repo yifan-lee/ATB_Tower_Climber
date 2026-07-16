@@ -29,7 +29,7 @@ func _ready():
 	hbox.add_child(stat_vbox)
 
 	name_lbl = _create_label("")
-	name_lbl.add_theme_color_override("default_color", Color(1, 1, 0))
+	name_lbl.add_theme_color_override("default_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	stat_vbox.add_child(name_lbl)
 	
 	exp_lbl = _create_label("")
@@ -53,7 +53,7 @@ func _ready():
 	hbox.add_child(equip_vbox)
 	
 	var equip_title = _create_label("EQUIPMENT")
-	equip_title.add_theme_color_override("default_color", Color(1, 1, 0))
+	equip_title.add_theme_color_override("default_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	equip_vbox.add_child(equip_title)
 	
 	for slot in player_stats.equipment.keys():
@@ -102,7 +102,7 @@ func _update_stats():
 		var item = player_stats.equipment[slot]
 		var item_name = item.item_name if item else "NONE"
 		equip_labels[slot].text = tr(_get_slot_name(slot)) + ": " + tr(item_name)
-		equip_labels[slot].modulate = Color(1, 1, 1) # Reset highlight
+		equip_labels[slot].modulate = ThemeConfig.COLOR_TEXT_NORMAL # Reset highlight
 
 func _on_preview_item(item_data: Resource):
 	_update_stats() # Reset to base state first
@@ -120,7 +120,7 @@ func _on_preview_item(item_data: Resource):
 	if item_data.type == Item.ItemType.EQUIPMENT:
 		var slot = item_data.equip_slot
 		if equip_labels.has(slot):
-			equip_labels[slot].modulate = Color(1, 1, 0) # Highlight the slot being replaced
+			equip_labels[slot].modulate = ThemeConfig.COLOR_TEXT_HIGHLIGHT # Highlight the slot being replaced
 			
 		var old_equip = player_stats.equipment[slot]
 		var old_effects = old_equip.get_effects() if old_equip else {}

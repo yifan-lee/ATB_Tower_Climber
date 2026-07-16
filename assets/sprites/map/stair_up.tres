@@ -1,0 +1,7 @@
+[gd_resource type="AtlasTexture" format=3 uid="uid://bmir3wa3wktkv"]
+
+[ext_resource type="Texture2D" uid="uid://rk8oie3gtfp7" path="res://assets/sprites/map/stair.jpg" id="1_iwb86"]
+
+[resource]
+atlas = ExtResource("1_iwb86")
+region = Rect2(512, 0, 512, 506)

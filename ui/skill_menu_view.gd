@@ -61,7 +61,7 @@ func _on_show_skill_menu(skills_info: Array):
 		var lbl = Label.new()
 		if skill.current_cd > 0:
 			lbl.text = "   " + tr(skill.skill_name) + " (CD:" + str(ceil(skill.current_cd)) + ")"
-			lbl.modulate = Color(0.5, 0.5, 0.5)
+			lbl.modulate = ThemeConfig.COLOR_TEXT_DISABLED
 		else:
 			lbl.text = "   " + tr(skill.skill_name)
 			

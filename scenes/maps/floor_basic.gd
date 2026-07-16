@@ -12,17 +12,21 @@ func _init() -> void:
         ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-        ["wall", "wall", "", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-        ["wall", "wall", "stair_down", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+        ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+        ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
 	]
 
 
-	stairs_config = {
-		Vector2i(2, 10): {
-			"target_scene": "res://scenes/maps/floor_3.gd",
-			"spawn_grid": Vector2i(2, 10)
-		},
-	}
+	# stairs_config = {
+	# 	Vector2i(5, 0): {
+	# 		"target_scene": "res://scenes/maps/floor_1.gd",
+	# 		"spawn_grid": Vector2i(5, 0)
+	# 	},
+    #     Vector2i(8, 10): {
+	# 		"target_scene": "res://scenes/maps/floor_3.gd",
+	# 		"spawn_grid": Vector2i(8, 10)
+	# 	},
+	# }
 
 	# triggers_config = {
 	# 	Vector2i(5, 4): [ # 用中括号 [] 包裹起来，变成一个数组（Array）

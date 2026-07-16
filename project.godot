@@ -24,8 +24,8 @@ ItemDB="*res://config/item_db.gd"
 
 [display]
 
-window/size/viewport_width=1600
-window/size/viewport_height=1600
+window/size/viewport_width=768
+window/size/viewport_height=1366
 window/stretch/mode="viewport"
 
 [gui]

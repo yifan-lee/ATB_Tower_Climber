@@ -92,22 +92,25 @@
 
 1. **输入捕获**：在 `entities/player.gd` 中的 `_unhandled_input()`，接受上下左右方向键的输入。
 2. **计算目标位移**：将方向（`Vector2.RIGHT`）乘以全局常量 `GameConfig.GRID_SIZE`（64），得到移动向量 `motion`。
-3. **安全移动检测**：调用 Godot 的底层物理方法 `test_move(current_transform, motion, collision)`：
-   - 物理引擎会在内存中模拟“如果玩家向右移动 64 像素，会不会碰到带有碰撞体的节点（PhysicsBody2D）”。
-4. **执行移动**：
-   - 如果返回 `false`（前方没有任何阻挡物理体的节点）：
-     - 玩家的位置瞬间更新 `position += motion`。
-     - 播放角色走路动画 (`anim_sprite.play("walk")`)。
-     - 发出事件：`EventBus.player_stepped.emit(grid_pos)`，广播“玩家成功踩在了一个新格子上”。`base_map.gd` 监听该信号。
-       - 楼梯跳转：如果`grid_pos`在`stairs_config`中，则`EventBus`发出`request_map_change`信号，`main.gd`监听该信号切换地图。
-         - 会设置当前地图不可见。然后从缓存加载地图，或者建新地图。然后把玩家生成在给定的坐标
-       - 拾取物品：如果`grid_pos`在`map_items`中，则`EventBus`发出`show_system_message`信号，显示物品信息。
-   - 如果返回`true`（前方有阻挡物理体的节点）。判断种类：
-     - `TileMap`：说明前方是墙壁，发出`EventBus.show_system_message.emit("MSG_HIT_WALL")`。
-     - `enemy`: 说明前方有敌人，发出信号`encounter_monster`。`main.gd`监听该信号切换战斗场景。
-       - 把`AppState`设置为`BATTLE`。
-       - 隐藏玩家和地图。
+3. **安全移动检测（纯逻辑网格）**：调用当前地图的 `is_passable(target_grid_pos)` 和 `get_entity_at(target_grid_pos)` 方法：
+   - 检查目标网格是否在边界内，以及地形是否是阻挡物（如 `wall`、`door_closed` 等）。
+   - 如果遇到阻挡物（地形不可通行）：
+     - 拒绝移动，播放待机动画。
+     - 发出 `EventBus.show_system_message.emit("MSG_HIT_WALL")`。
+   - 如果遇到怪物实体：
+     - 拒绝移动，发出 `EventBus.show_system_message.emit("MSG_HIT_ENEMY")`。
+     - 发出 `EventBus.encounter_monster.emit`，`main.gd` 会监听该信号并切换战斗场景。
+       - 把 `AppState` 设置为 `BATTLE`。
+       - 隐藏并暂停探索地图和玩家。
        - 设置战斗场景并加载到最上层节点(`overlay_layer`)。
+4. **执行移动**：
+   - 如果目标格子地形可通过，且没有怪物实体：
+     - 玩家位置瞬间更新 `position = target_pixel_pos`。
+     - 播放角色走路动画 (`anim_sprite.play("walk")`)。
+     - 发出事件：`EventBus.player_stepped.emit(grid_pos)`，广播“玩家踩在了一个新格子上”。`base_map.gd` 监听该信号：
+       - **楼梯/传送门跳转**：如果目标格子在 `stairs_config` 中配置了传送，则 `EventBus` 发出 `request_map_change` 信号。
+       - **机关踏板**：如果目标格子在 `triggers_config` 中配置了机关，则立刻调用 `change_tile` 改变其他格子的地形（如开门）。
+       - **拾取物品**：如果格子上有物品实体，则加入背包，并发出 `show_system_message` 显示文本，然后从地图上销毁该物品。
 
 ---
 
