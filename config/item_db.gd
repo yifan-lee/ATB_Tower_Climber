@@ -41,7 +41,7 @@ func _ready():
 		"EQUIPMENT_IRON_SWORD",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_IRON_SWORD_DESC",
-		10, 0, 0, Item.EquipSlot.RIGHT_HAND
+		20, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
 	sword_level1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 1, 1)
 	db["sword_level1"] = sword_level1
@@ -51,7 +51,7 @@ func _ready():
 		"EQUIPMENT_TREE_BRANCH",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_TREE_BRANCH_DESC",
-		1, 0, 0, Item.EquipSlot.RIGHT_HAND
+		5, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
 	tree_branch.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 0, 1)
 	db["tree_branch"] = tree_branch

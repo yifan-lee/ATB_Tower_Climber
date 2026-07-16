@@ -7,8 +7,8 @@ var db: Dictionary = {}
 func _ready():
     db['player'] = Stats.new().setup(
         "TooTwo",
-        1000,
-        1000,
+        100,
+        100,
         50,
         50,
         100,
@@ -35,22 +35,58 @@ func _ready():
     
     var bloodshot = Stats.new().setup(
         "BloodshotEye",
-        500,
-        500,
+        80,
+        80,
         0,
         0,
         50,
         30,
-        60,
-        "res://assets/sprites/enemy/Basic Monster Animations/Bloodshot Eye/blootshot_eye.tres",
+        52,
+        "res://assets/sprites/enemy/blootshot_eye.tres",
         [
             SkillDB.get_skill("basic_atk"),
         ],
         {}, # Empty inventory
         'as_mob_level'
     )
-    bloodshot.exp_yield = 200
+    bloodshot.exp_yield = 50
     db['bloodshot_eye'] = bloodshot
+
+    var red_cap = Stats.new().setup(
+        "RedCap",
+        40,
+        40,
+        0,
+        0,
+        45,
+        11,
+        80,
+        "res://assets/sprites/enemy/red_cap.tres",
+        [
+            SkillDB.get_skill("basic_atk"),
+        ],
+        {}, # Empty inventory
+        'as_mob_level'
+    )
+    db['red_cap'] = red_cap
+
+    var stone_troll = Stats.new().setup(
+        "RedCap",
+        120,
+        120,
+        0,
+        0,
+        38,
+        60,
+        30,
+        "res://assets/sprites/enemy/stone_troll.tres",
+        [
+            SkillDB.get_skill("basic_atk"),
+        ],
+        {}, # Empty inventory
+        'as_mob_level'
+    )
+    db['stone_troll'] = stone_troll
 
 func get_stats(id: String) -> Stats:
     return db.get(id)
