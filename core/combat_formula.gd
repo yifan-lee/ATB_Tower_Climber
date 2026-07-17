@@ -40,6 +40,5 @@ static func get_monster_exp_yield(hp: int, mp: int, atk: int, def: int, spd: int
 static func get_level_up_exp(current_level: int) -> int:
 	return 50 + current_level * 50
 
-# 战斗伤害计算公式 (从 battle.gd 迁移过来)
 static func calculate_damage(atk: int, def: int, skill_damage: int) -> float:
 	return max(1, atk / 100.0 * skill_damage * (100.0 / (100.0 + def)))

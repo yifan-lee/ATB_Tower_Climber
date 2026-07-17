@@ -62,14 +62,14 @@
              - `_update_cursors`：更新光标位置。简单的说就是判断一下光标在哪，就高亮哪里，并且发出信号`preview_item`以在底层 InfoPanel 显示属性变化。
            - `_refresh_items`：刷新物品列表
          - `hide_inventory` 来控制显示隐藏和预览信息的清除。发送信号`clear_preview`
-       - **交互逻辑 (`_input`)**：通过方向键在左右面板和物品列表之间导航，回车键使用或装备物品。
+       - **交互逻辑 (`_process`)**：通过长按方向键在左右面板和物品列表之间连续顺滑导航（配合 `input_cooldown` 防止过快），回车键使用或装备物品。
          - 使用后更新角色属性、扣除物品并发送 `show_system_message`显示文本。发送`player_stats_changed` 更新 UI。
      - `LevelUpView` (`ui/level_up_view.gd`) -> 挂载到 `overlay_layer`，同样限制尺寸。
        - **设置布局**：
          - 添加一个带透明度(alpha:0.8)的黑色背景 (`ColorRect`) 用于遮罩底层画面。
          - 使用 `VBoxContainer` 居中排列各类属性 Label (HP/MP/ATK/DEF/SPD) 以及最终的确认按钮 [ CONFIRM ]。
        - **监听信号**：监听 `show_level_up` 和 `hide_level_up` 信号，在显示时进入拦截输入模式。
-       - **交互逻辑 (`_input`)**：监听上下方向键切换选中项，左右方向键分配或取消点数，按回车键进行确认。一旦确认则增加玩家实际属性并重置 `stat_points`，最后发出 `player_stats_changed` 并退出界面。
+       - **交互逻辑 (`_process`)**：配合 `input_cooldown` 监听上下方向键切换选中项，左右方向键连续分配或取消点数，按回车键进行确认。一旦确认则增加玩家实际属性并重置 `stat_points`，最后发出 `player_stats_changed` 并退出界面。
 
 ---
 
@@ -109,7 +109,7 @@
      - 播放角色走路动画 (`anim_sprite.play("walk")`)。
      - 发出事件：`EventBus.player_stepped.emit(grid_pos)`，广播“玩家踩在了一个新格子上”。`base_map.gd` 监听该信号：
        - **楼梯/传送门跳转**：如果目标格子在 `stairs_config` 中配置了传送，则 `EventBus` 发出 `request_map_change` 信号。
-       - **机关踏板**：如果目标格子在 `triggers_config` 中配置了机关，则立刻调用 `change_tile` 改变其他格子的地形（如开门）。
+       - **机关踏板**：如果目标格子在 `triggers_config` 中配置了机关，则调用 `base_map.gd` 中基于**命令模式**的 `trigger_handlers` 字典分发事件（例如 `change_tile` 改变地形开门，或 `give_exp` 给予玩家经验，并触发 `player_stats_changed` 更新界面）。
        - **拾取物品**：如果格子上有物品实体，则加入背包，并发出 `show_system_message` 显示文本，然后从地图上销毁该物品。
 
 ---
@@ -158,6 +158,8 @@
   - 在确认上按回车就是分配完属性。
   - 发出信号`player_stats_changed`，`ui/stat_info_view.gd`监听该信号并刷新信息
   - 发出信号`hide_level_up`
+4. **技能领悟**：
+  - 在获得经验 (`gain_exp`) 导致升级时，系统会检查 `level_up_skills` 字典。如果达到特定等级，会自动学习新技能并广播提示。
 
 
 

@@ -71,6 +71,31 @@ func is_action_move_right(event: InputEvent) -> bool:
 	else:
 		return event.is_action_pressed("ui_right") or (event is InputEventKey and event.keycode == KEY_RIGHT and event.pressed and not event.echo)
 
+# 用于连续移动的按键状态轮询
+func is_pressing_up() -> bool:
+	if use_wasd_movement:
+		return Input.is_physical_key_pressed(KEY_W)
+	else:
+		return Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_UP)
+
+func is_pressing_down() -> bool:
+	if use_wasd_movement:
+		return Input.is_physical_key_pressed(KEY_S)
+	else:
+		return Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_DOWN)
+
+func is_pressing_left() -> bool:
+	if use_wasd_movement:
+		return Input.is_physical_key_pressed(KEY_A)
+	else:
+		return Input.is_action_pressed("ui_left") or Input.is_physical_key_pressed(KEY_LEFT)
+
+func is_pressing_right() -> bool:
+	if use_wasd_movement:
+		return Input.is_physical_key_pressed(KEY_D)
+	else:
+		return Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_RIGHT)
+
 func create_scaled_anim_sprite(anim_path: String, target_size: float = GRID_SIZE, anim_name: String = "idle") -> AnimatedSprite2D:
 	var anim = AnimatedSprite2D.new()
 	anim.sprite_frames = load(anim_path)

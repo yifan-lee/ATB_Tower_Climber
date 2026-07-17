@@ -5,6 +5,11 @@ var map_data = []
 var stairs_config = {}
 var triggers_config = {}
 
+var trigger_handlers = {
+	"change_tile": Callable(self, "_handle_change_tile"),
+	"give_exp": Callable(self, "_handle_give_exp")
+}
+
 var visual_grid: Array = []
 var entities_data: Dictionary = {}
 
@@ -167,11 +172,30 @@ func _on_player_stepped(grid_pos: Vector2i):
 		if typeof(trigger_data) == TYPE_DICTIONARY:
 			trigger_data = [trigger_data]
 			
+		var remaining_actions = []
 		for action in trigger_data:
-			var target_pos = action.get("target_grid", Vector2i(-1, -1))
-			var new_type = action.get("target_new_type", "floor")
-			if target_pos != Vector2i(-1, -1):
-				change_tile(target_pos, new_type)
+			var action_type = action.get("type", "")
+			
+			# 兼容旧格式（如果没有显式定义 type）
+			if action_type == "":
+				if action.has("target_grid"):
+					action_type = "change_tile"
+				elif action.has("give_exp"):
+					action_type = "give_exp"
+					action["amount"] = action["give_exp"]
+					
+			if trigger_handlers.has(action_type):
+				trigger_handlers[action_type].call(action)
+			else:
+				push_warning("未知的触发器动作类型: " + action_type)
+					
+			if not action.get("one_shot", false):
+				remaining_actions.append(action)
+				
+		if remaining_actions.is_empty():
+			triggers_config.erase(grid_pos)
+		else:
+			triggers_config[grid_pos] = remaining_actions
 			
 	# Check items
 	var entity = get_entity_at(grid_pos)
@@ -187,3 +211,20 @@ func _on_player_stepped(grid_pos: Vector2i):
 			
 		EventBus.show_system_message.emit(["MSG_GOT_ITEM", item_data.item_name])
 		remove_entity(grid_pos)
+
+# ==================== Trigger Handlers ====================
+func _handle_change_tile(action: Dictionary):
+	var target_pos = action.get("target_grid", Vector2i(-1, -1))
+	var new_type = action.get("target_new_type", "floor")
+	if target_pos != Vector2i(-1, -1):
+		change_tile(target_pos, new_type)
+
+func _handle_give_exp(action: Dictionary):
+	var amount = action.get("amount", 0)
+	if amount > 0:
+		var player_stats = EntityDB.get_stats("player")
+		var leveled_up = player_stats.gain_exp(amount)
+		EventBus.player_stats_changed.emit()
+		EventBus.show_system_message.emit(["MSG_GAIN_EXP_PREFIX", str(amount), "MSG_GAIN_EXP_SUFFIX"])
+		if leveled_up:
+			EventBus.show_level_up.emit()

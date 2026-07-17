@@ -24,14 +24,23 @@ func _init() -> void:
 	}
 
 	triggers_config = {
-		Vector2i(5, 4): [ # 用中括号 [] 包裹起来，变成一个数组（Array）
+		Vector2i(5, 4): [ 
 			{
+				"type": "change_tile",
 				"target_grid": Vector2i(5, 0),
-				"target_new_type": "stair_up"
+				"target_new_type": "stair_up",
+				"one_shot": true
 			},
 			{
-				"target_grid": Vector2i(5, 10), # 注意：您的地图大小是 11x11，所以最大坐标是 10。如果您写 11 就会越界哦！
-				"target_new_type": "wall"
+				"type": "change_tile",
+				"target_grid": Vector2i(5, 10),
+				"target_new_type": "wall",
+				"one_shot": true
+			},
+			{
+				"type": "give_exp",
+				"amount": 50,
+				"one_shot": true
 			}
 		]
 	}

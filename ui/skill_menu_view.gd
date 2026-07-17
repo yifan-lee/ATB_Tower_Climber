@@ -91,18 +91,33 @@ func _update_menu_cursor():
 		else:
 			skill_labels[i].text = "   " + skill_labels[i].text.trim_prefix("   ").trim_prefix("> ")
 
-func _input(event):
+var input_cooldown: float = 0.0
+const INPUT_DELAY: float = 0.15
+
+func _process(delta: float):
 	if not is_menu_active:
 		return
 		
-	if GameConfig.is_action_move_up(event):
-		current_selection = max(0, current_selection - 1)
-		_update_menu_cursor()
-	elif GameConfig.is_action_move_down(event):
-		current_selection = min(available_skills.size() - 1, current_selection + 1)
-		_update_menu_cursor()
-	elif event.is_action_pressed("ui_accept"):
+	if Input.is_action_just_pressed("ui_accept"):
 		var chosen_skill = available_skills[current_selection].skill
 		if chosen_skill.current_cd <= 0:
 			is_menu_active = false
 			EventBus.player_skill_chosen.emit(chosen_skill)
+		return
+		
+	if input_cooldown > 0:
+		input_cooldown -= delta
+		return
+		
+	var moved = false
+	if GameConfig.is_pressing_up():
+		current_selection = max(0, current_selection - 1)
+		_update_menu_cursor()
+		moved = true
+	elif GameConfig.is_pressing_down():
+		current_selection = min(available_skills.size() - 1, current_selection + 1)
+		_update_menu_cursor()
+		moved = true
+		
+	if moved:
+		input_cooldown = INPUT_DELAY

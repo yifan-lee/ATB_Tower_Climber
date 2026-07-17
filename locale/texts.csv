@@ -53,3 +53,6 @@ MSG_DAMAGE_POINT,点伤害," damage."
 MSG_ENEMY_SKIPPED,敌人没有可用技能,"Enemy skipped turn"
 MSG_LEVEL_UP,升级,Level Up
 MSG_CONFIRM,确认,ConfirmMSG_RULES_VIOLATED,违反了三层的禁忌，被传送回起点！,Violated Floor 3 taboo teleported back to start!
+MSG_LEARN_SKILL,等级提升！领悟了新技能：,Level Up! Learned new skill: 
+MSG_GAIN_EXP_PREFIX,获得了 ,Gained 
+MSG_GAIN_EXP_SUFFIX, 点经验值！, EXP!

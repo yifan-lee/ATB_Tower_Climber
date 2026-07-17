@@ -141,29 +141,41 @@ func _update_row(lbl: Label, index: int, stat_name: String, base_val: int, alloc
 	else:
 		lbl.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_NORMAL)
 
-func _input(event):
+var input_cooldown: float = 0.0
+const INPUT_DELAY: float = 0.15
+
+func _process(delta: float):
 	if not visible:
 		return
 		
-	if GameConfig.is_action_move_up(event):
-		current_selection_index = max(0, current_selection_index - 1)
-		_update_ui()
-		accept_event()
-	elif GameConfig.is_action_move_down(event):
-		current_selection_index = min(MAX_SELECTION_INDEX, current_selection_index + 1)
-		_update_ui()
-		accept_event()
-	elif GameConfig.is_action_move_left(event):
-		_handle_allocation(-1)
-		accept_event()
-	elif GameConfig.is_action_move_right(event):
-		_handle_allocation(1)
-		accept_event()
-	elif event is InputEventKey and event.pressed and not event.echo and (event.keycode == KEY_ENTER or event.keycode == KEY_SPACE or event.keycode == KEY_Z):
+	if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_Z):
 		if current_selection_index == MAX_SELECTION_INDEX and available_points == 0:
 			_apply_allocations()
 			EventBus.hide_level_up.emit()
-			accept_event()
+		return
+		
+	if input_cooldown > 0:
+		input_cooldown -= delta
+		return
+		
+	var moved = false
+	if GameConfig.is_pressing_up():
+		current_selection_index = max(0, current_selection_index - 1)
+		_update_ui()
+		moved = true
+	elif GameConfig.is_pressing_down():
+		current_selection_index = min(MAX_SELECTION_INDEX, current_selection_index + 1)
+		_update_ui()
+		moved = true
+	elif GameConfig.is_pressing_left():
+		_handle_allocation(-1)
+		moved = true
+	elif GameConfig.is_pressing_right():
+		_handle_allocation(1)
+		moved = true
+		
+	if moved:
+		input_cooldown = INPUT_DELAY
 
 func _handle_allocation(delta: int):
 	var key = ""

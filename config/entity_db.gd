@@ -18,8 +18,6 @@ func _ready():
         # "res://assets/sprites/player/warrior.tres",
         [
             SkillDB.get_skill("basic_atk"),
-            SkillDB.get_skill("heavy_strike"),
-            SkillDB.get_skill("fireball"),
             SkillDB.get_skill("one_hit"),
         ],
         {
@@ -33,58 +31,43 @@ func _ready():
         'as_hero_level'
     )
     
-    var bloodshot = Stats.new().setup(
+    # 配置主角的升级自动学习技能树
+    db['player'].level_up_skills = {
+        2: "heavy_strike",
+        3: "fireball"
+    }
+    
+    var bloodshot = Stats.new().setup_enemy(
+        "blootshot_eye",
         "BloodshotEye",
         80,
-        80,
-        0,
         0,
         50,
         30,
-        52,
-        "res://assets/sprites/enemy/blootshot_eye.tres",
-        [
-            SkillDB.get_skill("basic_atk"),
-        ],
-        {}, # Empty inventory
-        'as_mob_level'
+        52
     )
-    bloodshot.exp_yield = 50
+    # bloodshot.exp_yield = 50
     db['bloodshot_eye'] = bloodshot
 
-    var red_cap = Stats.new().setup(
+    var red_cap = Stats.new().setup_enemy(
+        "red_cap",
         "RedCap",
-        40,
-        40,
-        0,
+        200,
         0,
         45,
         11,
-        80,
-        "res://assets/sprites/enemy/red_cap.tres",
-        [
-            SkillDB.get_skill("basic_atk"),
-        ],
-        {}, # Empty inventory
-        'as_mob_level'
+        80
     )
     db['red_cap'] = red_cap
 
-    var stone_troll = Stats.new().setup(
-        "RedCap",
+    var stone_troll = Stats.new().setup_enemy(
+        "stone_troll",
+        "StoneTroll",
         120,
-        120,
-        0,
         0,
         38,
         60,
-        30,
-        "res://assets/sprites/enemy/stone_troll.tres",
-        [
-            SkillDB.get_skill("basic_atk"),
-        ],
-        {}, # Empty inventory
-        'as_mob_level'
+        30
     )
     db['stone_troll'] = stone_troll
 

@@ -23,6 +23,8 @@ class_name Stats
 	Item.EquipSlot.ACCESSORY: null
 }
 
+@export var level_up_skills: Dictionary = {}
+
 @export var level: int = 1
 @export var exp: int = 0
 @export var max_exp: int = 100
@@ -50,6 +52,48 @@ func setup(
 	max_exp = CombatFormula.get_level_up_exp(level)
 	return self
 
+func setup_enemy(
+	id: String,
+	n: String,
+	hp: int,
+	mp: int,
+	a: int,
+	d: int,
+	s: int,
+	entity_type: String = "as_mob_level",
+	anim: String = "",
+	sk: Array = []
+) -> Stats:
+	entity_name = n
+	max_hp = hp
+	current_hp = hp
+	max_mp = mp
+	current_mp = mp
+	atk = a
+	def = d
+	spd = s
+	
+	if anim == "":
+		anim_path = "res://assets/sprites/enemy/" + id + ".tres"
+	else:
+		anim_path = anim
+		
+	if sk.is_empty():
+		skills = [SkillDB.get_skill("basic_atk")]
+	else:
+		# Convert untyped Array to Array[Skill]
+		var typed_skills: Array[Skill] = []
+		for skill in sk:
+			typed_skills.append(skill as Skill)
+		skills = typed_skills
+		
+	inventory = {}
+	var result = CombatFormula.evaluate_monster(hp, mp, a, d, s)
+	level = result[entity_type]
+	max_exp = CombatFormula.get_level_up_exp(level)
+	return self
+
+
 
 func get_exp_yield() -> int:
 	if exp_yield != -1:
@@ -72,6 +116,21 @@ func gain_exp(amount: int) -> bool:
 		stat_points += CombatFormula.STAT_POINTS_PER_LEVEL
 		leveled_up = true
 		recover_on_level_up()
+		
+		# Check for new skills
+		if level_up_skills.has(level):
+			var skill_id = level_up_skills[level]
+			var already_has = false
+			for s in skills:
+				if s.id == skill_id:
+					already_has = true
+					break
+			if not already_has:
+				var new_skill = SkillDB.get_skill(skill_id)
+				if new_skill:
+					skills.append(new_skill)
+					EventBus.show_system_message.emit(["MSG_LEARN_SKILL", new_skill.skill_name])
+					
 	return leveled_up
 
 func get_total_max_hp() -> int:

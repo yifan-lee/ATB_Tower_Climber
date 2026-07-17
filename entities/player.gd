@@ -25,25 +25,15 @@ func _process(delta: float):
 		
 	var direction = Vector2.ZERO
 	
-	# 使用 Input 单例持续检测按键是否处于按住状态
-	if GameConfig.use_wasd_movement:
-		if Input.is_physical_key_pressed(KEY_W):
-			direction = Vector2.UP
-		elif Input.is_physical_key_pressed(KEY_S):
-			direction = Vector2.DOWN
-		elif Input.is_physical_key_pressed(KEY_A):
-			direction = Vector2.LEFT
-		elif Input.is_physical_key_pressed(KEY_D):
-			direction = Vector2.RIGHT
-	else:
-		if Input.is_action_pressed("ui_up") or Input.is_physical_key_pressed(KEY_UP):
-			direction = Vector2.UP
-		elif Input.is_action_pressed("ui_down") or Input.is_physical_key_pressed(KEY_DOWN):
-			direction = Vector2.DOWN
-		elif Input.is_action_pressed("ui_left") or Input.is_physical_key_pressed(KEY_LEFT):
-			direction = Vector2.LEFT
-		elif Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_RIGHT):
-			direction = Vector2.RIGHT
+	# 使用 GameConfig 里的抽象方法检测按键状态
+	if GameConfig.is_pressing_up():
+		direction = Vector2.UP
+	elif GameConfig.is_pressing_down():
+		direction = Vector2.DOWN
+	elif GameConfig.is_pressing_left():
+		direction = Vector2.LEFT
+	elif GameConfig.is_pressing_right():
+		direction = Vector2.RIGHT
 			
 	if direction != Vector2.ZERO:
 		_try_move(direction)

@@ -170,36 +170,53 @@ func _update_cursors():
 	if not item_previewed:
 		EventBus.clear_preview.emit()
 
-func _input(event):
+var input_cooldown: float = 0.0
+const INPUT_DELAY: float = 0.15
+
+func _process(delta: float):
 	if not visible:
 		return
 		
-	if GameConfig.is_action_move_up(event):
+	if Input.is_action_just_pressed("ui_accept"):
+		if current_focus == FocusSide.ITEMS and current_items.size() > 0:
+			_use_item(current_items[item_index])
+		return
+		
+	if input_cooldown > 0:
+		input_cooldown -= delta
+		return
+		
+	var moved = false
+	if GameConfig.is_pressing_up():
 		if current_focus == FocusSide.CATEGORY:
 			category_index = max(0, category_index - 1)
 			_refresh_items()
 		else:
 			item_index = max(0, item_index - 1)
 			_update_cursors()
-	elif GameConfig.is_action_move_down(event):
+		moved = true
+	elif GameConfig.is_pressing_down():
 		if current_focus == FocusSide.CATEGORY:
 			category_index = min(categories.size() - 1, category_index + 1)
 			_refresh_items()
 		else:
 			item_index = min(current_items.size() - 1, item_index + 1)
 			_update_cursors()
-	elif GameConfig.is_action_move_right(event):
+		moved = true
+	elif GameConfig.is_pressing_right():
 		if current_focus == FocusSide.CATEGORY and current_items.size() > 0:
 			current_focus = FocusSide.ITEMS
 			item_index = 0
 			_update_cursors()
-	elif GameConfig.is_action_move_left(event):
+		moved = true
+	elif GameConfig.is_pressing_left():
 		if current_focus == FocusSide.ITEMS:
 			current_focus = FocusSide.CATEGORY
 			_update_cursors()
-	elif event.is_action_pressed("ui_accept"):
-		if current_focus == FocusSide.ITEMS and current_items.size() > 0:
-			_use_item(current_items[item_index])
+		moved = true
+		
+	if moved:
+		input_cooldown = INPUT_DELAY
 
 func _use_item(item_dict):
 	var id = item_dict.id
