@@ -53,7 +53,7 @@
         - 监听 `encounter_monster` 和 `battle_ended` 控制可见性
         - 监听 `player_stats_changed`, `preview_item`, `clear_preview` 控制界面刷新
   - 新建 LevelUpView，并监听其 `level_up_completed`
-  - 新建 SkillMenuView, InventoryView, InfoPanel 
+  - 新建 BattleMenuView, PlayerMenuView, InfoPanel 
   - `_update_floor_info`:
     - 若 `info_panel` 和 `current_map` 存在，调用 `info_panel.refresh_floor_info(current_map)` 刷新底层地名
     - 调用 `info_panel.refresh_player_stats()` 刷新底层玩家概览数据
@@ -97,7 +97,7 @@
     - 调用 `change_state(AppState.INVENTORY)` 进入背包界面，会暂停玩家和地图并显示背包 UI
 - 如果按下 `KEY_C` 或 `KEY_ESCAPE`:
   - 若 `current_state == AppState.INVENTORY`:
-    - `inventory_view.clear()` 清理高亮与预览状态
+    - `player_menu_view.clear()` 清理高亮与预览状态
     - `change_state(AppState.MAP)` 回到地图探索状态
 
 ## 战斗流转逻辑 (`main.gd` 的 `_on_encounter_monster` 回调)
@@ -126,7 +126,7 @@
   - 进度封顶为 `BAR_WIDTH`，并锁定时间 `is_action_paused = true`
   - 标记 `ready_character = "player"`
   - 遍历玩家拥有的技能，利用 `CombatFormula.calculate_damage` 用攻防数值预估每个技能的伤害
-  - 发射信号 `EventBus.player_turn_started.emit(skills_info)`，通知下方的技能选单界面弹出选项
+  - 发射信号 `EventBus.player_turn_started.emit(skills_info)`，通知下方的战斗菜单弹出技能和物品选项
 - 否则如果怪物进度达到 `BAR_WIDTH`:
   - 进度封顶为 `BAR_WIDTH`，锁定时间 `is_action_paused = true`
   - 标记 `ready_character = "enemy"`

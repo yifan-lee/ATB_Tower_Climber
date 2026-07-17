@@ -183,6 +183,19 @@ func _unhandled_input(event):
 				player_menu_view.clear()
 				change_state(AppState.MAP)
 
+		# ====== DEBUG STATE ======
+		# F5: 保存断点 (Save State)
+		elif event.keycode == KEY_F5:
+			if current_state == AppState.MAP:
+				var DebugSnapshot = load("res://core/debug_snapshot.gd")
+				DebugSnapshot.save_state(current_map, player_instance)
+				
+		# F6: 读取断点 (Load State)
+		elif event.keycode == KEY_F6:
+			if current_state == AppState.MAP:
+				var DebugSnapshot = load("res://core/debug_snapshot.gd")
+				DebugSnapshot.load_state(self)
+
 func _pause_map_and_player():
 	if current_map:
 		current_map.process_mode = Node.PROCESS_MODE_DISABLED

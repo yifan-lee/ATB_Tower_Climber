@@ -63,7 +63,7 @@ func _ready():
     var stone_troll = Stats.new().setup_enemy(
         "stone_troll",
         "StoneTroll",
-        100,
+        200,
         0,
         35,
         105,
