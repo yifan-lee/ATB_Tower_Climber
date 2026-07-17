@@ -5,6 +5,9 @@ var map_data = []
 var stairs_config = {}
 var triggers_config = {}
 
+var floor_name_key: String = "MAP_FLOOR_UNKNOWN"
+var floor_desc_key: String = "MAP_DESC_UNKNOWN"
+
 var trigger_handlers = {
 	"change_tile": Callable(self, "_handle_change_tile"),
 	"give_exp": Callable(self, "_handle_give_exp")

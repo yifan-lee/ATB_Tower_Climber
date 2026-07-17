@@ -1,63 +1,47 @@
 # res://ui/stat_info_view.gd
-extends HBoxContainer
+extends PanelContainer
 
 var player_stats: Stats
 
-var name_lbl: RichTextLabel
-var exp_lbl: RichTextLabel
-var hp_lbl: RichTextLabel
-var mp_lbl: RichTextLabel
-var atk_lbl: RichTextLabel
-var def_lbl: RichTextLabel
-var spd_lbl: RichTextLabel
-
+var entity_stat_view: EntityStatView
 var equip_labels: Dictionary = {}
 
 func _ready():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	
+	var style = StyleBoxFlat.new()
+	style.bg_color = ThemeConfig.COLOR_UI_BG_SOLID
+	add_theme_stylebox_override("panel", style)
+	
 	player_stats = EntityDB.get_stats("player")
+	
+	var margin = MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 10)
+	margin.add_theme_constant_override("margin_right", 10)
+	margin.add_theme_constant_override("margin_top", 10)
+	margin.add_theme_constant_override("margin_bottom", 10)
+	add_child(margin)
 	
 	var hbox = HBoxContainer.new()
 	hbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	add_child(hbox)
+	margin.add_child(hbox)
 	
 	# Left Side: Stats
-	var stat_vbox = VBoxContainer.new()
-	stat_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(stat_vbox)
-
-	name_lbl = _create_label("")
-	name_lbl.add_theme_color_override("default_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
-	stat_vbox.add_child(name_lbl)
-	
-	exp_lbl = _create_label("")
-	stat_vbox.add_child(exp_lbl)
-	
-	hp_lbl = _create_label("")
-	mp_lbl = _create_label("")
-	atk_lbl = _create_label("")
-	def_lbl = _create_label("")
-	spd_lbl = _create_label("")
-
-	stat_vbox.add_child(hp_lbl)
-	stat_vbox.add_child(mp_lbl)
-	stat_vbox.add_child(atk_lbl)
-	stat_vbox.add_child(def_lbl)
-	stat_vbox.add_child(spd_lbl)
+	entity_stat_view = EntityStatView.new()
+	hbox.add_child(entity_stat_view)
 	
 	# Right Side: Equipment
 	var equip_vbox = VBoxContainer.new()
 	equip_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(equip_vbox)
 	
-	var equip_title = _create_label("EQUIPMENT")
+	var equip_title = UIUtils.create_rich_label("EQUIPMENT")
 	equip_title.add_theme_color_override("default_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	equip_vbox.add_child(equip_title)
 	
 	for slot in player_stats.equipment.keys():
-		var lbl = _create_label("")
+		var lbl = UIUtils.create_rich_label("")
 		equip_vbox.add_child(lbl)
 		equip_labels[slot] = lbl
 
@@ -68,13 +52,6 @@ func _ready():
 	EventBus.player_stats_changed.connect(_update_stats)
 	EventBus.preview_item.connect(_on_preview_item)
 	EventBus.clear_preview.connect(_on_clear_preview)
-
-func _create_label(text: String) -> RichTextLabel:
-	var lbl = RichTextLabel.new()
-	lbl.bbcode_enabled = true
-	lbl.fit_content = true
-	lbl.text = text
-	return lbl
 
 func _get_slot_name(slot: Item.EquipSlot) -> String:
 	match slot:
@@ -88,14 +65,7 @@ func _get_slot_name(slot: Item.EquipSlot) -> String:
 	return "UNKNOWN"
 
 func _update_stats():
-	name_lbl.text = player_stats.entity_name + " LV." + str(player_stats.level)
-	exp_lbl.text = "EXP: " + str(player_stats.exp) + " / " + str(player_stats.max_exp)
-	
-	hp_lbl.text = "HP: " + str(player_stats.current_hp) + "/" + str(player_stats.get_total_max_hp())
-	mp_lbl.text = "MP: " + str(player_stats.current_mp) + "/" + str(player_stats.get_total_max_mp())
-	atk_lbl.text = "ATK: " + str(player_stats.get_total_atk())
-	def_lbl.text = "DEF: " + str(player_stats.get_total_def())
-	spd_lbl.text = "SPD: " + str(player_stats.get_total_spd())
+	entity_stat_view.update_stats(player_stats, {}, true)
 	
 	# Update equipment list
 	for slot in equip_labels.keys():
@@ -105,16 +75,7 @@ func _update_stats():
 		equip_labels[slot].modulate = ThemeConfig.COLOR_TEXT_NORMAL # Reset highlight
 
 func _on_preview_item(item_data: Resource):
-	_update_stats() # Reset to base state first
-	
-	var stat_labels = {
-		"hp": hp_lbl,
-		"mp": mp_lbl,
-		"atk": atk_lbl,
-		"def": def_lbl,
-		"spd": spd_lbl
-	}
-	
+	var expected_changes = {}
 	var effects = item_data.get_effects()
 	
 	if item_data.type == Item.ItemType.EQUIPMENT:
@@ -126,7 +87,6 @@ func _on_preview_item(item_data: Resource):
 		var old_effects = old_equip.get_effects() if old_equip else {}
 		
 		# For equipment, we want to show the DELTA across all possible stats
-		# To do this safely, we combine all keys from both new and old effects
 		var all_keys = []
 		for k in effects.keys():
 			if not all_keys.has(k): all_keys.append(k)
@@ -134,34 +94,14 @@ func _on_preview_item(item_data: Resource):
 			if not all_keys.has(k): all_keys.append(k)
 			
 		for stat_name in all_keys:
-			if not stat_labels.has(stat_name): continue
-			
 			var new_val = effects.get(stat_name, 0)
 			var old_val = old_effects.get(stat_name, 0)
-			var delta = new_val - old_val
-			
-			var lbl = stat_labels[stat_name]
-			if delta > 0:
-				lbl.text += " [color=green](+" + str(delta) + ")[/color]"
-			elif delta < 0:
-				lbl.text += " [color=red](" + str(delta) + ")[/color]"
-				
+			expected_changes[stat_name] = new_val - old_val
 	else:
 		# Potion logic
-		for stat_name in effects.keys():
-			var val = effects[stat_name]
-			var lbl = stat_labels[stat_name]
-			
-			if stat_name == "hp" or stat_name == "mp":
-				var max_val = player_stats.get_total_max_hp() if stat_name == "hp" else player_stats.get_total_max_mp()
-				var cur_val = player_stats.current_hp if stat_name == "hp" else player_stats.current_mp
-				val = min(val, max_val - cur_val)
-				if val <= 0: continue
-				
-			if val > 0:
-				lbl.text += " [color=green](+" + str(val) + ")[/color]"
-			elif val < 0:
-				lbl.text += " [color=red](" + str(val) + ")[/color]"
+		expected_changes = effects.duplicate()
+		
+	entity_stat_view.update_stats(player_stats, expected_changes, true)
 
 func _on_clear_preview():
 	_update_stats()

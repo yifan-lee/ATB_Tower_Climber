@@ -12,14 +12,11 @@ var skill_labels: Array = []
 func _ready():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	size_flags_vertical = Control.SIZE_EXPAND_FILL
-	visible = false # 初始隐藏
 
 	_setup_skill_list_box()
 	_setup_desc_label_box()
 	
-
-	EventBus.show_skill_menu.connect(_on_show_skill_menu)
-	EventBus.battle_ended.connect(_on_hide_skill_menu)
+	EventBus.player_turn_started.connect(_on_player_turn_started)
 
 func _setup_skill_list_box():
 	skill_list_box = VBoxContainer.new()
@@ -41,12 +38,7 @@ func _setup_desc_label_box():
 	# 直接塞进本脚本的 HBoxContainer 里
 	add_child(skill_desc_label)
 
-func _on_hide_skill_menu(_result: String = ""):
-	is_menu_active = false
-	visible = false
-
-func _on_show_skill_menu(skills_info: Array):
-	visible = true
+func _on_player_turn_started(skills_info: Array):
 	is_menu_active = true
 
 	_clear_skill_buttons()
@@ -74,6 +66,7 @@ func _clear_skill_buttons():
 	for child in skill_list_box.get_children():
 		child.queue_free()
 	skill_labels.clear()
+	skill_desc_label.text = ""
 
 func _update_menu_cursor():
 	for i in range(available_skills.size()):
@@ -85,9 +78,12 @@ func _update_menu_cursor():
 				tr(skill.description) + "\n" +
 				tr("DISPLAY_DAMAGE") + str(skill.damage) + "\n" +
 				tr("DISPLAY_MANA_COST") + str(skill.mana_cost) + "\n" +
-				tr("DISPLAY_CD") + str(skill.max_cd) + "\n" +
-				tr("DISPLAY_ESTIMATED_DAMAGE") + str(info.estimated_damage)
+				tr("DISPLAY_CD") + str(skill.max_cd)
 			)
+			EventBus.preview_skill.emit({
+				"enemy_changes": {"hp": - info.estimated_damage},
+				"player_changes": {"mp": - skill.mana_cost}
+			})
 		else:
 			skill_labels[i].text = "   " + skill_labels[i].text.trim_prefix("   ").trim_prefix("> ")
 
@@ -102,6 +98,8 @@ func _process(delta: float):
 		var chosen_skill = available_skills[current_selection].skill
 		if chosen_skill.current_cd <= 0:
 			is_menu_active = false
+			EventBus.clear_skill_preview.emit()
+			_clear_skill_buttons()
 			EventBus.player_skill_chosen.emit(chosen_skill)
 		return
 		
