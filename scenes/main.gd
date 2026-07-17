@@ -171,7 +171,7 @@ func change_state(new_state: AppState):
 			level_up_view.show()
 			level_up_view.refresh()
 
-func _input(event):
+func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
 		if event.keycode == KEY_B:
 			if current_state == AppState.MAP:
