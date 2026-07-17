@@ -58,7 +58,7 @@ func _build_map_grids():
 			
 			var cell_val = "floor"
 			if y < map_data.size() and x < map_data[y].size():
-				var v = str(map_data[y][x])
+				var v = str(map_data[y][x]).strip_edges()
 				if v == "" or v == "0":
 					cell_val = "floor"
 				elif v in ["wall", "door_closed", "door_open", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap"]:

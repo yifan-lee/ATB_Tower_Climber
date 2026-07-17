@@ -6,17 +6,17 @@ func _init() -> void:
 	floor_desc_key = "MAP_FLOOR_1_DESC"
 	
 	map_data = [
-		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "", "", "tree_branch", "", "", "wall", "wall", "wall"],
-		["wall", "wall", "", "", "wall", "wall", "wall", "", "", "wall", "wall"],
-		["wall", "wall", "", "wall", "wall", "pedal_switch", "wall", "wall", "", "wall", "wall"],
-		["wall", "wall", "", "", "", "bloodshot_eye", "", "", "", "wall", "wall"],
-		["wall", "wall", "", "wall", "wall", "", "wall", "wall", "", "wall", "wall"],
-		["wall", "wall", "", "", "wall", "", "wall", "", "", "wall", "wall"],
-		["wall", "wall", "wall", "", "", "bloodshot_eye", "", "", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall         ", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "    ", "    ", "tree_branch  ", "    ", "    ", "wall", "wall", "wall"],
+		["wall", "wall", "    ", "    ", "wall", "wall         ", "wall", "    ", "    ", "wall", "wall"],
+		["wall", "wall", "    ", "wall", "wall", "pedal_switch ", "wall", "wall", "    ", "wall", "wall"],
+		["wall", "wall", "    ", "    ", "    ", "bloodshot_eye", "    ", "    ", "    ", "wall", "wall"],
+		["wall", "wall", "    ", "wall", "wall", "             ", "wall", "wall", "    ", "wall", "wall"],
+		["wall", "wall", "    ", "    ", "wall", "             ", "wall", "    ", "    ", "wall", "wall"],
+		["wall", "wall", "wall", "    ", "    ", "bloodshot_eye", "    ", "    ", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
 	]
 	
 	stairs_config = {
