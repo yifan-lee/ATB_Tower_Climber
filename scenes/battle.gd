@@ -1,6 +1,8 @@
 # res://scenes/battle.gd
 extends Control
 
+const EntityStatView = preload("res://ui/components/entity_stat_view.gd")
+
 var player_stats: Stats
 var enemy_stats: Stats
 var enemy_id: String
@@ -22,8 +24,8 @@ var is_action_paused: bool = false
 var ready_character: String = "" # 记录当前是谁走到了终点 ("player" 或 "enemy")
 
 
-var p_hp_label: Label
-var e_hp_label: Label
+var p_stat_view: EntityStatView
+var e_stat_view: EntityStatView
 
 var speed_dom: float = 100.0
 var speed_lowerbound: float = 0.1
@@ -53,6 +55,8 @@ func _ready():
 	e_speed_px = BAR_WIDTH * _get_speed(enemy_stats.get_total_spd())
 
 	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
+	EventBus.preview_skill.connect(_on_preview_skill)
+	EventBus.clear_skill_preview.connect(_on_clear_skill_preview)
 
 func _get_speed(speed: float) -> float:
 	return max(speed_lowerbound, speed / speed_dom)
@@ -85,33 +89,13 @@ func _build_middle_stats():
 	hbox.add_theme_constant_override("separation", GameConfig.GRID_SIZE) # 左右间距
 	add_child(hbox)
 
-	hbox.add_child(_create_stat_panel(player_stats, true))
-	hbox.add_child(_create_stat_panel(enemy_stats, false))
-
-func _create_stat_panel(stats: Stats, is_player: bool) -> VBoxContainer:
-	var vbox = VBoxContainer.new()
-	vbox.add_child(_create_label(stats.entity_name, ThemeConfig.COLOR_TEXT_HIGHLIGHT)) # 名字标黄
-	var hp_lbl = _create_label(
-		"HP: " + str(stats.current_hp) + "/" + str(stats.get_total_max_hp()) + "\n" +
-		"MP: " + str(stats.current_mp) + "/" + str(stats.get_total_max_mp())
-	)
-	vbox.add_child(hp_lbl)
-	if is_player:
-		p_hp_label = hp_lbl
-	else:
-		e_hp_label = hp_lbl
-	vbox.add_child(_create_label("ATK: " + str(stats.get_total_atk())))
-	vbox.add_child(_create_label("DEF: " + str(stats.get_total_def())))
-	vbox.add_child(_create_label("SPD: " + str(stats.get_total_spd())))
-	return vbox
-
-
-func _create_label(text: String, color: Color = ThemeConfig.COLOR_TEXT_NORMAL) -> Label:
-	var lbl = Label.new()
-	lbl.text = text
-	lbl.add_theme_color_override("font_color", color)
-	return lbl
-
+	p_stat_view = EntityStatView.new()
+	hbox.add_child(p_stat_view)
+	p_stat_view.update_stats(player_stats)
+	
+	e_stat_view = EntityStatView.new()
+	hbox.add_child(e_stat_view)
+	e_stat_view.update_stats(enemy_stats)
 
 func _build_bottom_animations():
 	# 左侧玩家动画 (我们在战斗画面让它大一点，比如占据 2 个格子的尺寸: 128x128)
@@ -156,7 +140,6 @@ func _process(delta):
 		p_progress = BAR_WIDTH
 		is_action_paused = true
 		ready_character = "player"
-		# EventBus.show_system_message.emit("MSG_PLAYER_TURN") # 通知 UI 显示玩家回合
 		var skills_info = []
 		for skill in player_stats.skills:
 			var estimated_dmg = CombatFormula.calculate_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), skill.damage)
@@ -165,14 +148,13 @@ func _process(delta):
 				"estimated_damage": int(estimated_dmg)
 			})
 			
-		EventBus.show_skill_menu.emit(skills_info)
+		EventBus.player_turn_started.emit(skills_info)
 		
 	# 判断怪物是否到达终点（如果同时到达，玩家优先）
 	elif e_progress >= BAR_WIDTH:
 		e_progress = BAR_WIDTH
 		is_action_paused = true
 		ready_character = "enemy"
-		# EventBus.show_system_message.emit("MSG_ENEMY_TURN") # 通知 UI 显示怪物回合
 		get_tree().create_timer(1.0).timeout.connect(_on_enemy_turn)
 		
 	# 实时更新指针的 X 坐标
@@ -224,17 +206,20 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill) -> int:
 	defender.current_hp = max(0, defender.current_hp - final_damage)
 	
 	# 刷新上方战斗面板的文字
-	p_hp_label.text = (
-		"HP: " + str(player_stats.current_hp) + "/" + str(player_stats.get_total_max_hp()) + "\n" +
-		"MP: " + str(player_stats.current_mp) + "/" + str(player_stats.get_total_max_mp())
-	)
-	e_hp_label.text = (
-		"HP: " + str(enemy_stats.current_hp) + "/" + str(enemy_stats.get_total_max_hp()) + "\n" +
-		"MP: " + str(enemy_stats.current_mp) + "/" + str(enemy_stats.get_total_max_mp())
-	)
+	p_stat_view.update_stats(player_stats)
+	e_stat_view.update_stats(enemy_stats)
 	
 	return final_damage
 
+func _on_preview_skill(skill_data: Dictionary):
+	if skill_data.has("player_changes"):
+		p_stat_view.update_stats(player_stats, skill_data["player_changes"])
+	if skill_data.has("enemy_changes"):
+		e_stat_view.update_stats(enemy_stats, skill_data["enemy_changes"])
+
+func _on_clear_skill_preview():
+	p_stat_view.update_stats(player_stats)
+	e_stat_view.update_stats(enemy_stats)
 
 func _resume_battle(was_player: bool):
 	# 谁刚攻击完，谁的进度条清零
@@ -244,4 +229,3 @@ func _resume_battle(was_player: bool):
 		e_progress = 0.0
 		
 	is_action_paused = false
-	# EventBus.show_system_message.emit("MSG_BATTLE_CONTINUE")

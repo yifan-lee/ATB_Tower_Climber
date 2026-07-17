@@ -1,6 +1,8 @@
 # res://ui/level_up_view.gd
 extends Control
 
+signal level_up_completed
+
 var player_stats: Stats
 var available_points: int = 0
 
@@ -71,9 +73,6 @@ func _ready():
 	confirm_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	vbox.add_child(confirm_label)
 
-	EventBus.show_level_up.connect(_on_show)
-	EventBus.hide_level_up.connect(_on_hide)
-	
 	set_process_input(false)
 
 func _create_stat_row(parent: Node) -> Label:
@@ -82,8 +81,7 @@ func _create_stat_row(parent: Node) -> Label:
 	parent.add_child(lbl)
 	return lbl
 
-func _on_show():
-	visible = true
+func refresh():
 	set_process_input(true)
 	available_points = player_stats.stat_points
 	current_selection_index = 0
@@ -97,10 +95,6 @@ func _on_show():
 	}
 	
 	_update_ui()
-
-func _on_hide():
-	visible = false
-	set_process_input(false)
 
 func _update_ui():
 	points_label.text = "Stat Points: " + str(available_points)
@@ -151,7 +145,8 @@ func _process(delta: float):
 	if Input.is_action_just_pressed("ui_accept") or Input.is_key_pressed(KEY_Z):
 		if current_selection_index == MAX_SELECTION_INDEX and available_points == 0:
 			_apply_allocations()
-			EventBus.hide_level_up.emit()
+			set_process_input(false)
+			level_up_completed.emit()
 		return
 		
 	if input_cooldown > 0:

@@ -73,7 +73,7 @@ func _ready():
 		0, 0, "EQUIPMENT_SWIFT_BOOTS_DESC",
 		0, 0, 10, Item.EquipSlot.FEET
 	)
-	swift_boots.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 3, 0)
+	swift_boots.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
 	db["swift_boots"] = swift_boots
 	
 

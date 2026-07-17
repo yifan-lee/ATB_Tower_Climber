@@ -66,8 +66,7 @@ func _ready():
 	desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	right_panel.add_child(desc_label)
 	
-	EventBus.show_inventory.connect(_on_show_inventory)
-	EventBus.hide_inventory.connect(_on_hide_inventory)
+
 
 func _create_title(text: String) -> Label:
 	var lbl = Label.new()
@@ -75,16 +74,14 @@ func _create_title(text: String) -> Label:
 	lbl.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT) # Highlight title
 	return lbl
 
-func _on_show_inventory():
-	visible = true
+func refresh():
 	current_focus = FocusSide.CATEGORY
 	category_index = 0
 	item_index = 0
 	_refresh_categories()
 	_refresh_items()
 
-func _on_hide_inventory():
-	visible = false
+func clear():
 	EventBus.clear_preview.emit()
 
 func _refresh_categories():

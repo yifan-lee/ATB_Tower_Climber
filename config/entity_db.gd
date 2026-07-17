@@ -52,22 +52,22 @@ func _ready():
     var red_cap = Stats.new().setup_enemy(
         "red_cap",
         "RedCap",
-        200,
+        30,
         0,
-        45,
-        11,
-        80
+        25,
+        12,
+        115
     )
     db['red_cap'] = red_cap
 
     var stone_troll = Stats.new().setup_enemy(
         "stone_troll",
         "StoneTroll",
-        120,
+        100,
         0,
-        38,
-        60,
-        30
+        35,
+        105,
+        40
     )
     db['stone_troll'] = stone_troll
 
