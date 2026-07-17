@@ -65,3 +65,5 @@ MAP_FLOOR_2_DESC,这里弥漫着迷雾，能见度极低。,Covered in thick mis
 UI_CONTROLS_GUIDE,"WASD移动 | B打开背包 | 回车确认 | ESC退出","WASD to Move | B for Inventory | Enter to Confirm | ESC to Cancel"
 STAT_HP,生命值,HP
 STAT_MP,魔法值,MP
+TAB_ITEMS,道具,Items
+TAB_SKILLS,技能,Skills

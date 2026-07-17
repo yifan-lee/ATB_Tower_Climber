@@ -26,3 +26,4 @@ signal clear_skill_preview() # 清除预览
 # --- 物品系统相关信号 ---
 signal inventory_input(event: InputEvent)
 signal player_stats_changed()
+signal player_item_used()

@@ -4,10 +4,11 @@ extends Node
 const MapFloor1 = preload("res://scenes/maps/floor_1.gd")
 const Player = preload("res://entities/player.gd")
 const BattleScene = preload("res://scenes/battle.gd")
-const InventoryView = preload("res://ui/inventory_view.gd")
+
 const LevelUpView = preload("res://ui/level_up_view.gd")
 const StatInfoView = preload("res://ui/stat_info_view.gd")
-const SkillMenuView = preload("res://ui/skill_menu_view.gd")
+const BattleMenuView = preload("res://ui/battle_menu_view.gd")
+const PlayerMenuView = preload("res://ui/player_menu_view.gd")
 const SystemMessageView = preload("res://ui/system_message_view.gd")
 const InfoPanel = preload("res://ui/info_panel.gd")
 
@@ -21,10 +22,10 @@ var player_instance: CharacterBody2D
 var overlay_layer1: Control
 var overlay_layer2: Control
 
-var inventory_view: Control
+var player_menu_view: Control
 var level_up_view: Control
 var stat_info_view: Control
-var skill_menu_view: Control
+var battle_menu_view: Control
 var system_message_view: Control
 var info_panel: Control
 
@@ -77,8 +78,9 @@ func _setup_containers():
 	ui_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.UI_AREA_HEIGHT)
 	ui_container.position = Vector2(0, GameConfig.GAME_AREA_HEIGHT)
 	
-	overlay_layer1.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
-	overlay_layer1.position = Vector2(0, 0)
+	var sys_msg_height = 40
+	overlay_layer1.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT - sys_msg_height)
+	overlay_layer1.position = Vector2(0, sys_msg_height)
 	
 	overlay_layer2.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.UI_AREA_HEIGHT)
 	overlay_layer2.position = Vector2(0, GameConfig.GAME_AREA_HEIGHT)
@@ -113,13 +115,13 @@ func _load_initial_scenes():
 	level_up_view.level_up_completed.connect(_on_level_up_completed)
 	overlay_layer1.add_child(level_up_view)
 	
-	skill_menu_view = SkillMenuView.new()
-	skill_menu_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay_layer2.add_child(skill_menu_view)
+	battle_menu_view = BattleMenuView.new()
+	battle_menu_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay_layer2.add_child(battle_menu_view)
 	
-	inventory_view = InventoryView.new()
-	inventory_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	overlay_layer2.add_child(inventory_view)
+	player_menu_view = PlayerMenuView.new()
+	player_menu_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay_layer2.add_child(player_menu_view)
 	
 	# 4. 加载 InfoPanel 到底部的 ui_container
 	info_panel = InfoPanel.new()
@@ -138,8 +140,8 @@ func change_state(new_state: AppState):
 	overlay_layer1.hide()
 	overlay_layer2.hide()
 	stat_info_view.hide()
-	skill_menu_view.hide()
-	inventory_view.hide()
+	battle_menu_view.hide()
+	player_menu_view.hide()
 	level_up_view.hide()
 	info_panel.hide()
 	
@@ -159,13 +161,13 @@ func change_state(new_state: AppState):
 			overlay_layer2.show()
 			if current_battle:
 				current_battle.show()
-			skill_menu_view.show()
+			battle_menu_view.show()
 		AppState.INVENTORY:
 			overlay_layer1.show()
 			overlay_layer2.show()
 			stat_info_view.show()
-			inventory_view.show()
-			inventory_view.refresh()
+			player_menu_view.show()
+			player_menu_view.refresh()
 		AppState.LEVEL_UP:
 			overlay_layer1.show()
 			level_up_view.show()
@@ -178,7 +180,7 @@ func _unhandled_input(event):
 				change_state(AppState.INVENTORY)
 		elif event.keycode == KEY_C or event.keycode == KEY_ESCAPE:
 			if current_state == AppState.INVENTORY:
-				inventory_view.clear()
+				player_menu_view.clear()
 				change_state(AppState.MAP)
 
 func _pause_map_and_player():

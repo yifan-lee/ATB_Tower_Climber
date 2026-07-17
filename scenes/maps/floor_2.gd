@@ -11,7 +11,7 @@ func _init() -> void:
         ["wall", "wall", "wall", "", "", "", "", "red_cap", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "red_cap", "wall", "wall", "wall", "red_cap", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "stone_troll", "wall", "wall", "wall", "swift_boots", "wall", "wall", "wall"],
-        ["wall", "wall", "wall", "wall", "wall", "stone_troll", "wall", "wall", "wall", "wall", "wall"],
+        ["wall", "wall", "wall", "wall", "wall", "stone_troll", "wall", "hp_herb", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
         ["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],

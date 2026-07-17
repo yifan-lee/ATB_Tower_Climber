@@ -40,7 +40,8 @@ func setup(enemy_id: String):
 	
 	
 func _ready():
-	custom_minimum_size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
+	size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	size_flags_vertical = Control.SIZE_EXPAND_FILL
 	var bg = ColorRect.new()
 	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
 	bg.color = ThemeConfig.COLOR_BATTLE_BG
@@ -55,6 +56,7 @@ func _ready():
 	e_speed_px = BAR_WIDTH * _get_speed(enemy_stats.get_total_spd())
 
 	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
+	EventBus.player_item_used.connect(_on_player_item_used)
 	EventBus.preview_skill.connect(_on_preview_skill)
 	EventBus.clear_skill_preview.connect(_on_clear_skill_preview)
 
@@ -229,3 +231,15 @@ func _resume_battle(was_player: bool):
 		e_progress = 0.0
 		
 	is_action_paused = false
+
+func _on_player_item_used():
+	p_stat_view.update_stats(player_stats)
+	e_stat_view.update_stats(enemy_stats)
+	
+	if enemy_stats.current_hp <= 0:
+		var gained_exp = enemy_stats.get_exp_yield()
+		player_stats.gain_exp(gained_exp)
+		EventBus.show_system_message.emit(["MSG_GAINED_EXP", str(gained_exp)])
+		EventBus.battle_ended.emit("win")
+	else:
+		_resume_battle(true)
