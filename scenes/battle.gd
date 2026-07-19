@@ -100,16 +100,15 @@ func _build_middle_stats():
 	e_stat_view.update_stats(enemy_stats)
 
 func _build_bottom_animations():
-	# 左侧玩家动画 (我们在战斗画面让它大一点，比如占据 2 个格子的尺寸: 128x128)
-	var p_anim = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE * 2)
+	var p_anim = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE, "combat_idle")
 	p_anim.position = Vector2(
 		GameConfig.GRID_SIZE + GameConfig.WALL_THICKNESS,
 		GameConfig.GAME_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
 	)
 	add_child(p_anim)
 	
-	# 右侧怪物动画 (同样 128x128)
-	var e_anim = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE * 2)
+	var e_anim = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE, "combat_idle")
+	e_anim.flip_h = true
 	e_anim.position = Vector2(
 		GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE - GameConfig.WALL_THICKNESS,
 		GameConfig.GAME_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE

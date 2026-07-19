@@ -2,7 +2,7 @@
 extends CharacterBody2D
 
 # 记录当前面朝的方向，默认向下
-# var facing_direction = "down"
+var facing = "down"
 var anim_sprite: AnimatedSprite2D
 
 func _ready():
@@ -16,7 +16,7 @@ func _setup_sprite():
 	add_child(anim_sprite)
 
 var move_cooldown: float = 0.0
-const MOVE_DELAY: float = 0.15 # 0.15秒移动一格
+const MOVE_DELAY: float = 0.25 # 0.15秒移动一格
 
 func _process(delta: float):
 	if move_cooldown > 0:
@@ -28,16 +28,23 @@ func _process(delta: float):
 	# 使用 GameConfig 里的抽象方法检测按键状态
 	if GameConfig.is_pressing_up():
 		direction = Vector2.UP
+		facing = "up"
 	elif GameConfig.is_pressing_down():
 		direction = Vector2.DOWN
+		facing = "down"
 	elif GameConfig.is_pressing_left():
 		direction = Vector2.LEFT
+		facing = "left"
 	elif GameConfig.is_pressing_right():
 		direction = Vector2.RIGHT
+		facing = "right"
 			
 	if direction != Vector2.ZERO:
 		_try_move(direction)
 		move_cooldown = MOVE_DELAY
+	else:
+		if anim_sprite.animation != "idle":
+			anim_sprite.play("idle")
 
 func _try_move(direction: Vector2):
 	var target_pixel_pos = position + direction * GameConfig.GRID_SIZE
@@ -69,5 +76,5 @@ func _try_move(direction: Vector2):
 
 	# 执行移动
 	position = target_pixel_pos
-	anim_sprite.play("walk")
+	anim_sprite.play("walk_" + facing)
 	EventBus.player_stepped.emit(target_grid_pos)

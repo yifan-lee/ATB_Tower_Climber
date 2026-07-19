@@ -94,7 +94,6 @@ func setup_enemy(
 	return self
 
 
-
 func get_exp_yield() -> int:
 	if exp_yield != -1:
 		return exp_yield

@@ -11,10 +11,10 @@ func _init() -> void:
 		["wall", "wall", "wall", "    ", "    ", "tree_branch  ", "    ", "    ", "wall", "wall", "wall"],
 		["wall", "wall", "    ", "    ", "wall", "wall         ", "wall", "    ", "    ", "wall", "wall"],
 		["wall", "wall", "    ", "wall", "wall", "pedal_switch ", "wall", "wall", "    ", "wall", "wall"],
-		["wall", "wall", "    ", "    ", "    ", "bloodshot_eye", "    ", "    ", "    ", "wall", "wall"],
+		["wall", "wall", "    ", "    ", "    ", "monster_first", "    ", "    ", "    ", "wall", "wall"],
 		["wall", "wall", "    ", "wall", "wall", "             ", "wall", "wall", "    ", "wall", "wall"],
 		["wall", "wall", "    ", "    ", "wall", "             ", "wall", "    ", "    ", "wall", "wall"],
-		["wall", "wall", "wall", "    ", "    ", "bloodshot_eye", "    ", "    ", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "    ", "    ", "monster_first", "    ", "    ", "wall", "wall", "wall"],
 		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
 		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
 	]
@@ -27,7 +27,7 @@ func _init() -> void:
 	}
 
 	triggers_config = {
-		Vector2i(5, 4): [ 
+		Vector2i(5, 4): [
 			{
 				"type": "change_tile",
 				"target_grid": Vector2i(5, 0),

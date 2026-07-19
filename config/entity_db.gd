@@ -14,7 +14,7 @@ func _ready():
         100,
         100,
         100,
-        "res://assets/sprites/player/blonde_man_animations.tres",
+        "res://assets/sprites/player/player.tres",
         # "res://assets/sprites/player/warrior.tres",
         [
             SkillDB.get_skill("basic_atk"),
@@ -38,8 +38,8 @@ func _ready():
     }
     
     var bloodshot = Stats.new().setup_enemy(
-        "blootshot_eye",
-        "BloodshotEye",
+        "monster_first",
+        "monster_first",
         80,
         0,
         50,
@@ -47,29 +47,29 @@ func _ready():
         52
     )
     # bloodshot.exp_yield = 50
-    db['bloodshot_eye'] = bloodshot
+    db['monster_first'] = bloodshot
 
     var red_cap = Stats.new().setup_enemy(
-        "red_cap",
-        "RedCap",
+        "monster_spd_lv1",
+        "monster_spd_lv1",
         30,
         0,
         25,
         12,
         115
     )
-    db['red_cap'] = red_cap
+    db['monster_spd_lv1'] = red_cap
 
     var stone_troll = Stats.new().setup_enemy(
-        "stone_troll",
-        "StoneTroll",
+        "monster_def_lv1",
+        "monster_def_lv1",
         200,
         0,
         35,
         105,
         40
     )
-    db['stone_troll'] = stone_troll
+    db['monster_def_lv1'] = stone_troll
 
 func get_stats(id: String) -> Stats:
     return db.get(id)
