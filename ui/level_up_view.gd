@@ -29,6 +29,7 @@ const MAX_SELECTION_INDEX = 5 # 0:hp, 1:mp, 2:atk, 3:def, 4:spd, 5:confirm
 func _ready():
 	visible = false
 	player_stats = EntityDB.get_stats("player")
+	EventBus.game_loaded.connect(_on_game_loaded)
 	
 	# Semi-transparent background
 	var bg = ColorRect.new()
@@ -201,3 +202,8 @@ func _apply_allocations():
 	
 	player_stats.stat_points = 0 # Safety
 	EventBus.player_stats_changed.emit()
+
+func _on_game_loaded():
+	player_stats = EntityDB.get_stats("player")
+	if visible:
+		refresh()

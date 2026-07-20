@@ -52,6 +52,7 @@ func _ready():
 	EventBus.player_stats_changed.connect(_update_stats)
 	EventBus.preview_item.connect(_on_preview_item)
 	EventBus.clear_preview.connect(_on_clear_preview)
+	EventBus.game_loaded.connect(_on_game_loaded)
 
 func _get_slot_name(slot: Item.EquipSlot) -> String:
 	match slot:
@@ -112,3 +113,8 @@ func _on_encounter_monster(_id: String, _node: Node):
 func _on_battle_ended(_result: String):
 	_update_stats()
 	visible = true
+
+func _on_game_loaded():
+	player_stats = EntityDB.get_stats("player")
+	if visible:
+		_update_stats()

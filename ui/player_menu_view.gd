@@ -38,6 +38,8 @@ func _ready():
 	
 	player_stats = EntityDB.get_stats("player")
 	
+	EventBus.game_loaded.connect(_on_game_loaded)
+	
 	# Top Tabs
 	tabs_hbox = HBoxContainer.new()
 	tabs_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -275,3 +277,8 @@ func _use_item(item_dict):
 				current_focus = FocusState.FOCUS_CATEGORY
 				
 			_refresh_view()
+
+func _on_game_loaded():
+	player_stats = EntityDB.get_stats("player")
+	if visible:
+		refresh()

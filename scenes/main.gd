@@ -11,6 +11,7 @@ const BattleMenuView = preload("res://ui/battle_menu_view.gd")
 const PlayerMenuView = preload("res://ui/player_menu_view.gd")
 const SystemMessageView = preload("res://ui/system_message_view.gd")
 const InfoPanel = preload("res://ui/info_panel.gd")
+const SystemMenuView = preload("res://ui/system_menu_view.gd")
 
 var game_container: Control
 var ui_container: Control
@@ -28,17 +29,22 @@ var stat_info_view: Control
 var battle_menu_view: Control
 var system_message_view: Control
 var info_panel: Control
+var system_menu_view: Control
 
 var initial_player_position_x: int = 5
 var initial_player_position_y: int = 10
 
-enum AppState {MAP, BATTLE, INVENTORY, LEVEL_UP}
+enum AppState {MAP, BATTLE, INVENTORY, LEVEL_UP, SYSTEM}
 var current_state: AppState = AppState.MAP
 
 func _ready():
 	game_container = Control.new()
 	game_container.name = "GameContainer"
 	add_child(game_container)
+	
+	if FileAccess.file_exists("res://core/debug_system.gd"):
+		add_child(load("res://core/debug_system.gd").new())
+
 	
 	ui_container = Control.new()
 	ui_container.name = "UIContainer"
@@ -128,6 +134,12 @@ func _load_initial_scenes():
 	info_panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	ui_container.add_child(info_panel)
 	
+	system_menu_view = SystemMenuView.new()
+	system_menu_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay_layer2.add_child(system_menu_view)
+	
+	EventBus.game_loaded.connect(_on_game_loaded)
+	
 	_update_floor_info()
 
 func _update_floor_info():
@@ -144,6 +156,7 @@ func change_state(new_state: AppState):
 	player_menu_view.hide()
 	level_up_view.hide()
 	info_panel.hide()
+	system_menu_view.hide()
 	
 	if current_battle:
 		current_battle.hide()
@@ -172,6 +185,11 @@ func change_state(new_state: AppState):
 			overlay_layer1.show()
 			level_up_view.show()
 			level_up_view.refresh()
+		AppState.SYSTEM:
+			overlay_layer1.show()
+			overlay_layer2.show()
+			system_menu_view.show()
+			system_menu_view.refresh()
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -182,19 +200,12 @@ func _unhandled_input(event):
 			if current_state == AppState.INVENTORY:
 				player_menu_view.clear()
 				change_state(AppState.MAP)
+			elif current_state == AppState.SYSTEM and event.keycode == KEY_ESCAPE:
+				change_state(AppState.MAP)
+			elif current_state == AppState.MAP and event.keycode == KEY_ESCAPE:
+				change_state(AppState.SYSTEM)
 
-		# ====== DEBUG STATE ======
-		# F5: 保存断点 (Save State)
-		elif event.keycode == KEY_F5:
-			if current_state == AppState.MAP:
-				var DebugSnapshot = load("res://core/debug_snapshot.gd")
-				DebugSnapshot.save_state(current_map, player_instance)
-				
-		# F6: 读取断点 (Load State)
-		elif event.keycode == KEY_F6:
-			if current_state == AppState.MAP:
-				var DebugSnapshot = load("res://core/debug_snapshot.gd")
-				DebugSnapshot.load_state(self)
+
 
 func _pause_map_and_player():
 	if current_map:
@@ -274,3 +285,8 @@ func _on_battle_ended(result: String = ""):
 
 func _on_level_up_completed():
 	change_state(AppState.MAP)
+
+func _on_game_loaded():
+	# Update the player_instance reference if it was recreated or re-parented?
+	# We don't recreate player_instance, its data just updates in EntityDB.
+	_update_floor_info()

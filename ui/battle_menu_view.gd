@@ -69,6 +69,7 @@ func _ready():
 	main_vbox.add_child(desc_label)
 
 	EventBus.player_turn_started.connect(_on_player_turn_started)
+	EventBus.game_loaded.connect(_on_game_loaded)
 
 func _on_player_turn_started(skills_info: Array):
 	is_menu_active = true
@@ -270,3 +271,8 @@ func _close_menu():
 	EventBus.clear_skill_preview.emit()
 	EventBus.clear_preview.emit()
 	_clear_menu()
+
+func _on_game_loaded():
+	if is_menu_active:
+		player_stats = EntityDB.get_stats("player")
+		_refresh_view()

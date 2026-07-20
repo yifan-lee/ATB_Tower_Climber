@@ -70,6 +70,7 @@ func _ready():
 	
 	EventBus.player_stats_changed.connect(refresh_player_stats)
 	EventBus.battle_ended.connect(_on_battle_ended)
+	EventBus.game_loaded.connect(refresh_player_stats)
 
 func refresh_floor_info(map_node: Node2D):
 	if map_node and "floor_name_key" in map_node and "floor_desc_key" in map_node:
