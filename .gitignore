@@ -1,3 +1,11 @@
 # Godot 4+ specific ignores
 .godot/
 /android/
+
+
+# 1. 忽略 MCP 服务端源码与付费包
+resources/godot-mcp-pro-server/
+# 2. 忽略 MCP 本地配置文件（包含环境及绝对路径）
+.mcp.json
+# 3. 忽略 Node.js 依赖与构建产物（如果在项目根目录安装了 node 依赖）
+node_modules/
