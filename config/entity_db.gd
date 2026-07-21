@@ -7,10 +7,10 @@ var db: Dictionary = {}
 func _ready():
     db['player'] = Stats.new().setup(
         "TooTwo",
-        100,
-        100,
-        50,
-        50,
+        500,
+        500,
+        200,
+        200,
         100,
         100,
         100,

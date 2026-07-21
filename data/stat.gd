@@ -101,9 +101,9 @@ func get_exp_yield() -> int:
 
 # Future interface for recovering on level up (currently disabled by user request)
 func recover_on_level_up():
-	pass
-	# current_hp = get_total_max_hp()
-	# current_mp = get_total_max_mp()
+	if CombatFormula.RECOVER_ON_LEVEL_UP:
+		current_hp = get_total_max_hp()
+		current_mp = get_total_max_mp()
 
 func gain_exp(amount: int) -> bool:
 	exp += amount

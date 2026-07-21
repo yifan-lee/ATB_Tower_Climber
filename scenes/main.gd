@@ -42,10 +42,7 @@ func _ready():
 	game_container.name = "GameContainer"
 	add_child(game_container)
 	
-	if FileAccess.file_exists("res://core/debug_system.gd"):
-		add_child(load("res://core/debug_system.gd").new())
 
-	
 	ui_container = Control.new()
 	ui_container.name = "UIContainer"
 	add_child(ui_container)
@@ -84,15 +81,15 @@ func _setup_containers():
 	ui_container.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.UI_AREA_HEIGHT)
 	ui_container.position = Vector2(0, GameConfig.GAME_AREA_HEIGHT)
 	
-	var sys_msg_height = 40
-	overlay_layer1.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT - sys_msg_height)
-	overlay_layer1.position = Vector2(0, sys_msg_height)
+	overlay_layer1.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.GAME_AREA_HEIGHT)
+	overlay_layer1.position = Vector2(0, 0)
 	
 	overlay_layer2.size = Vector2(GameConfig.SCREEN_WIDTH, GameConfig.UI_AREA_HEIGHT)
 	overlay_layer2.position = Vector2(0, GameConfig.GAME_AREA_HEIGHT)
 	
 	system_message_view.set_anchors_preset(Control.PRESET_TOP_WIDE)
 	system_message_view.size = Vector2(GameConfig.SCREEN_WIDTH, 0)
+	system_message_view.position = Vector2(0, GameConfig.GAME_AREA_HEIGHT - 50)
 
 var loaded_maps: Dictionary = {}
 var current_enemy_node: Node = null
@@ -204,7 +201,6 @@ func _unhandled_input(event):
 				change_state(AppState.MAP)
 			elif current_state == AppState.MAP and event.keycode == KEY_ESCAPE:
 				change_state(AppState.SYSTEM)
-
 
 
 func _pause_map_and_player():

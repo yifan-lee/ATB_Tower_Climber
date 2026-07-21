@@ -4,6 +4,7 @@ class_name EntityStatView
 
 var name_lbl: RichTextLabel
 var exp_lbl: RichTextLabel
+var extra_info_lbl: RichTextLabel
 var stat_labels: Dictionary = {}
 
 func _init():
@@ -22,6 +23,10 @@ func _init():
 		var lbl = UIUtils.create_rich_label("")
 		add_child(lbl)
 		stat_labels[stat] = lbl
+		
+	extra_info_lbl = UIUtils.create_rich_label("")
+	extra_info_lbl.visible = false
+	add_child(extra_info_lbl)
 
 func update_stats(stats: Stats, expected_changes: Dictionary = {}, show_exp: bool = false):
 	# Update Name and Level
@@ -84,3 +89,7 @@ func update_stats(stats: Stats, expected_changes: Dictionary = {}, show_exp: boo
 			current = 0 # Assume 0 if not explicitly defined in Stats class, or get it dynamically if we add properties
 			
 		lbl.text = UIUtils.format_stat(stat, current, max_val, delta)
+
+func set_extra_info(text: String, is_visible: bool = true):
+	extra_info_lbl.text = text
+	extra_info_lbl.visible = is_visible

@@ -100,11 +100,11 @@ func refresh():
 func _update_ui():
 	points_label.text = "Stat Points: " + str(available_points)
 	
-	_update_row(hp_label, 0, "HP", player_stats.max_hp, temp_allocations["hp"], 10)
-	_update_row(mp_label, 1, "MP", player_stats.max_mp, temp_allocations["mp"], 5)
-	_update_row(atk_label, 2, "ATK", player_stats.atk, temp_allocations["atk"], 1)
-	_update_row(def_label, 3, "DEF", player_stats.def, temp_allocations["def"], 1)
-	_update_row(spd_label, 4, "SPD", player_stats.spd, temp_allocations["spd"], 1)
+	_update_row(hp_label, 0, "HP", player_stats.max_hp, temp_allocations["hp"], CombatFormula.STAT_ADD_RATIO_HP)
+	_update_row(mp_label, 1, "MP", player_stats.max_mp, temp_allocations["mp"], CombatFormula.STAT_ADD_RATIO_MP)
+	_update_row(atk_label, 2, "ATK", player_stats.atk, temp_allocations["atk"], CombatFormula.STAT_ADD_RATIO_ATK)
+	_update_row(def_label, 3, "DEF", player_stats.def, temp_allocations["def"], CombatFormula.STAT_ADD_RATIO_DEF)
+	_update_row(spd_label, 4, "SPD", player_stats.spd, temp_allocations["spd"], CombatFormula.STAT_ADD_RATIO_SPD)
 	
 	var confirm_text = tr("MSG_CONFIRM")
 	if current_selection_index == 5:
@@ -192,13 +192,13 @@ func _handle_allocation(delta: int):
 	_update_ui()
 
 func _apply_allocations():
-	player_stats.max_hp += temp_allocations["hp"] * 10
-	player_stats.current_hp += temp_allocations["hp"] * 10 # Also heal by the amount gained
-	player_stats.max_mp += temp_allocations["mp"] * 5
-	player_stats.current_mp += temp_allocations["mp"] * 5
-	player_stats.atk += temp_allocations["atk"]
-	player_stats.def += temp_allocations["def"]
-	player_stats.spd += temp_allocations["spd"]
+	player_stats.max_hp += temp_allocations["hp"] * CombatFormula.STAT_ADD_RATIO_HP
+	player_stats.current_hp += temp_allocations["hp"] * CombatFormula.STAT_ADD_RATIO_HP # Also heal by the amount gained
+	player_stats.max_mp += temp_allocations["mp"] * CombatFormula.STAT_ADD_RATIO_MP
+	player_stats.current_mp += temp_allocations["mp"] * CombatFormula.STAT_ADD_RATIO_MP
+	player_stats.atk += temp_allocations["atk"] * CombatFormula.STAT_ADD_RATIO_ATK
+	player_stats.def += temp_allocations["def"] * CombatFormula.STAT_ADD_RATIO_DEF
+	player_stats.spd += temp_allocations["spd"] * CombatFormula.STAT_ADD_RATIO_SPD
 	
 	player_stats.stat_points = 0 # Safety
 	EventBus.player_stats_changed.emit()

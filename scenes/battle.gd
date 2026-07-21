@@ -23,12 +23,12 @@ var e_speed_px: float = 0.0
 var is_action_paused: bool = false
 var ready_character: String = "" # 记录当前是谁走到了终点 ("player" 或 "enemy")
 
+var p_time_label: Label
+var e_time_label: Label
+
 
 var p_stat_view: EntityStatView
 var e_stat_view: EntityStatView
-
-var speed_dom: float = 100.0
-var speed_lowerbound: float = 0.1
 
 
 func setup(enemy_id: String):
@@ -52,17 +52,14 @@ func _ready():
 	_build_bottom_animations()
 
 	# 计算 ATB 移动速度 (像素/秒)
-	p_speed_px = BAR_WIDTH * _get_speed(player_stats.get_total_spd())
-	e_speed_px = BAR_WIDTH * _get_speed(enemy_stats.get_total_spd())
+	p_speed_px = BAR_WIDTH * CombatFormula.get_atb_speed(player_stats.get_total_spd())
+	e_speed_px = BAR_WIDTH * CombatFormula.get_atb_speed(enemy_stats.get_total_spd())
 
 	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
 	EventBus.player_item_used.connect(_on_player_item_used)
 	EventBus.preview_skill.connect(_on_preview_skill)
 	EventBus.clear_skill_preview.connect(_on_clear_skill_preview)
 
-func _get_speed(speed: float) -> float:
-	return max(speed_lowerbound, speed / speed_dom)
-	
 
 func _build_top_progress_bar():
 	var bar_bg = ColorRect.new()
@@ -76,12 +73,22 @@ func _build_top_progress_bar():
 	p_pointer.play("static") # 使用静止动画
 	p_pointer.position = Vector2(0, -GameConfig.GRID_SIZE / 4) # 放在进度条上边缘
 	bar_bg.add_child(p_pointer)
+	
+	p_time_label = Label.new()
+	p_time_label.position = Vector2(-30, -GameConfig.GRID_SIZE / 4)
+	p_time_label.add_theme_font_size_override("font_size", 12)
+	bar_bg.add_child(p_time_label)
 
 	# 怪物指针 (进度条上)
 	e_pointer = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE / 2)
 	e_pointer.play("static") # 使用静止动画
 	e_pointer.position = Vector2(0, GameConfig.GRID_SIZE / 4)
 	bar_bg.add_child(e_pointer)
+	
+	e_time_label = Label.new()
+	e_time_label.position = Vector2(-30, GameConfig.GRID_SIZE / 4)
+	e_time_label.add_theme_font_size_override("font_size", 12)
+	bar_bg.add_child(e_time_label)
 
 func _build_middle_stats():
 	var hbox = HBoxContainer.new()
@@ -98,6 +105,10 @@ func _build_middle_stats():
 	e_stat_view = EntityStatView.new()
 	hbox.add_child(e_stat_view)
 	e_stat_view.update_stats(enemy_stats)
+	
+	var basic_atk_skill = SkillDB.get_skill("basic_atk")
+	var expected_dmg = ceil(CombatFormula.calculate_damage(enemy_stats.get_total_atk(), player_stats.get_total_def(), basic_atk_skill.damage))
+	e_stat_view.set_extra_info(TranslationServer.translate("EXPECTED_DMG") + ": [color=red]" + str(expected_dmg) + "[/color]")
 
 func _build_bottom_animations():
 	var p_anim = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE, "combat_idle")
@@ -117,6 +128,14 @@ func _build_bottom_animations():
 
 
 func _process(delta):
+	if p_speed_px > 0:
+		var p_time = (BAR_WIDTH / p_speed_px) if p_progress >= BAR_WIDTH else max(0.0, (BAR_WIDTH - p_progress) / p_speed_px)
+		p_time_label.text = "%.1fs" % p_time
+	
+	if e_speed_px > 0:
+		var e_time = (BAR_WIDTH / e_speed_px) if e_progress >= BAR_WIDTH else max(0.0, (BAR_WIDTH - e_progress) / e_speed_px)
+		e_time_label.text = "%.1fs" % e_time
+
 	# 如果有人走到终点了，暂停进度条
 	if is_action_paused:
 		return

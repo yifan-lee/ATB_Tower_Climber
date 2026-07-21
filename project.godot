@@ -21,12 +21,19 @@ EventBus="*uid://cxi7xgq07lxsl"
 SkillDB="*uid://c72hcka0dy8tx"
 EntityDB="*uid://d2d4lcb4ig0xt"
 ItemDB="*res://config/item_db.gd"
+MCPScreenshot="*res://addons/godot_mcp/mcp_screenshot_service.gd"
+MCPInputService="*res://addons/godot_mcp/mcp_input_service.gd"
+MCPGameInspector="*res://addons/godot_mcp/mcp_game_inspector_service.gd"
 
 [display]
 
 window/size/viewport_width=768
 window/size/viewport_height=1366
 window/stretch/mode="viewport"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/godot_mcp/plugin.cfg")
 
 [gui]
 

@@ -13,6 +13,22 @@ const HP_RATIO: float = 10.0
 const MP_RATIO: float = 5.0
 const STAT_POINTS_PER_LEVEL: int = 16
 
+const ATB_SPEED_DOM: float = 400.0
+const ATB_SPEED_CONSTANT: float = 400.0
+const ATB_SPEED_LOWERBOUND: float = 0.1
+
+const STAT_ADD_RATIO_HP: int = 20
+const STAT_ADD_RATIO_MP: int = 10
+const STAT_ADD_RATIO_ATK: int = 2
+const STAT_ADD_RATIO_DEF: int = 2
+const STAT_ADD_RATIO_SPD: int = 2
+
+const RECOVER_ON_LEVEL_UP: bool = false
+
+const EXP_YIELD_DIVISOR: float = 10.0
+const LEVEL_UP_EXP_BASE: int = 50
+const LEVEL_UP_EXP_MULTIPLIER: int = 10
+
 static func calculate_cp(hp: int, mp: int, atk: int, def: int, spd: int) -> float:
 	return float(atk + def + spd) + (float(hp) / HP_RATIO) + (float(mp) / MP_RATIO)
 
@@ -31,14 +47,18 @@ static func evaluate_monster(hp: int, mp: int, atk: int, def: int, spd: int) -> 
 		"as_boss_level": _reverse_calculate_level(cp, MULTIPLIER_BOSS)
 	}
 
-# 怪物掉落的经验值：战斗力除以 10
+# 怪物掉落的经验值
 static func get_monster_exp_yield(hp: int, mp: int, atk: int, def: int, spd: int) -> int:
 	var cp = calculate_cp(hp, mp, atk, def, spd)
-	return maxi(1, roundi(cp / 10.0))
+	return maxi(1, roundi(cp / EXP_YIELD_DIVISOR))
 
-# 玩家升级需要的经验：50 + 当前等级 * 50
+# 玩家升级需要的经验
 static func get_level_up_exp(current_level: int) -> int:
-	return 50 + current_level * 50
+	return LEVEL_UP_EXP_BASE + current_level * current_level * LEVEL_UP_EXP_MULTIPLIER
 
 static func calculate_damage(atk: int, def: int, skill_damage: int) -> float:
 	return max(1, atk / 100.0 * skill_damage * (100.0 / (100.0 + def)))
+
+# 速度公式 
+static func get_atb_speed(speed: float) -> float:
+	return (ATB_SPEED_CONSTANT + speed) / ATB_SPEED_DOM

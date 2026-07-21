@@ -7,8 +7,10 @@ var ignore_input_timer: float = 0.0
 func _ready():
 	# UI Styling
 	var style = StyleBoxFlat.new()
-	style.bg_color = Color(0, 0, 0, 0.7) # 半透明黑色底色
+	style.bg_color = Color(0, 0, 0, 0.3) # 更高的透明度 (0.3 代替原来的 0.7)
 	add_theme_stylebox_override("panel", style)
+	
+	grow_vertical = Control.GROW_DIRECTION_BEGIN
 	
 	var margin_container = MarginContainer.new()
 	margin_container.add_theme_constant_override("margin_top", 12)

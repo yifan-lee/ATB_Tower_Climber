@@ -21,6 +21,19 @@ static func format_stat(stat_name: String, current: int, max_val: int = -1, delt
 		
 	return text
 
+static var _texture_cache = {}
+
+static func _get_square_texture(color: Color, size: int = 16) -> ImageTexture:
+	var key = str(color) + "_" + str(size)
+	if _texture_cache.has(key):
+		return _texture_cache[key]
+		
+	var image = Image.create_empty(size, size, false, Image.FORMAT_RGBA8)
+	image.fill(color)
+	var texture = ImageTexture.create_from_image(image)
+	_texture_cache[key] = texture
+	return texture
+
 static func show_skill_list(container: Control, skills_info: Array, current_selection: int, desc_label = null, emit_preview: bool = false):
 	for child in container.get_children():
 		child.queue_free()
@@ -28,6 +41,20 @@ static func show_skill_list(container: Control, skills_info: Array, current_sele
 	for i in range(skills_info.size()):
 		var info = skills_info[i]
 		var skill = info.skill if typeof(info) == TYPE_DICTIONARY and info.has("skill") else info
+		
+		var hbox = HBoxContainer.new()
+		hbox.alignment = BoxContainer.ALIGNMENT_BEGIN
+		
+		# Radial CD Indicator
+		var cd_bar = TextureProgressBar.new()
+		cd_bar.texture_under = _get_square_texture(Color(0.2, 0.2, 0.2, 1.0))
+		cd_bar.texture_progress = _get_square_texture(Color(1.0, 1.0, 1.0, 1.0))
+		cd_bar.fill_mode = TextureProgressBar.FILL_CLOCKWISE
+		cd_bar.min_value = 0
+		cd_bar.max_value = max(0.01, skill.max_cd)
+		cd_bar.value = max(0, skill.max_cd - skill.current_cd)
+		cd_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		
 		var lbl = Label.new()
 		
 		var prefix = "> " if i == current_selection else "   "
@@ -36,13 +63,17 @@ static func show_skill_list(container: Control, skills_info: Array, current_sele
 		if skill.current_cd > 0:
 			text_str += " (CD:" + str(ceil(skill.current_cd)) + ")"
 			lbl.modulate = ThemeConfig.COLOR_TEXT_DISABLED
+			cd_bar.modulate = Color(0.7, 0.7, 0.7, 1.0) # Dim the progress bar slightly when on CD
 		elif i == current_selection:
 			lbl.modulate = ThemeConfig.COLOR_TEXT_NORMAL
 		else:
-			lbl.modulate = ThemeConfig.COLOR_TEXT_DISABLED # Not selected and not on CD is still somewhat dim, but let's just make it normal if selected
+			lbl.modulate = ThemeConfig.COLOR_TEXT_DISABLED
 			
 		lbl.text = prefix + text_str
-		container.add_child(lbl)
+		
+		hbox.add_child(cd_bar)
+		hbox.add_child(lbl)
+		container.add_child(hbox)
 		
 		if i == current_selection and desc_label != null:
 			var desc = TranslationServer.translate(skill.description) + "\n"
