@@ -36,7 +36,7 @@ func _ready():
 	equip_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	hbox.add_child(equip_vbox)
 	
-	var equip_title = UIUtils.create_rich_label("EQUIPMENT")
+	var equip_title = UIUtils.create_rich_label(TranslationServer.translate("CATEGORY_EQUIP"))
 	equip_title.add_theme_color_override("default_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	equip_vbox.add_child(equip_title)
 	

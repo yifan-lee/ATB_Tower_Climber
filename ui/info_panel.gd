@@ -1,10 +1,11 @@
 # res://ui/info_panel.gd
 extends PanelContainer
 
+const EntityStatView = preload("res://ui/components/entity_stat_view.gd")
+
 var floor_title_label: Label
 var floor_desc_label: Label
-var hp_label: Label
-var mp_label: Label
+var player_stat_view: EntityStatView
 
 func _ready():
 	# 给背景设置个深色底板
@@ -45,20 +46,11 @@ func _ready():
 	floor_desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left_vbox.add_child(floor_desc_label)
 	
-	# 右侧：HP / MP
-	var right_vbox = VBoxContainer.new()
-	right_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	right_vbox.size_flags_vertical = Control.SIZE_FILL
-	right_vbox.alignment = BoxContainer.ALIGNMENT_BEGIN
-	dynamic_hbox.add_child(right_vbox)
-	
-	hp_label = Label.new()
-	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	right_vbox.add_child(hp_label)
-	
-	mp_label = Label.new()
-	mp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	right_vbox.add_child(mp_label)
+	# 右侧：EntityStatView 显示完整属性
+	player_stat_view = EntityStatView.new()
+	player_stat_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	player_stat_view.size_flags_vertical = Control.SIZE_FILL
+	dynamic_hbox.add_child(player_stat_view)
 	
 	# 下部分：静态操作指南
 	var static_guide = Label.new()
@@ -83,8 +75,7 @@ func refresh_floor_info(map_node: Node2D):
 func refresh_player_stats():
 	var stats = EntityDB.get_stats("player")
 	if stats:
-		hp_label.text = tr("STAT_HP") + ": " + str(stats.current_hp) + "/" + str(stats.max_hp)
-		mp_label.text = tr("STAT_MP") + ": " + str(stats.current_mp) + "/" + str(stats.max_mp)
+		player_stat_view.update_stats(stats, {}, true)
 
 func _on_battle_ended(_result):
 	refresh_player_stats()

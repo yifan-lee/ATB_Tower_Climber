@@ -135,4 +135,12 @@ animations = [{
 "loop": 1,
 "name": &"idle",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wuaj8")
+}],
+"loop": 1,
+"name": &"static",
+"speed": 5.0
 }]

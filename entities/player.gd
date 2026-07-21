@@ -43,8 +43,9 @@ func _process(delta: float):
 		_try_move(direction)
 		move_cooldown = MOVE_DELAY
 	else:
-		if anim_sprite.animation != "idle":
-			anim_sprite.play("idle")
+		# if anim_sprite.animation != "idle":
+		# 	anim_sprite.play("idle")
+		pass
 
 func _try_move(direction: Vector2):
 	var target_pixel_pos = position + direction * GameConfig.GRID_SIZE

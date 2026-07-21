@@ -1,18 +1,16 @@
 # res://scenes/battle.gd
 extends Control
 
-const EntityStatView = preload("res://ui/components/entity_stat_view.gd")
+const BattleUIView = preload("res://ui/battle_ui_view.gd")
 
 var player_stats: Stats
 var enemy_stats: Stats
 var enemy_id: String
 
-# --- ATB 进度条相关变量 ---
-var bar_bg: ColorRect
-const BAR_WIDTH = GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE
+var ui_view: BattleUIView
 
-var p_pointer: AnimatedSprite2D
-var e_pointer: AnimatedSprite2D
+# --- ATB 进度条相关变量 ---
+const BAR_WIDTH = GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE
 
 var p_progress: float = 0.0
 var e_progress: float = 0.0
@@ -23,21 +21,12 @@ var e_speed_px: float = 0.0
 var is_action_paused: bool = false
 var ready_character: String = "" # 记录当前是谁走到了终点 ("player" 或 "enemy")
 
-var p_time_label: Label
-var e_time_label: Label
-
-
-var p_stat_view: EntityStatView
-var e_stat_view: EntityStatView
-
-
 func setup(enemy_id: String):
 	# 玩家共享全局属性，血量能在战斗之间继承
 	player_stats = EntityDB.get_stats("player")
 	
 	# 怪物从数据库拿出来时深拷贝一份，这样每个怪物血量互相独立
 	enemy_stats = EntityDB.get_stats(enemy_id).duplicate(true)
-	
 	
 func _ready():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -47,9 +36,9 @@ func _ready():
 	bg.color = ThemeConfig.COLOR_BATTLE_BG
 	add_child(bg)
 	
-	_build_top_progress_bar()
-	_build_middle_stats()
-	_build_bottom_animations()
+	ui_view = BattleUIView.new()
+	add_child(ui_view)
+	ui_view.setup(player_stats, enemy_stats)
 
 	# 计算 ATB 移动速度 (像素/秒)
 	p_speed_px = BAR_WIDTH * CombatFormula.get_atb_speed(player_stats.get_total_spd())
@@ -60,81 +49,17 @@ func _ready():
 	EventBus.preview_skill.connect(_on_preview_skill)
 	EventBus.clear_skill_preview.connect(_on_clear_skill_preview)
 
-
-func _build_top_progress_bar():
-	var bar_bg = ColorRect.new()
-	bar_bg.size = Vector2(BAR_WIDTH, GameConfig.GRID_SIZE / 4)
-	bar_bg.position = Vector2(GameConfig.GRID_SIZE / 2, GameConfig.GRID_SIZE / 2) # 居中留白
-	bar_bg.color = ThemeConfig.COLOR_BAR_BG
-	add_child(bar_bg)
-
-	# 玩家指针 (进度条上方)
-	p_pointer = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE / 2)
-	p_pointer.play("static") # 使用静止动画
-	p_pointer.position = Vector2(0, -GameConfig.GRID_SIZE / 4) # 放在进度条上边缘
-	bar_bg.add_child(p_pointer)
-	
-	p_time_label = Label.new()
-	p_time_label.position = Vector2(-30, -GameConfig.GRID_SIZE / 4)
-	p_time_label.add_theme_font_size_override("font_size", 12)
-	bar_bg.add_child(p_time_label)
-
-	# 怪物指针 (进度条上)
-	e_pointer = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE / 2)
-	e_pointer.play("static") # 使用静止动画
-	e_pointer.position = Vector2(0, GameConfig.GRID_SIZE / 4)
-	bar_bg.add_child(e_pointer)
-	
-	e_time_label = Label.new()
-	e_time_label.position = Vector2(-30, GameConfig.GRID_SIZE / 4)
-	e_time_label.add_theme_font_size_override("font_size", 12)
-	bar_bg.add_child(e_time_label)
-
-func _build_middle_stats():
-	var hbox = HBoxContainer.new()
-	hbox.size = Vector2(GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE, 2 * GameConfig.GRID_SIZE)
-	hbox.position = Vector2(GameConfig.GRID_SIZE / 2, GameConfig.GRID_SIZE)
-	hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	hbox.add_theme_constant_override("separation", GameConfig.GRID_SIZE) # 左右间距
-	add_child(hbox)
-
-	p_stat_view = EntityStatView.new()
-	hbox.add_child(p_stat_view)
-	p_stat_view.update_stats(player_stats)
-	
-	e_stat_view = EntityStatView.new()
-	hbox.add_child(e_stat_view)
-	e_stat_view.update_stats(enemy_stats)
-	
-	var basic_atk_skill = SkillDB.get_skill("basic_atk")
-	var expected_dmg = ceil(CombatFormula.calculate_damage(enemy_stats.get_total_atk(), player_stats.get_total_def(), basic_atk_skill.damage))
-	e_stat_view.set_extra_info(TranslationServer.translate("EXPECTED_DMG") + ": [color=red]" + str(expected_dmg) + "[/color]")
-
-func _build_bottom_animations():
-	var p_anim = GameConfig.create_scaled_anim_sprite(player_stats.anim_path, GameConfig.GRID_SIZE, "combat_idle")
-	p_anim.position = Vector2(
-		GameConfig.GRID_SIZE + GameConfig.WALL_THICKNESS,
-		GameConfig.GAME_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
-	)
-	add_child(p_anim)
-	
-	var e_anim = GameConfig.create_scaled_anim_sprite(enemy_stats.anim_path, GameConfig.GRID_SIZE, "combat_idle")
-	e_anim.flip_h = true
-	e_anim.position = Vector2(
-		GameConfig.SCREEN_WIDTH - GameConfig.GRID_SIZE - GameConfig.WALL_THICKNESS,
-		GameConfig.GAME_AREA_HEIGHT - GameConfig.WALL_THICKNESS - GameConfig.GRID_SIZE
-	)
-	add_child(e_anim)
-
-
 func _process(delta):
+	var p_time = 0.0
+	var e_time = 0.0
+	
 	if p_speed_px > 0:
-		var p_time = (BAR_WIDTH / p_speed_px) if p_progress >= BAR_WIDTH else max(0.0, (BAR_WIDTH - p_progress) / p_speed_px)
-		p_time_label.text = "%.1fs" % p_time
+		p_time = (BAR_WIDTH / p_speed_px) if p_progress >= BAR_WIDTH else max(0.0, (BAR_WIDTH - p_progress) / p_speed_px)
 	
 	if e_speed_px > 0:
-		var e_time = (BAR_WIDTH / e_speed_px) if e_progress >= BAR_WIDTH else max(0.0, (BAR_WIDTH - e_progress) / e_speed_px)
-		e_time_label.text = "%.1fs" % e_time
+		e_time = (BAR_WIDTH / e_speed_px) if e_progress >= BAR_WIDTH else max(0.0, (BAR_WIDTH - e_progress) / e_speed_px)
+
+	ui_view.update_atb(p_progress, e_progress, p_time, e_time, p_speed_px, e_speed_px)
 
 	# 如果有人走到终点了，暂停进度条
 	if is_action_paused:
@@ -177,10 +102,6 @@ func _process(delta):
 		ready_character = "enemy"
 		get_tree().create_timer(1.0).timeout.connect(_on_enemy_turn)
 		
-	# 实时更新指针的 X 坐标
-	p_pointer.position.x = p_progress
-	e_pointer.position.x = e_progress
-
 func _on_player_skill_chosen(skill: Skill):
 	# 将刚选的技能进入CD
 	skill.current_cd = skill.max_cd
@@ -226,20 +147,17 @@ func _execute_skill(attacker: Stats, defender: Stats, skill: Skill) -> int:
 	defender.current_hp = max(0, defender.current_hp - final_damage)
 	
 	# 刷新上方战斗面板的文字
-	p_stat_view.update_stats(player_stats)
-	e_stat_view.update_stats(enemy_stats)
+	ui_view.update_stats(player_stats, enemy_stats)
 	
 	return final_damage
 
 func _on_preview_skill(skill_data: Dictionary):
-	if skill_data.has("player_changes"):
-		p_stat_view.update_stats(player_stats, skill_data["player_changes"])
-	if skill_data.has("enemy_changes"):
-		e_stat_view.update_stats(enemy_stats, skill_data["enemy_changes"])
+	var p_changes = skill_data.get("player_changes", {})
+	var e_changes = skill_data.get("enemy_changes", {})
+	ui_view.preview_stats(player_stats, p_changes, enemy_stats, e_changes)
 
 func _on_clear_skill_preview():
-	p_stat_view.update_stats(player_stats)
-	e_stat_view.update_stats(enemy_stats)
+	ui_view.update_stats(player_stats, enemy_stats)
 
 func _resume_battle(was_player: bool):
 	# 谁刚攻击完，谁的进度条清零
@@ -251,8 +169,7 @@ func _resume_battle(was_player: bool):
 	is_action_paused = false
 
 func _on_player_item_used():
-	p_stat_view.update_stats(player_stats)
-	e_stat_view.update_stats(enemy_stats)
+	ui_view.update_stats(player_stats, enemy_stats)
 	
 	if enemy_stats.current_hp <= 0:
 		var gained_exp = enemy_stats.get_exp_yield()

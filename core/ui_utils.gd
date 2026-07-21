@@ -10,7 +10,8 @@ static func create_rich_label(text: String = "") -> RichTextLabel:
 	return lbl
 
 static func format_stat(stat_name: String, current: int, max_val: int = -1, delta: int = 0) -> String:
-	var text = stat_name.to_upper() + ": " + str(current)
+	var translated_name = TranslationServer.translate("STAT_" + stat_name.to_upper())
+	var text = translated_name + ": " + str(current)
 	if max_val >= 0:
 		text += "/" + str(max_val)
 		

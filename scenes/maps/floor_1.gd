@@ -6,31 +6,32 @@ func _init() -> void:
 	floor_desc_key = "MAP_FLOOR_1_DESC"
 	
 	map_data = [
-		["wall", "wall", "wall", "wall", "wall", "wall         ", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "    ", "    ", "tree_branch  ", "    ", "    ", "wall", "wall", "wall"],
-		["wall", "wall", "    ", "    ", "wall", "wall         ", "wall", "    ", "    ", "wall", "wall"],
-		["wall", "wall", "    ", "wall", "wall", "pedal_switch ", "wall", "wall", "    ", "wall", "wall"],
-		["wall", "wall", "    ", "    ", "    ", "monster_first", "    ", "    ", "    ", "wall", "wall"],
-		["wall", "wall", "    ", "wall", "wall", "             ", "wall", "wall", "    ", "wall", "wall"],
-		["wall", "wall", "    ", "    ", "wall", "             ", "wall", "    ", "    ", "wall", "wall"],
-		["wall", "wall", "wall", "    ", "    ", "monster_first", "    ", "    ", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall         ", "wall", "wall         ", "wall", "wall         ", "wall", "wall         ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "wall", "wall         ", "wall", "             ", "wall", "wall         ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "wall", "             ", "    ", "wall         ", "    ", "             ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "    ", "             ", "wall", "wall         ", "wall", "             ", "    ", "wall         ", "wall"],
+		["wall", "wall         ", "    ", "wall         ", "wall", "wall         ", "wall", "wall         ", "    ", "wall         ", "wall"],
+		["wall", "pedal_switch ", "wall", "wall         ", "wall", "wall.        ", "wall", "wall         ", "wall", "tree_branch  ", "wall"],
+		["wall", "monster_first", "    ", "monster_first", "wall", "             ", "wall", "monster_first", "    ", "monster_first", "wall"],
+		["wall", "wall         ", "wall", "             ", "wall", "             ", "wall", "             ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "wall", "             ", "    ", "monster_first", "    ", "             ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "wall", "wall         ", "wall", "             ", "wall", "wall         ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "wall", "wall         ", "wall", "             ", "wall", "wall         ", "wall", "wall         ", "wall"],
 	]
 	
+
 	stairs_config = {
-		Vector2i(5, 0): {
+		Vector2i(10, 5): {
 			"target_scene": "res://scenes/maps/floor_2.gd",
-			"spawn_grid": Vector2i(5, 0) # 传送到2楼的 (5, 0)
+			# "spawn_grid": Vector2i(10, 5)
 		}
 	}
 
 	triggers_config = {
-		Vector2i(5, 4): [
+		Vector2i(1, 5): [
 			{
 				"type": "change_tile",
-				"target_grid": Vector2i(5, 0),
+				"target_grid": Vector2i(10, 5),
 				"target_new_type": "stair_up",
 				"one_shot": true
 			},
@@ -42,7 +43,7 @@ func _init() -> void:
 			},
 			{
 				"type": "give_exp",
-				"amount": 50,
+				"amount": 10,
 				"one_shot": true
 			}
 		]

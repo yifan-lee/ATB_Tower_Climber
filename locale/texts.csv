@@ -67,3 +67,11 @@ STAT_HP,生命值,HP
 STAT_MP,魔法值,MP
 TAB_ITEMS,道具,Items
 TAB_SKILLS,技能,Skills
+EXPECTED_DMG,预计伤害,Expected DMG
+STAT_ATK,攻击力,ATK
+STAT_DEF,防御力,DEF
+STAT_SPD,速度,SPD
+MSG_STAT_POINTS,可用属性点：,Stat Points: 
+MSG_LV,等级,LV
+MSG_EXP,经验：,EXP: 
+CATEGORY_EQUIP,装备,Equipment

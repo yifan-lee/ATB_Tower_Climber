@@ -98,13 +98,13 @@ func refresh():
 	_update_ui()
 
 func _update_ui():
-	points_label.text = "Stat Points: " + str(available_points)
+	points_label.text = TranslationServer.translate("MSG_STAT_POINTS") + str(available_points)
 	
-	_update_row(hp_label, 0, "HP", player_stats.max_hp, temp_allocations["hp"], CombatFormula.STAT_ADD_RATIO_HP)
-	_update_row(mp_label, 1, "MP", player_stats.max_mp, temp_allocations["mp"], CombatFormula.STAT_ADD_RATIO_MP)
-	_update_row(atk_label, 2, "ATK", player_stats.atk, temp_allocations["atk"], CombatFormula.STAT_ADD_RATIO_ATK)
-	_update_row(def_label, 3, "DEF", player_stats.def, temp_allocations["def"], CombatFormula.STAT_ADD_RATIO_DEF)
-	_update_row(spd_label, 4, "SPD", player_stats.spd, temp_allocations["spd"], CombatFormula.STAT_ADD_RATIO_SPD)
+	_update_row(hp_label, 0, "hp", player_stats.max_hp, temp_allocations["hp"], CombatFormula.STAT_ADD_RATIO_HP)
+	_update_row(mp_label, 1, "mp", player_stats.max_mp, temp_allocations["mp"], CombatFormula.STAT_ADD_RATIO_MP)
+	_update_row(atk_label, 2, "atk", player_stats.atk, temp_allocations["atk"], CombatFormula.STAT_ADD_RATIO_ATK)
+	_update_row(def_label, 3, "def", player_stats.def, temp_allocations["def"], CombatFormula.STAT_ADD_RATIO_DEF)
+	_update_row(spd_label, 4, "spd", player_stats.spd, temp_allocations["spd"], CombatFormula.STAT_ADD_RATIO_SPD)
 	
 	var confirm_text = tr("MSG_CONFIRM")
 	if current_selection_index == 5:
@@ -130,7 +130,7 @@ func _update_row(lbl: Label, index: int, stat_name: String, base_val: int, alloc
 	if allocated_pts > 0:
 		alloc_str = " (+" + str(allocated_pts * multiplier) + ")"
 		
-	lbl.text = prefix + stat_name + ": " + str(current_total) + alloc_str + suffix
+	lbl.text = prefix + TranslationServer.translate("STAT_" + stat_name.to_upper()) + ": " + str(current_total) + alloc_str + suffix
 	if current_selection_index == index:
 		lbl.add_theme_color_override("font_color", ThemeConfig.COLOR_TEXT_HIGHLIGHT)
 	else:

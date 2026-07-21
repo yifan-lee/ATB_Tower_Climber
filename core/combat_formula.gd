@@ -1,17 +1,16 @@
 # res://core/combat_formula.gd
 class_name CombatFormula
 
-const BASE_PLAYER_CP: float = 320.0
+const BASE_PLAYER_CP: float = 200.0
 const CP_GROWTH_PER_LEVEL: float = 0.05
 
-const MULTIPLIER_MOB: float = 0.45 # 普通小怪战力是同级玩家的 45%
+const MULTIPLIER_MOB: float = 0.5 # 普通小怪战力是同级玩家的 45%
 const MULTIPLIER_ELITE: float = 0.75 # 精英怪 75%
-const MULTIPLIER_BOSS: float = 1.35 # Boss 135%
+const MULTIPLIER_BOSS: float = 1.25 # Boss 135%
 const MULTIPLIER_HERO: float = 1.00 # 英雄 100%
 
-const HP_RATIO: float = 10.0
-const MP_RATIO: float = 5.0
-const STAT_POINTS_PER_LEVEL: int = 16
+
+const STAT_POINTS_PER_LEVEL: int = 10
 
 const ATB_SPEED_DOM: float = 400.0
 const ATB_SPEED_CONSTANT: float = 400.0
@@ -30,7 +29,13 @@ const LEVEL_UP_EXP_BASE: int = 50
 const LEVEL_UP_EXP_MULTIPLIER: int = 10
 
 static func calculate_cp(hp: int, mp: int, atk: int, def: int, spd: int) -> float:
-	return float(atk + def + spd) + (float(hp) / HP_RATIO) + (float(mp) / MP_RATIO)
+	return (
+		float(atk) / STAT_ADD_RATIO_ATK +
+		float(def) / STAT_ADD_RATIO_DEF +
+		float(spd) / STAT_ADD_RATIO_SPD +
+		float(hp) / STAT_ADD_RATIO_HP +
+		float(mp) / STAT_ADD_RATIO_MP
+	)
 
 static func _reverse_calculate_level(target_cp: float, rarity_multiplier: float) -> int:
 	var base_rarity_cp = BASE_PLAYER_CP * rarity_multiplier
@@ -54,8 +59,9 @@ static func get_monster_exp_yield(hp: int, mp: int, atk: int, def: int, spd: int
 
 # 玩家升级需要的经验
 static func get_level_up_exp(current_level: int) -> int:
-	return LEVEL_UP_EXP_BASE + current_level * current_level * LEVEL_UP_EXP_MULTIPLIER
+	return LEVEL_UP_EXP_BASE + current_level * LEVEL_UP_EXP_MULTIPLIER
 
+# 伤害公式
 static func calculate_damage(atk: int, def: int, skill_damage: int) -> float:
 	return max(1, atk / 100.0 * skill_damage * (100.0 / (100.0 + def)))
 

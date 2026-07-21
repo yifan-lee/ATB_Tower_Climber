@@ -165,7 +165,8 @@ func _on_player_stepped(grid_pos: Vector2i):
 	if terrain in ["stair_up", "stair_down", "portal_open"]:
 		if stairs_config.has(grid_pos):
 			var config = stairs_config[grid_pos]
-			EventBus.request_map_change.emit(config["target_scene"], config["spawn_grid"])
+			var target_spawn = config.get("spawn_grid", grid_pos)
+			EventBus.request_map_change.emit(config["target_scene"], target_spawn)
 			return
 			
 	# Check triggers

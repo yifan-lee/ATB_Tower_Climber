@@ -30,11 +30,10 @@ func _init():
 
 func update_stats(stats: Stats, expected_changes: Dictionary = {}, show_exp: bool = false):
 	# Update Name and Level
-	name_lbl.text = stats.entity_name + " LV." + str(stats.level)
+	name_lbl.text = stats.entity_name + " " + TranslationServer.translate("MSG_LV") + "." + str(stats.level)
 	
-	# Update EXP
 	if show_exp:
-		exp_lbl.text = "EXP: " + str(stats.exp) + " / " + str(stats.max_exp)
+		exp_lbl.text = TranslationServer.translate("MSG_EXP") + str(stats.exp) + " / " + str(stats.max_exp)
 		exp_lbl.visible = true
 	else:
 		exp_lbl.visible = false
@@ -90,6 +89,6 @@ func update_stats(stats: Stats, expected_changes: Dictionary = {}, show_exp: boo
 			
 		lbl.text = UIUtils.format_stat(stat, current, max_val, delta)
 
-func set_extra_info(text: String, is_visible: bool = true):
+func set_extra_info(text: String, should_show: bool = true):
 	extra_info_lbl.text = text
-	extra_info_lbl.visible = is_visible
+	extra_info_lbl.visible = should_show

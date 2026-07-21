@@ -9,8 +9,8 @@ func _ready():
         "TooTwo",
         500,
         500,
-        200,
-        200,
+        250,
+        250,
         100,
         100,
         100,
@@ -41,10 +41,10 @@ func _ready():
         "monster_first",
         "monster_first",
         80,
-        0,
-        50,
+        10,
+        70,
         30,
-        52
+        90
     )
     # bloodshot.exp_yield = 50
     db['monster_first'] = bloodshot

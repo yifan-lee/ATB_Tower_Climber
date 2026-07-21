@@ -421,4 +421,12 @@ animations = [{
 "loop": 1,
 "name": &"walk_up",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7tvje")
+}],
+"loop": 1,
+"name": &"static",
+"speed": 5.0
 }]
