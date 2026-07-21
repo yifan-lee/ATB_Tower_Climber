@@ -33,11 +33,11 @@ func _ready():
     
     # 配置主角的升级自动学习技能树
     db['player'].level_up_skills = {
-        2: "heavy_strike",
-        3: "fireball"
+        3: "heavy_strike",
+        5: "fireball"
     }
     
-    var bloodshot = Stats.new().setup_enemy(
+    var monster_first = Stats.new().setup_enemy(
         "monster_first",
         "monster_first",
         80,
@@ -47,20 +47,20 @@ func _ready():
         90
     )
     # bloodshot.exp_yield = 50
-    db['monster_first'] = bloodshot
+    db['monster_first'] = monster_first
 
-    var red_cap = Stats.new().setup_enemy(
+    var monster_spd_lv1 = Stats.new().setup_enemy(
         "monster_spd_lv1",
         "monster_spd_lv1",
+        80,
+        10,
+        46,
         30,
-        0,
-        25,
-        12,
-        115
+        114
     )
-    db['monster_spd_lv1'] = red_cap
+    db['monster_spd_lv1'] = monster_spd_lv1
 
-    var stone_troll = Stats.new().setup_enemy(
+    var monster_def_lv1 = Stats.new().setup_enemy(
         "monster_def_lv1",
         "monster_def_lv1",
         200,
@@ -69,7 +69,7 @@ func _ready():
         105,
         40
     )
-    db['monster_def_lv1'] = stone_troll
+    db['monster_def_lv1'] = monster_def_lv1
 
 func get_stats(id: String) -> Stats:
     return db.get(id)

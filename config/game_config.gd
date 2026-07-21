@@ -96,16 +96,26 @@ func is_pressing_right() -> bool:
 	else:
 		return Input.is_action_pressed("ui_right") or Input.is_physical_key_pressed(KEY_RIGHT)
 
+var _sprite_frames_cache: Dictionary = {}
+
 func create_scaled_anim_sprite(anim_path: String, target_size: float = GRID_SIZE, anim_name: String = "idle") -> AnimatedSprite2D:
 	var anim = AnimatedSprite2D.new()
-	anim.sprite_frames = load(anim_path)
+	var frames: SpriteFrames = null
+	if _sprite_frames_cache.has(anim_path):
+		frames = _sprite_frames_cache[anim_path]
+	else:
+		frames = load(anim_path) as SpriteFrames
+		if frames != null:
+			_sprite_frames_cache[anim_path] = frames
+
+	anim.sprite_frames = frames
 	
-	# 读取指定动画第一帧的原始纹理大小
-	var texture = anim.sprite_frames.get_frame_texture(anim_name, 0)
-	if texture != null:
-		var original_size = texture.get_size()
-		# 自动计算缩放比例（例如 64 / 16 = 4）
-		anim.scale = Vector2(target_size / original_size.x, target_size / original_size.y)
+	if anim.sprite_frames != null and anim.sprite_frames.has_animation(anim_name):
+		var texture = anim.sprite_frames.get_frame_texture(anim_name, 0)
+		if texture != null:
+			var original_size = texture.get_size()
+			if original_size.x > 0 and original_size.y > 0:
+				anim.scale = Vector2(target_size / original_size.x, target_size / original_size.y)
 	
 	anim.play(anim_name)
 	return anim

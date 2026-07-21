@@ -41,8 +41,8 @@ EQUIPMENT_JY_SWORD,绝世好剑,Peerless Sword
 EQUIPMENT_JY_SWORD_DESC,提升大量攻击力,Increases attack power
 EQUIPMENT_TREE_BRANCH,树枝,Tree Branch
 EQUIPMENT_TREE_BRANCH_DESC,树枝,A tree branch
-EQUIPMENT_SWIFT_BOOTS,疾风靴,Swift Boots
-EQUIPMENT_SWIFT_BOOTS_DESC,轻盈的靴子,Light boots
+EQUIPMENT_BOOTS_LV1,1级鞋子,Boots LV1
+EQUIPMENT_BOOTS_LV1_DESC,增强速度的鞋子,Shoes that enhance speed
 MSG_USED_ITEM,使用了,"Used "
 MSG_GOT_ITEM,获得了,"Got "
 MSG_EQUIPPED,装备了,"Equipped "
@@ -58,10 +58,10 @@ MSG_GAIN_EXP_PREFIX,获得了 ,Gained
 MSG_GAIN_EXP_SUFFIX, 点经验值！, EXP!
 MAP_FLOOR_UNKNOWN,未知领域,Unknown Area
 MAP_DESC_UNKNOWN,此处没有任何说明。,No description available.
-MAP_FLOOR_1_NAME,第一层：初见,Floor 1: First Encounter
-MAP_FLOOR_1_DESC,一切开始的地方，充满着未知的危险与机遇。,Where everything begins. Filled with unknown dangers and opportunities.
-MAP_FLOOR_2_NAME,第二层：迷雾,Floor 2: The Mist
-MAP_FLOOR_2_DESC,这里弥漫着迷雾，能见度极低。,Covered in thick mist, visibility is extremely low.
+MAP_FLOOR_1_NAME,第一层：攻击,Floor 1: ATK
+MAP_FLOOR_1_DESC,攻击线105,ATK 105
+MAP_FLOOR_2_NAME,第二层：速度,Floor 2: SPD
+MAP_FLOOR_2_DESC,速度线115,SPD 115
 UI_CONTROLS_GUIDE,"WASD移动 | B打开背包 | 回车确认 | ESC退出","WASD to Move | B for Inventory | Enter to Confirm | ESC to Cancel"
 STAT_HP,生命值,HP
 STAT_MP,魔法值,MP

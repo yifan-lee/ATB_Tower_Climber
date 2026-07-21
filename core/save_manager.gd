@@ -95,8 +95,8 @@ static func load_game(save_name: String, main_scene: Node):
 		# Override its data with saved data
 		var map_saved = maps_state[map_path]
 		map_node.map_data = map_saved["map_data"].duplicate(true)
-		map_node.stairs_config = map_saved["stairs_config"].duplicate(true)
-		map_node.triggers_config = map_saved["triggers_config"].duplicate(true)
+		map_node.stairs_config = _restore_vector2i_keys(map_saved["stairs_config"].duplicate(true))
+		map_node.triggers_config = _restore_vector2i_keys(map_saved["triggers_config"].duplicate(true))
 		
 		main_scene.loaded_maps[map_path] = map_node
 		
@@ -108,6 +108,24 @@ static func load_game(save_name: String, main_scene: Node):
 	
 	# 5. Tell UI components to refresh their `player_stats` references
 	EventBus.game_loaded.emit()
+
+static func delete_game(save_name: String) -> bool:
+	_ensure_dir()
+	var state_path = SAVE_DIR + save_name + ".json"
+	var stats_path = SAVE_DIR + save_name + "_stats.tres"
+	var dir = DirAccess.open(SAVE_DIR)
+	if dir:
+		var deleted_any = false
+		if dir.file_exists(save_name + ".json"):
+			dir.remove(save_name + ".json")
+			deleted_any = true
+		if dir.file_exists(save_name + "_stats.tres"):
+			dir.remove(save_name + "_stats.tres")
+			deleted_any = true
+		if deleted_any:
+			EventBus.show_system_message.emit(["SAVE DELETED: " + save_name])
+			return true
+	return false
 
 static func get_save_files() -> Array:
 	_ensure_dir()
@@ -123,3 +141,15 @@ static func get_save_files() -> Array:
 	saves.sort()
 	saves.reverse()
 	return saves
+
+static func _restore_vector2i_keys(dict: Dictionary) -> Dictionary:
+	var new_dict = {}
+	for k in dict.keys():
+		var new_k = k
+		if typeof(k) == TYPE_STRING and k.begins_with("(") and k.ends_with(")"):
+			# Parse strings like "(10, 5)" back into Vector2i
+			var parts = k.substr(1, k.length() - 2).split(",")
+			if parts.size() == 2:
+				new_k = Vector2i(parts[0].to_int(), parts[1].to_int())
+		new_dict[new_k] = dict[k]
+	return new_dict

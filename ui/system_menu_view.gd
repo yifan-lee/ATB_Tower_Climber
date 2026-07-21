@@ -10,6 +10,8 @@ var content_vbox: VBoxContainer
 var input_line: LineEdit
 var item_list: ItemList
 var confirm_btn: Button
+var delete_btn: Button
+var buttons_hbox: HBoxContainer
 
 enum TabSide {SAVE, LOAD}
 var current_tab: TabSide = TabSide.SAVE
@@ -61,11 +63,24 @@ func _ready():
 	spacer.custom_minimum_size = Vector2(0, 20)
 	content_vbox.add_child(spacer)
 	
+	buttons_hbox = HBoxContainer.new()
+	buttons_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons_hbox.add_theme_constant_override("separation", 20)
+	content_vbox.add_child(buttons_hbox)
+
 	confirm_btn = Button.new()
 	confirm_btn.custom_minimum_size = Vector2(120, 40)
 	confirm_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	confirm_btn.pressed.connect(_on_confirm)
-	content_vbox.add_child(confirm_btn)
+	buttons_hbox.add_child(confirm_btn)
+	
+	delete_btn = Button.new()
+	delete_btn.custom_minimum_size = Vector2(120, 40)
+	delete_btn.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	delete_btn.text = tr("DELETE")
+	delete_btn.modulate = Color(1.0, 0.4, 0.4)
+	delete_btn.pressed.connect(_on_delete)
+	buttons_hbox.add_child(delete_btn)
 	
 func refresh():
 	current_tab = TabSide.SAVE
@@ -80,6 +95,7 @@ func _refresh_view():
 		
 		input_line.show()
 		item_list.hide()
+		delete_btn.hide()
 		var date_time = Time.get_datetime_string_from_system().replace("T", "_").replace(":", "-")
 		input_line.text = "save_" + date_time
 		confirm_btn.text = tr("SAVE")
@@ -91,6 +107,7 @@ func _refresh_view():
 		
 		input_line.hide()
 		item_list.show()
+		delete_btn.show()
 		item_list.clear()
 		confirm_btn.text = tr("LOAD")
 		
@@ -162,3 +179,11 @@ func _on_confirm():
 			var s_name = item_list.get_item_text(selected[0])
 			SaveManager.load_game(s_name, main)
 			main.change_state(main.AppState.MAP)
+
+func _on_delete():
+	if current_tab == TabSide.LOAD:
+		var selected = item_list.get_selected_items()
+		if selected.size() > 0:
+			var s_name = item_list.get_item_text(selected[0])
+			if SaveManager.delete_game(s_name):
+				_refresh_view()

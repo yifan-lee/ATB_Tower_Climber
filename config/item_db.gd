@@ -76,15 +76,15 @@ func _ready():
 	sword_level5.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 4, 1)
 	db["sword_level5"] = sword_level5
 	
-	var swift_boots = Item.new().setup(
-		"swift_boots",
-		"EQUIPMENT_SWIFT_BOOTS",
+	var boot_level1 = Item.new().setup(
+		"boot_level1",
+		"EQUIPMENT_BOOTS_LV1",
 		Item.ItemType.EQUIPMENT,
-		0, 0, "EQUIPMENT_SWIFT_BOOTS_DESC",
+		0, 0, "EQUIPMENT_BOOTS_LV1_DESC",
 		0, 0, 10, Item.EquipSlot.FEET
 	)
-	swift_boots.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
-	db["swift_boots"] = swift_boots
+	boot_level1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
+	db["boot_level1"] = boot_level1
 	
 
 func get_item(id: String) -> Item:
@@ -94,6 +94,8 @@ func get_item(id: String) -> Item:
 		push_error("找不到物品 ID: " + id)
 		return null
 
+var _texture_cache: Dictionary = {}
+
 # 动态生成图集资源，不需要手动建 25 个 tres 文件！
 # texture_path: 贴图路径 (例如 "res://assets/sprites/item/weapon1.png")
 # cols: 这张图横向有几列 (5)
@@ -101,7 +103,14 @@ func get_item(id: String) -> Item:
 # col_idx: 你要取的物品在第几列 (0 ~ 4)
 # row_idx: 你要取的物品在第几行 (0 ~ 4)
 func get_atlas_icon(texture_path: String, cols: int, rows: int, col_idx: int, row_idx: int) -> AtlasTexture:
-	var base_tex = load(texture_path)
+	var base_tex: Texture2D = null
+	if _texture_cache.has(texture_path):
+		base_tex = _texture_cache[texture_path]
+	else:
+		base_tex = load(texture_path) as Texture2D
+		if base_tex != null:
+			_texture_cache[texture_path] = base_tex
+
 	if not base_tex:
 		push_error("找不到图集: " + texture_path)
 		return null
