@@ -63,8 +63,18 @@ func _ready():
 		0, 0, "EQUIPMENT_JY_SWORD_DESC",
 		100, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
-	sword_level2.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 2, 1) # 假设是用第2把武器
+	sword_level2.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 2, 1)
 	db["sword_level2"] = sword_level2
+
+	var sword_level5 = Item.new().setup(
+		"sword_level5",
+		"EQUIPMENT_BEST_SWORD",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
+	)
+	sword_level5.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 4, 1)
+	db["sword_level5"] = sword_level5
 	
 	var swift_boots = Item.new().setup(
 		"swift_boots",

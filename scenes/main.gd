@@ -69,6 +69,7 @@ func _ready():
 	EventBus.request_map_change.connect(_on_map_change_requested)
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
+	EventBus.show_level_up.connect(_on_show_level_up)
 
 	_setup_containers()
 	_load_initial_scenes()
@@ -281,6 +282,9 @@ func _on_battle_ended(result: String = ""):
 
 func _on_level_up_completed():
 	change_state(AppState.MAP)
+
+func _on_show_level_up():
+	change_state(AppState.LEVEL_UP)
 
 func _on_game_loaded():
 	# Update the player_instance reference if it was recreated or re-parented?
