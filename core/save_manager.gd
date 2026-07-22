@@ -69,8 +69,7 @@ static func load_game(save_name: String, main_scene: Node):
 	# 1. Update Global Player Stats
 	EntityDB.db["player"] = saved_stats.duplicate(true)
 	
-	# 2. Check Debug Hook
-	var is_debug = FileAccess.file_exists("res://core/debug_map_hook.gd")
+	# 2. Skip Debug Hook (Removed)
 	
 	# 3. Restore Maps
 	var maps_state = state.get("maps_state", {})
@@ -84,11 +83,6 @@ static func load_game(save_name: String, main_scene: Node):
 	
 	# Rebuild maps
 	for map_path in maps_state.keys():
-		if is_debug and map_path == current_map_path:
-			# Skip injecting saved map_data for the current map in debug mode,
-			# forcing it to parse fresh data from its .gd script!
-			continue
-			
 		var MapClass = load(map_path)
 		var map_node = MapClass.new()
 		
