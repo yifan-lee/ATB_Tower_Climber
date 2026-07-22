@@ -86,3 +86,4 @@ STAT_SPD,速度,SPD
 MSG_STAT_POINTS,可用属性点：,Stat Points: 
 MSG_LV,等级,LV
 MSG_EXP,经验：,EXP: 
+MSG_FAKE_WALL_REVEALED,发现了一条隐藏的通道！,A hidden path is revealed!

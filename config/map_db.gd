@@ -9,7 +9,7 @@ const TILE_RES = {
 	"stair_up": "res://assets/sprites/map/stair_up.tres",
 	"stair_down": "res://assets/sprites/map/stair_down.tres",
 	"portal_closed": "res://assets/sprites/map/portal_closed.tres",
-	"portal_open": "res://assets/sprites/map/portal_open.tres",
+	"portal_open": "res://assets/sprites/map/portal_opened.tres",
 	"pedal_switch": "res://assets/sprites/map/pedal_switch.tres",
 	"pedal_trap": "res://assets/sprites/map/pedal_trap.tres"
 }

@@ -5,6 +5,8 @@ var map_data = []
 var stairs_config = {}
 var triggers_config = {}
 var items_config = {}
+var fake_walls_config = {}
+
 
 var floor_name_key: String = "MAP_FLOOR_UNKNOWN"
 var floor_desc_key: String = "MAP_DESC_UNKNOWN"
@@ -111,15 +113,44 @@ func _spawn_entity(id: String, grid_pos: Vector2i, is_enemy: bool):
 		"node": node
 	}
 
-func is_passable(grid_pos: Vector2i) -> bool:
+func get_cell_interaction(grid_pos: Vector2i) -> Dictionary:
 	if grid_pos.x < 0 or grid_pos.x >= GameConfig.GRID_COLUMNS or grid_pos.y < 0 or grid_pos.y >= GameConfig.GRID_ROWS:
-		return false
+		return {"type": "wall"}
+		
+	var entity = get_entity_at(grid_pos)
+	if not entity.is_empty():
+		if entity.get("is_enemy", false):
+			return {"type": "enemy", "id": entity["id"], "node": entity["node"]}
+		# Items are generally passable, handled during step
+			
+	if fake_walls_config.has(grid_pos):
+		return {"type": "fake_wall"}
 		
 	var terrain = str(map_data[grid_pos.y][grid_pos.x])
 	if terrain in ["wall", "door_closed", "portal_closed", "", "0"]:
-		return false
+		return {"type": "wall"}
 		
-	return true
+	return {"type": "passable"}
+
+func reveal_fake_wall(grid_pos: Vector2i, show_message: bool = true):
+	if not fake_walls_config.has(grid_pos):
+		return
+		
+	var real_type = fake_walls_config[grid_pos]
+	fake_walls_config.erase(grid_pos)
+	
+	if real_type in ["floor", "stair_up", "stair_down", "portal_open", "portal_closed", "door_closed", "door_open"]:
+		change_tile(grid_pos, real_type)
+	else:
+		change_tile(grid_pos, "floor")
+		if ItemDB.db.has(real_type):
+			_spawn_entity(real_type, grid_pos, false)
+		elif EntityDB.db.has(real_type):
+			_spawn_entity(real_type, grid_pos, true)
+			
+	if show_message:
+		EventBus.show_system_message.emit(["MSG_FAKE_WALL_REVEALED"])
+
 	
 func get_entity_at(grid_pos: Vector2i) -> Dictionary:
 	if entities_data.has(grid_pos):

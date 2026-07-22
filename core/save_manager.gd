@@ -32,7 +32,8 @@ static func save_game(save_name: String, main_scene: Node):
 		state["maps_state"][map_path] = {
 			"map_data": map_node.map_data.duplicate(true),
 			"stairs_config": map_node.stairs_config.duplicate(true),
-			"triggers_config": map_node.triggers_config.duplicate(true)
+			"triggers_config": map_node.triggers_config.duplicate(true),
+			"fake_walls_config": map_node.fake_walls_config.duplicate(true) if "fake_walls_config" in map_node else {}
 		}
 		
 	var state_path = SAVE_DIR + save_name + ".json"
@@ -91,6 +92,7 @@ static func load_game(save_name: String, main_scene: Node):
 		map_node.map_data = map_saved["map_data"].duplicate(true)
 		map_node.stairs_config = _restore_vector2i_keys(map_saved["stairs_config"].duplicate(true))
 		map_node.triggers_config = _restore_vector2i_keys(map_saved["triggers_config"].duplicate(true))
+		map_node.fake_walls_config = _restore_vector2i_keys(map_saved.get("fake_walls_config", {}).duplicate(true))
 		
 		main_scene.loaded_maps[map_path] = map_node
 		

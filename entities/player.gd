@@ -57,17 +57,23 @@ func _try_move(direction: Vector2):
 		
 	var map_node = main.current_map
 	
-	if not map_node.is_passable(target_grid_pos):
-		anim_sprite.play("idle")
-		EventBus.show_system_message.emit("MSG_HIT_WALL")
-		return
-		
-	var entity = map_node.get_entity_at(target_grid_pos)
-	if not entity.is_empty() and entity.get("is_enemy", false):
-		anim_sprite.play("idle")
-		EventBus.show_system_message.emit("MSG_HIT_ENEMY")
-		EventBus.encounter_monster.emit(entity["id"], entity["node"])
-		return
+	var interaction = map_node.get_cell_interaction(target_grid_pos)
+	match interaction.type:
+		"wall":
+			anim_sprite.play("idle")
+			EventBus.show_system_message.emit(["MSG_HIT_WALL"])
+			return
+		"fake_wall":
+			anim_sprite.play("idle")
+			map_node.reveal_fake_wall(target_grid_pos)
+			return
+		"enemy":
+			anim_sprite.play("idle")
+			EventBus.show_system_message.emit(["MSG_HIT_ENEMY"])
+			EventBus.encounter_monster.emit(interaction.id, interaction.node)
+			return
+		"passable":
+			pass # Proceed to movement
 
 	# 在真正执行移动前，检查自定义地图规则
 	if map_node.has_method("check_custom_move_rules"):

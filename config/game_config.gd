@@ -42,8 +42,8 @@ func get_ui_area_pixel_position(grid_x: int, grid_y: int) -> Vector2:
 
 # 将屏幕实际像素坐标转换为网格坐标
 func get_grid_position(pixel_pos: Vector2) -> Vector2i:
-	var grid_x = int((pixel_pos.x - WALL_THICKNESS) / GRID_SIZE)
-	var grid_y = int((pixel_pos.y - WALL_THICKNESS) / GRID_SIZE)
+	var grid_x = int(floor((pixel_pos.x - WALL_THICKNESS) / float(GRID_SIZE)))
+	var grid_y = int(floor((pixel_pos.y - WALL_THICKNESS) / float(GRID_SIZE)))
 	return Vector2i(grid_x, grid_y)
 
 # 输入检测辅助函数

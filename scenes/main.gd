@@ -230,6 +230,10 @@ func _on_map_change_requested(target_scene_path: String, spawn_grid_pos: Vector2
 		_set_map_active(current_map, true)
 	
 	player_instance.position = GameConfig.get_game_area_pixel_position(spawn_grid_pos.x, spawn_grid_pos.y)
+	if current_map.has_method("reveal_fake_wall"):
+		current_map.reveal_fake_wall(spawn_grid_pos, false)
+	if current_map.has_method("on_player_entered"):
+		current_map.on_player_entered(spawn_grid_pos)
 	_update_floor_info()
 
 # 封装一个极简的函数，代替原来的 hide() / show()
