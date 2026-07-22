@@ -71,5 +71,17 @@ func _ready():
     )
     db['monster_def_lv1'] = monster_def_lv1
 
+
+    var monster_def_lv3 = Stats.new().setup_enemy(
+        "monster_def_lv3",
+        "monster_def_lv3",
+        10000,
+        10000,
+        10000,
+        10000,
+        10000
+    )
+    db['monster_def_lv3'] = monster_def_lv3
+
 func get_stats(id: String) -> Stats:
     return db.get(id)

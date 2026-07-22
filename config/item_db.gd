@@ -95,6 +95,42 @@ func _ready():
 	spirit_stone.icon = load("res://assets/sprites/item/gold.png")
 	db["spirit_stone"] = spirit_stone
 	
+	var frag_red = Item.new().setup(
+		"fragment_red",
+		"ITEM_FRAG_RED_NAME",
+		Item.ItemType.MATERIAL,
+		0, 0, "ITEM_FRAG_RED_DESC"
+	)
+	frag_red.icon = get_atlas_icon("res://assets/sprites/item/fragment.png", 2, 2, 0, 0)
+	db["fragment_red"] = frag_red
+
+	var frag_yellow = Item.new().setup(
+		"fragment_yellow",
+		"ITEM_FRAG_YELLOW_NAME",
+		Item.ItemType.MATERIAL,
+		0, 0, "ITEM_FRAG_YELLOW_DESC"
+	)
+	frag_yellow.icon = get_atlas_icon("res://assets/sprites/item/fragment.png", 2, 2, 1, 0)
+	db["fragment_yellow"] = frag_yellow
+
+	var frag_blue = Item.new().setup(
+		"fragment_blue",
+		"ITEM_FRAG_BLUE_NAME",
+		Item.ItemType.MATERIAL,
+		0, 0, "ITEM_FRAG_BLUE_DESC"
+	)
+	frag_blue.icon = get_atlas_icon("res://assets/sprites/item/fragment.png", 2, 2, 0, 1)
+	db["fragment_blue"] = frag_blue
+
+	var frag_white = Item.new().setup(
+		"fragment_white",
+		"ITEM_FRAG_WHITE_NAME",
+		Item.ItemType.MATERIAL,
+		0, 0, "ITEM_FRAG_WHITE_DESC"
+	)
+	frag_white.icon = get_atlas_icon("res://assets/sprites/item/fragment.png", 2, 2, 1, 1)
+	db["fragment_white"] = frag_white
+	
 
 func get_item(id: String) -> Item:
 	if db.has(id):

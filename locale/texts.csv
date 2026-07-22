@@ -58,6 +58,14 @@ MSG_GAIN_EXP_PREFIX,获得了 ,Gained
 MSG_GAIN_EXP_SUFFIX, 点经验值！, EXP!
 ITEM_SPIRIT_STONE_NAME,灵石,Spirit Stone
 ITEM_SPIRIT_STONE_DESC,蕴含微弱灵气的石头,A stone containing faint spiritual energy
+ITEM_FRAG_RED_NAME,红色碎片,Red Fragment
+ITEM_FRAG_RED_DESC,散发着红色光芒的碎片,A fragment glowing with red light
+ITEM_FRAG_YELLOW_NAME,黄色碎片,Yellow Fragment
+ITEM_FRAG_YELLOW_DESC,散发着黄色光芒的碎片,A fragment glowing with yellow light
+ITEM_FRAG_BLUE_NAME,蓝色碎片,Blue Fragment
+ITEM_FRAG_BLUE_DESC,散发着蓝色光芒的碎片,A fragment glowing with blue light
+ITEM_FRAG_WHITE_NAME,白色碎片,White Fragment
+ITEM_FRAG_WHITE_DESC,散发着白色光芒的碎片,A fragment glowing with white light
 TAB_KEY_ITEMS,重要道具,Key Items
 TAB_MATERIALS,材料,Materials
 MAP_FLOOR_UNKNOWN,未知领域,Unknown Area
