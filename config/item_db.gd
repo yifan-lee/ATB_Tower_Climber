@@ -89,7 +89,7 @@ func _ready():
 	var spirit_stone = Item.new().setup(
 		"spirit_stone",
 		"ITEM_SPIRIT_STONE_NAME",
-		Item.ItemType.KEY_ITEM,
+		Item.ItemType.MATERIAL,
 		0, 0, "ITEM_SPIRIT_STONE_DESC"
 	)
 	spirit_stone.icon = load("res://assets/sprites/item/gold.png")

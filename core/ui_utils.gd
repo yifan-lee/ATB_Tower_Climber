@@ -95,10 +95,10 @@ static func show_skill_list(container: Control, skills_info: Array, current_sele
 				})
 
 static func get_inventory_categories() -> Array:
-	return [Item.ItemType.POTION, Item.ItemType.EQUIPMENT, Item.ItemType.KEY_ITEM]
+	return [Item.ItemType.POTION, Item.ItemType.EQUIPMENT, Item.ItemType.MATERIAL, Item.ItemType.KEY_ITEM]
 
 static func get_category_names() -> Array:
-	return ["TAB_POTIONS", "TAB_EQUIPMENT", "TAB_KEY_ITEMS"]
+	return ["TAB_POTIONS", "TAB_EQUIPMENT", "TAB_MATERIALS", "TAB_KEY_ITEMS"]
 
 static func filter_items_by_category(items: Array, category: int) -> Array:
 	var filtered = []

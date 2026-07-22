@@ -210,7 +210,11 @@ func _on_player_stepped(grid_pos: Vector2i):
 		
 		var amount = 1
 		if items_config.has(grid_pos):
-			amount = items_config[grid_pos]
+			var cfg = items_config[grid_pos]
+			if typeof(cfg) == TYPE_DICTIONARY:
+				amount = cfg.get("amount", 1)
+			elif typeof(cfg) == TYPE_INT or typeof(cfg) == TYPE_FLOAT:
+				amount = int(cfg)
 		
 		var stats = EntityDB.get_stats("player")
 		if stats.inventory.has(item_id):
