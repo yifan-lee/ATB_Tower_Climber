@@ -3,17 +3,17 @@ extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
 	map_data = [
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "wall      ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "          ", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "wall", "stair_down", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
+		["wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "wall"],
 	]
 
 

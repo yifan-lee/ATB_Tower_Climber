@@ -60,6 +60,28 @@ func _ready():
     )
     db['monster_spd_lv1'] = monster_spd_lv1
 
+    var monster_spd_lv2 = Stats.new().setup_enemy(
+        "monster_spd_lv2",
+        "monster_spd_lv2",
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+    )
+    db['monster_spd_lv2'] = monster_spd_lv2
+
+    var monster_spd_lv3 = Stats.new().setup_enemy(
+        "monster_spd_lv3",
+        "monster_spd_lv3",
+        10000,
+        10000,
+        10000,
+        10000,
+        10000
+    )
+    db['monster_spd_lv3'] = monster_spd_lv3
+
     var monster_def_lv1 = Stats.new().setup_enemy(
         "monster_def_lv1",
         "monster_def_lv1",
@@ -70,6 +92,17 @@ func _ready():
         40
     )
     db['monster_def_lv1'] = monster_def_lv1
+
+    var monster_def_lv2 = Stats.new().setup_enemy(
+        "monster_def_lv2",
+        "monster_def_lv2",
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+    )
+    db['monster_def_lv2'] = monster_def_lv2
 
 
     var monster_def_lv3 = Stats.new().setup_enemy(
@@ -82,6 +115,74 @@ func _ready():
         10000
     )
     db['monster_def_lv3'] = monster_def_lv3
+
+    var monster_atk_lv1 = Stats.new().setup_enemy(
+        "monster_atk_lv1",
+        "monster_atk_lv1",
+        100,
+        100,
+        100,
+        100,
+        100
+    )
+    db['monster_atk_lv1'] = monster_atk_lv1
+
+    var monster_atk_lv2 = Stats.new().setup_enemy(
+        "monster_atk_lv2",
+        "monster_atk_lv2",
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+    )
+    db['monster_atk_lv2'] = monster_atk_lv2
+
+
+    var monster_atk_lv3 = Stats.new().setup_enemy(
+        "monster_atk_lv3",
+        "monster_atk_lv3",
+        10000,
+        10000,
+        10000,
+        10000,
+        10000
+    )
+    db['monster_atk_lv3'] = monster_atk_lv3
+
+    var monster_basic_lv1 = Stats.new().setup_enemy(
+        "monster_basic_lv1",
+        "monster_basic_lv1",
+        100,
+        100,
+        100,
+        100,
+        100
+    )
+    db['monster_basic_lv1'] = monster_basic_lv1
+
+    var monster_basic_lv2 = Stats.new().setup_enemy(
+        "monster_basic_lv2",
+        "monster_basic_lv2",
+        1000,
+        1000,
+        1000,
+        1000,
+        1000
+    )
+    db['monster_basic_lv2'] = monster_basic_lv2
+
+
+    var monster_basic_lv3 = Stats.new().setup_enemy(
+        "monster_basic_lv3",
+        "monster_basic_lv3",
+        10000,
+        10000,
+        10000,
+        10000,
+        10000
+    )
+    db['monster_basic_lv3'] = monster_basic_lv3
 
 func get_stats(id: String) -> Stats:
     return db.get(id)
