@@ -98,7 +98,7 @@ static func get_inventory_categories() -> Array:
 	return [Item.ItemType.POTION, Item.ItemType.EQUIPMENT, Item.ItemType.KEY_ITEM]
 
 static func get_category_names() -> Array:
-	return ["CATEGORY_POTION", "CATEGORY_EQUIP", "CATEGORY_KEY_ITEM"]
+	return ["TAB_POTIONS", "TAB_EQUIPMENT", "TAB_KEY_ITEMS"]
 
 static func filter_items_by_category(items: Array, category: int) -> Array:
 	var filtered = []

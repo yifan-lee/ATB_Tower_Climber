@@ -65,20 +65,27 @@ func _process(delta):
 	if is_action_paused:
 		return
 		
+	# 计算最快到达终点所需的时间
+	var time_to_p = INF if p_speed_px <= 0 else max(0.0, (BAR_WIDTH - p_progress) / p_speed_px)
+	var time_to_e = INF if e_speed_px <= 0 else max(0.0, (BAR_WIDTH - e_progress) / e_speed_px)
+	
+	# 实际流逝时间不能超过任一方到达终点的时间
+	var step_time = min(delta, min(time_to_p, time_to_e))
+	
 	# 累加进度
-	p_progress += p_speed_px * delta
-	e_progress += e_speed_px * delta
+	p_progress += p_speed_px * step_time
+	e_progress += e_speed_px * step_time
 	
 	# 技能冷却
 	if player_stats.skills != null:
 		for skill in player_stats.skills:
 			if skill.current_cd > 0:
-				skill.current_cd = max(0.0, skill.current_cd - delta)
+				skill.current_cd = max(0.0, skill.current_cd - step_time)
 				
 	if enemy_stats.skills != null:
 		for skill in enemy_stats.skills:
 			if skill.current_cd > 0:
-				skill.current_cd = max(0.0, skill.current_cd - delta)
+				skill.current_cd = max(0.0, skill.current_cd - step_time)
 	
 	# 判断玩家是否到达终点
 	if p_progress >= BAR_WIDTH:

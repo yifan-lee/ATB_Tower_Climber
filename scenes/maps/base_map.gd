@@ -4,6 +4,7 @@ extends Node2D
 var map_data = []
 var stairs_config = {}
 var triggers_config = {}
+var items_config = {}
 
 var floor_name_key: String = "MAP_FLOOR_UNKNOWN"
 var floor_desc_key: String = "MAP_DESC_UNKNOWN"
@@ -207,13 +208,17 @@ func _on_player_stepped(grid_pos: Vector2i):
 		var item_id = entity["id"]
 		var item_data = ItemDB.get_item(item_id)
 		
+		var amount = 1
+		if items_config.has(grid_pos):
+			amount = items_config[grid_pos]
+		
 		var stats = EntityDB.get_stats("player")
 		if stats.inventory.has(item_id):
-			stats.inventory[item_id] += 1
+			stats.inventory[item_id] += amount
 		else:
-			stats.inventory[item_id] = 1
+			stats.inventory[item_id] = amount
 			
-		EventBus.show_system_message.emit(["MSG_GOT_ITEM", item_data.item_name])
+		EventBus.show_system_message.emit(["MSG_GOT_ITEM", item_data.item_name, " x" + str(amount)])
 		remove_entity(grid_pos)
 
 # ==================== Trigger Handlers ====================

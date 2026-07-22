@@ -26,21 +26,21 @@ func _ready():
 	mp_herb.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 3, 0)
 	db["mp_herb"] = mp_herb
 
-	var iron_helm = Item.new().setup(
-		"iron_helm",
-		"EQUIPMENT_IRON_HELM",
+	var helm_level1 = Item.new().setup(
+		"helm_level1",
+		"EQUIPMENT_HELM_LV1",
 		Item.ItemType.EQUIPMENT,
-		0, 0, "EQUIPMENT_IRON_HELM_DESC",
+		0, 0, "EQUIPMENT_HELM_LV1_DESC",
 		0, 10, 0, Item.EquipSlot.HEAD
 	)
-	iron_helm.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 0)
-	db["iron_helm"] = iron_helm
+	helm_level1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 0)
+	db["helm_level1"] = helm_level1
 
 	var sword_level1 = Item.new().setup(
 		"sword_level1",
-		"EQUIPMENT_IRON_SWORD",
+		"EQUIPMENT_SWORD_LV1",
 		Item.ItemType.EQUIPMENT,
-		0, 0, "EQUIPMENT_IRON_SWORD_DESC",
+		0, 0, "EQUIPMENT_SWORD_LV1_DESC",
 		20, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
 	sword_level1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 1, 1)
@@ -85,6 +85,15 @@ func _ready():
 	)
 	boot_level1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
 	db["boot_level1"] = boot_level1
+	
+	var spirit_stone = Item.new().setup(
+		"spirit_stone",
+		"ITEM_SPIRIT_STONE_NAME",
+		Item.ItemType.KEY_ITEM,
+		0, 0, "ITEM_SPIRIT_STONE_DESC"
+	)
+	spirit_stone.icon = load("res://assets/sprites/item/gold.png")
+	db["spirit_stone"] = spirit_stone
 	
 
 func get_item(id: String) -> Item:
