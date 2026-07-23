@@ -73,7 +73,10 @@ func setup(title: String, options: Array):
 		if enabled and first_enabled == -1:
 			first_enabled = i
 	
-	current_selection_index = max(0, first_enabled)
+	# Try to maintain selection index if possible
+	if current_selection_index >= options.size() or not options[current_selection_index].get("enabled", true):
+		current_selection_index = max(0, first_enabled)
+	
 	_update_selection_visual()
 
 func _add_option(text: String, enabled: bool):
@@ -114,7 +117,8 @@ func _unhandled_input(event):
 		elif event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
 			var opt = current_options[current_selection_index]
 			if opt.get("enabled", true):
-				EventBus.interaction_dialog_closed.emit()
+				if opt.get("close_on_select", true):
+					EventBus.interaction_dialog_closed.emit()
 				EventBus.interaction_action_selected.emit(opt.get("action", ""), opt.get("metadata", {}))
 			get_viewport().set_input_as_handled()
 		elif event.keycode == KEY_ESCAPE or event.keycode == KEY_X:

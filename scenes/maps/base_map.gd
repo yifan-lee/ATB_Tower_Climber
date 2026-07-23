@@ -215,19 +215,22 @@ func trigger_interaction(grid_pos: Vector2i):
 				"text": "消耗 %d 红色碎片，提升 %d 攻击力 (拥有: %d)" % [cost_red, GameRules.STATUE_EXCHANGE_GAIN_ATK, current_red],
 				"action": "statue_exchange_atk",
 				"enabled": current_red >= cost_red,
-				"metadata": {"cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK}
+				"close_on_select": false,
+				"metadata": {"pos": grid_pos, "cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK}
 			},
 			{
 				"text": "消耗 %d 蓝色碎片，提升 %d 速度 (拥有: %d)" % [cost_blue, GameRules.STATUE_EXCHANGE_GAIN_SPD, current_blue],
 				"action": "statue_exchange_spd",
 				"enabled": current_blue >= cost_blue,
-				"metadata": {"cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD}
+				"close_on_select": false,
+				"metadata": {"pos": grid_pos, "cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD}
 			},
 			{
 				"text": "消耗 %d 黄色碎片，提升 %d 防御力 (拥有: %d)" % [cost_yellow, GameRules.STATUE_EXCHANGE_GAIN_DEF, current_yellow],
 				"action": "statue_exchange_def",
 				"enabled": current_yellow >= cost_yellow,
-				"metadata": {"cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF}
+				"close_on_select": false,
+				"metadata": {"pos": grid_pos, "cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF}
 			},
 			{
 				"text": "离开",
@@ -332,16 +335,19 @@ func _on_interaction_action_selected(action: String, metadata: Dictionary):
 		player_stats.inventory["fragment_red"] = player_stats.inventory.get("fragment_red", 0) - metadata.get("cost", 1)
 		player_stats.atk += metadata.get("gain", 0)
 		EventBus.show_system_message.emit(["提升了 %d 攻击力！" % metadata.get("gain", 0)])
+		trigger_interaction(metadata.pos)
 	elif action == "statue_exchange_spd":
 		var player_stats = EntityDB.get_stats("player")
 		player_stats.inventory["fragment_blue"] = player_stats.inventory.get("fragment_blue", 0) - metadata.get("cost", 1)
 		player_stats.spd += metadata.get("gain", 0)
 		EventBus.show_system_message.emit(["提升了 %d 速度！" % metadata.get("gain", 0)])
+		trigger_interaction(metadata.pos)
 	elif action == "statue_exchange_def":
 		var player_stats = EntityDB.get_stats("player")
 		player_stats.inventory["fragment_yellow"] = player_stats.inventory.get("fragment_yellow", 0) - metadata.get("cost", 1)
 		player_stats.def += metadata.get("gain", 0)
 		EventBus.show_system_message.emit(["提升了 %d 防御力！" % metadata.get("gain", 0)])
+		trigger_interaction(metadata.pos)
 
 func _on_battle_ended(result: String):
 	if self.get_parent() == null or not self.visible:

@@ -2,7 +2,7 @@ extends "res://scenes/main.gd"
 
 @export_category("Map Settings")
 @export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_3.gd"
-@export var start_pos: Vector2i = Vector2i(0, 0)
+@export var start_pos: Vector2i = Vector2i(8, 4)
 
 @export_category("Player Stats")
 @export var debug_level: int = 1
@@ -10,14 +10,14 @@ extends "res://scenes/main.gd"
 @export var debug_mp: int = 250
 @export var debug_atk: int = 100
 @export var debug_def: int = 100
-@export var debug_spd: int = 100
+@export var debug_spd: int = 900
 @export var debug_exp: int = 40
 @export var debug_stat_points: int = 0
 
 @export_category("Inventory & Skills")
 @export var debug_inventory: Dictionary = {
 	"spirit_stone": 999,
-	# "fragment_red": 10,
+	"fragment_red": 10,
 	# "sword_level5": 1,
 	# "hp_herb": 99
 }
