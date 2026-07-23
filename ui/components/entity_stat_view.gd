@@ -7,6 +7,8 @@ var exp_lbl: RichTextLabel
 var extra_info_lbl: RichTextLabel
 var stat_labels: Dictionary = {}
 
+const VALID_STATS = ["hp", "mp", "atk", "def", "spd", "max_hp", "max_mp"]
+
 func _init():
 	size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
@@ -41,7 +43,7 @@ func update_stats(stats: Stats, expected_changes: Dictionary = {}, show_exp: boo
 	# Ensure all standard and dynamically requested stat labels exist
 	var all_stats = stat_labels.keys()
 	for key in expected_changes.keys():
-		if not all_stats.has(key):
+		if key in VALID_STATS and not all_stats.has(key):
 			all_stats.append(key)
 			
 	for stat in all_stats:

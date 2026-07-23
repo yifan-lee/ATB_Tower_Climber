@@ -2,10 +2,15 @@
 extends PanelContainer
 
 const EntityStatView = preload("res://ui/components/entity_stat_view.gd")
+const MaterialView = preload("res://ui/components/material_view.gd")
 
 var floor_title_label: Label
 var floor_desc_label: Label
 var player_stat_view: EntityStatView
+var material_separator: HSeparator
+var material_view: MaterialView
+
+var current_preview: Dictionary = {}
 
 func _ready():
 	# 给背景设置个深色底板
@@ -46,11 +51,24 @@ func _ready():
 	floor_desc_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left_vbox.add_child(floor_desc_label)
 	
-	# 右侧：EntityStatView 显示完整属性
+	# 右侧：属性与材料 (VBox 结构)
+	var right_vbox = VBoxContainer.new()
+	right_vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_vbox.size_flags_vertical = Control.SIZE_FILL
+	dynamic_hbox.add_child(right_vbox)
+	
 	player_stat_view = EntityStatView.new()
 	player_stat_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	player_stat_view.size_flags_vertical = Control.SIZE_FILL
-	dynamic_hbox.add_child(player_stat_view)
+	right_vbox.add_child(player_stat_view)
+	
+	material_separator = HSeparator.new()
+	right_vbox.add_child(material_separator)
+	
+	material_view = MaterialView.new()
+	material_view.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	material_view.size_flags_vertical = Control.SIZE_FILL
+	right_vbox.add_child(material_view)
 	
 	# 下部分：静态操作指南
 	var static_guide = Label.new()
@@ -63,11 +81,21 @@ func _ready():
 	EventBus.player_stats_changed.connect(refresh_player_stats)
 	EventBus.battle_ended.connect(_on_battle_ended)
 	EventBus.game_loaded.connect(refresh_player_stats)
+	EventBus.preview_interaction.connect(_on_preview_interaction)
+	EventBus.clear_preview_interaction.connect(_on_clear_preview_interaction)
+
+func _on_preview_interaction(expected_changes: Dictionary):
+	current_preview = expected_changes
+	refresh_player_stats()
+
+func _on_clear_preview_interaction():
+	current_preview = {}
+	refresh_player_stats()
 
 func refresh_floor_info(map_node: Node2D):
-	if map_node and "floor_name_key" in map_node and "floor_desc_key" in map_node:
-		floor_title_label.text = tr(map_node.floor_name_key)
-		floor_desc_label.text = tr(map_node.floor_desc_key)
+	if map_node and "config" in map_node:
+		floor_title_label.text = tr(map_node.config.get("name", "MAP_FLOOR_UNKNOWN"))
+		floor_desc_label.text = tr(map_node.config.get("desc", "MAP_DESC_UNKNOWN"))
 	else:
 		floor_title_label.text = "???"
 		floor_desc_label.text = ""
@@ -75,7 +103,9 @@ func refresh_floor_info(map_node: Node2D):
 func refresh_player_stats():
 	var stats = EntityDB.get_stats("player")
 	if stats:
-		player_stat_view.update_stats(stats, {}, true)
+		player_stat_view.update_stats(stats, current_preview, true)
+		material_view.update_materials(stats.inventory, current_preview)
+		material_separator.visible = material_view.visible
 
 func _on_battle_ended(_result):
 	refresh_player_stats()

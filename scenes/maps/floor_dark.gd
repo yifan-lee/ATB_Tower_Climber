@@ -4,8 +4,7 @@ extends "res://scenes/maps/base_map.gd"
 var last_revealed_tiles = []
 
 func _init():
-	floor_name_key = "MAP_FLOOR_UNKNOWN"
-	floor_desc_key = "MAP_DESC_UNKNOWN"
+	config = {"floor": -1, "name": "MAP_FLOOR_UNKNOWN", "desc": "MAP_DESC_UNKNOWN"}
 	
 	map_data = [
 		["wall", "wall ", "wall ", "wall ", "wall ", "stair_up       ", "wall ", "wall ", "wall ", "wall ", "wall"],

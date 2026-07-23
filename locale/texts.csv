@@ -71,10 +71,14 @@ TAB_KEY_ITEMS,重要道具,Key Items
 TAB_MATERIALS,材料,Materials
 MAP_FLOOR_UNKNOWN,未知领域,Unknown Area
 MAP_DESC_UNKNOWN,此处没有任何说明。,No description available.
-MAP_FLOOR_1_NAME,第一层：攻击,Floor 1: ATK
-MAP_FLOOR_1_DESC,攻击线105,ATK 105
-MAP_FLOOR_2_NAME,第二层：速度,Floor 2: SPD
-MAP_FLOOR_2_DESC,速度线115,SPD 115
+MAP_FLOOR_ATK_NAME,攻击,ATK
+MAP_FLOOR_ATK_DESC,攻击线105,ATK 105
+MAP_FLOOR_SPD_NAME,速度,SPD
+MAP_FLOOR_SPD_DESC,速度线115,SPD 115
+MAP_FLOOR_SHOP_NAME,商店,Shop
+MAP_FLOOR_SHOP_DESC,商店,Shop
+MAP_FLOOR_LEFT_NAME,规则,Rule
+MAP_FLOOR_LEFT_DESC,顾右不顾左，顾前不顾后,"Left is left, Right is right"
 UI_CONTROLS_GUIDE,"WASD移动 | B打开背包 | 回车确认 | ESC退出","WASD to Move | B for Inventory | Enter to Confirm | ESC to Cancel"
 STAT_HP,生命值,HP
 STAT_MP,魔法值,MP

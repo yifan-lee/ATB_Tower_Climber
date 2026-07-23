@@ -103,6 +103,13 @@ func _update_selection_visual():
 			else:
 				option_labels[i].add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
 
+	var current_opt = current_options[current_selection_index]
+	var metadata = current_opt.get("metadata", {})
+	if metadata.has("expected_change"):
+		EventBus.preview_interaction.emit(metadata["expected_change"])
+	else:
+		EventBus.clear_preview_interaction.emit()
+
 func _unhandled_input(event):
 	if not visible:
 		return
@@ -118,10 +125,12 @@ func _unhandled_input(event):
 			var opt = current_options[current_selection_index]
 			if opt.get("enabled", true):
 				if opt.get("close_on_select", true):
+					EventBus.clear_preview_interaction.emit()
 					EventBus.interaction_dialog_closed.emit()
 				EventBus.interaction_action_selected.emit(opt.get("action", ""), opt.get("metadata", {}))
 			get_viewport().set_input_as_handled()
 		elif event.keycode == KEY_ESCAPE or event.keycode == KEY_X:
+			EventBus.clear_preview_interaction.emit()
 			EventBus.interaction_dialog_closed.emit()
 			get_viewport().set_input_as_handled()
 

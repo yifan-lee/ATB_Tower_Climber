@@ -11,8 +11,7 @@ var statues_config = {}
 var custom_state = {}
 
 
-var floor_name_key: String = "MAP_FLOOR_UNKNOWN"
-var floor_desc_key: String = "MAP_DESC_UNKNOWN"
+var config: Dictionary = {"floor": 0, "name": "MAP_FLOOR_UNKNOWN", "desc": "MAP_DESC_UNKNOWN"}
 
 var trigger_handlers = {
 	"change_tile": Callable(self, "_handle_change_tile"),
@@ -216,21 +215,21 @@ func trigger_interaction(grid_pos: Vector2i):
 				"action": "statue_exchange_atk",
 				"enabled": current_red >= cost_red,
 				"close_on_select": false,
-				"metadata": {"pos": grid_pos, "cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK}
+				"metadata": {"pos": grid_pos, "cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK, "expected_change": {"atk": GameRules.STATUE_EXCHANGE_GAIN_ATK, "fragment_red": -cost_red}}
 			},
 			{
 				"text": "消耗 %d 蓝色碎片，提升 %d 速度 (拥有: %d)" % [cost_blue, GameRules.STATUE_EXCHANGE_GAIN_SPD, current_blue],
 				"action": "statue_exchange_spd",
 				"enabled": current_blue >= cost_blue,
 				"close_on_select": false,
-				"metadata": {"pos": grid_pos, "cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD}
+				"metadata": {"pos": grid_pos, "cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD, "expected_change": {"spd": GameRules.STATUE_EXCHANGE_GAIN_SPD, "fragment_blue": -cost_blue}}
 			},
 			{
 				"text": "消耗 %d 黄色碎片，提升 %d 防御力 (拥有: %d)" % [cost_yellow, GameRules.STATUE_EXCHANGE_GAIN_DEF, current_yellow],
 				"action": "statue_exchange_def",
 				"enabled": current_yellow >= cost_yellow,
 				"close_on_select": false,
-				"metadata": {"pos": grid_pos, "cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF}
+				"metadata": {"pos": grid_pos, "cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF, "expected_change": {"def": GameRules.STATUE_EXCHANGE_GAIN_DEF, "fragment_yellow": -cost_yellow}}
 			},
 			{
 				"text": "离开",

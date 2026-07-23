@@ -2,6 +2,7 @@
 extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
+	config = {"floor": 3, "name": "MAP_FLOOR_SHOP_NAME", "desc": "MAP_FLOOR_SHOP_DESC"}
 	map_data = [
 		["stair_down       ", "                 ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "wall       ", "wall       ", "wall             "],
 		["wall             ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "                 ", "wall             ", "statue_part", "statue_part", "statue_part", "wall             "],

@@ -2,8 +2,7 @@
 extends "res://scenes/maps/base_map.gd"
 
 func _init():
-	floor_name_key = "MAP_FLOOR_UNKNOWN"
-	floor_desc_key = "MAP_DESC_UNKNOWN"
+	config = {"floor": 5, "name": "MAP_FLOOR_UNKNOWN", "desc": "MAP_DESC_UNKNOWN"}
 	
 	# 这里定义“真实”的迷宫地形
 	# 除了真正的"wall"，其他所有非墙壁元素（floor, monster, stair_up, item）

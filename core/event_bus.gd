@@ -17,6 +17,8 @@ signal request_map_change(target_scene_path: String, spawn_grid_pos: Vector2i)
 signal show_interaction_dialog(title: String, options: Array)
 signal interaction_action_selected(action: String, metadata: Dictionary)
 signal interaction_dialog_closed()
+signal preview_interaction(expected_changes: Dictionary)
+signal clear_preview_interaction()
 
 signal encounter_monster(entity_id: String, monster_node: Node)
 

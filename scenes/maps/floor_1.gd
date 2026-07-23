@@ -2,8 +2,7 @@
 extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
-	floor_name_key = "MAP_FLOOR_1_NAME"
-	floor_desc_key = "MAP_FLOOR_1_DESC"
+	config = {"floor": 1, "name": "MAP_FLOOR_ATK_NAME", "desc": "MAP_FLOOR_ATK_DESC"}
 	
 	map_data = [
 		["wall", "wall         ", "wall", "wall", "wall", "sword_lv5    ", "wall", "wall", "wall", "wall         ", "wall"],

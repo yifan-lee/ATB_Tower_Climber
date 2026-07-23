@@ -18,6 +18,9 @@ extends "res://scenes/main.gd"
 @export var debug_inventory: Dictionary = {
 	"spirit_stone": 999,
 	"fragment_red": 10,
+	"fragment_yellow": 10,
+	"fragment_blue": 10,
+	"fragment_white": 10,
 	# "sword_level5": 1,
 	# "hp_herb": 99
 }
