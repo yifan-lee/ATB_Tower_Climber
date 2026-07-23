@@ -1,20 +1,20 @@
-# res://scenes/maps/floor_1.gd
+# res://scenes/maps/floor_4.gd
 extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
 	config = {"floor": 4, "name": "MAP_FLOOR_LEFT_NAME", "desc": "MAP_FLOOR_LEFT_DESC"}
 	map_data = [
-		["    ", "    ", "        ", "    ", "    ", "    ", "    ", "    ", "          ", "    ", "    "],
-		["    ", "wall", "        ", "wall", "    ", "wall", "    ", "wall", "wall      ", "wall", "    "],
-		["    ", "wall", "        ", "    ", "    ", "    ", "    ", "    ", "          ", "    ", "    "],
-		["    ", "wall", "        ", "wall", "    ", "wall", "wall", "wall", "          ", "wall", "    "],
-		["    ", "wall", "        ", "wall", "    ", "    ", "    ", "    ", "          ", "wall", "    "],
-		["    ", "    ", "        ", "    ", "    ", "    ", "    ", "wall", "          ", "wall", "    "],
-		["wall", "wall", "        ", "wall", "    ", "wall", "wall", "wall", "          ", "wall", "    "],
-		["wall", "wall", "        ", "    ", "    ", "    ", "    ", "    ", "          ", "wall", "    "],
-		["wall", "wall", "        ", "wall", "wall", "wall", "    ", "wall", "          ", "wall", "    "],
-		["wall", "wall", "        ", "    ", "    ", "    ", "    ", "    ", "          ", "    ", "    "],
-		["wall", "wall", "stair_up", "wall", "wall", "wall", "wall", "wall", "stair_down", "wall", "wall"],
+		["    ", "    ", "        ", "    ", "    ", "    ", "    ", "                 ", "                 ", "    ", "                 "],
+		["    ", "wall", "        ", "wall", "    ", "wall", "    ", "wall             ", "wall             ", "wall", "monster_basic_lv2"],
+		["    ", "wall", "        ", "    ", "    ", "    ", "    ", "monster_basic_lv2", "bracers_lv1      ", "    ", "                 "],
+		["    ", "wall", "        ", "wall", "    ", "wall", "wall", "wall             ", "monster_basic_lv1", "wall", "hp_herb_lv1      "],
+		["    ", "wall", "        ", "wall", "    ", "    ", "    ", "monster_basic_lv2", "spirit_stone     ", "wall", "                 "],
+		["    ", "    ", "        ", "    ", "    ", "    ", "    ", "wall             ", "monster_basic_lv1", "wall", "monster_basic_lv1"],
+		["wall", "wall", "        ", "wall", "    ", "wall", "wall", "wall             ", "                 ", "wall", "monster_basic_lv1"],
+		["wall", "wall", "        ", "    ", "    ", "    ", "    ", "monster_basic_lv2", "                 ", "wall", "                 "],
+		["wall", "wall", "        ", "wall", "wall", "wall", "    ", "wall             ", "monster_basic_lv1", "wall", "leggings_lv1     "],
+		["wall", "wall", "        ", "    ", "    ", "    ", "    ", "hp_herb_lv1      ", "                 ", "    ", "                 "],
+		["wall", "wall", "stair_up", "wall", "wall", "wall", "wall", "wall             ", "stair_down       ", "wall", "wall             "],
 	]
 
 
@@ -55,15 +55,9 @@ func _on_player_stepped(grid_pos: Vector2i):
 		custom_state["rule_disabled"] = true
 	super._on_player_stepped(grid_pos)
 
-	# triggers_config = {
-	# 	Vector2i(5, 4): [ # 用中括号 [] 包裹起来，变成一个数组（Array）
-	# 		{
-	# 			"target_grid": Vector2i(5, 0),
-	# 			"target_new_type": "stair_up"
-	# 		},
-	# 		{
-	# 			"target_grid": Vector2i(5, 10), # 注意：您的地图大小是 11x11，所以最大坐标是 10。如果您写 11 就会越界哦！
-	# 			"target_new_type": "wall"
-	# 		}
-	# 	]
-	# }
+	# stair_down, stair_up, pedal_switch, door_closed
+	# fragment_blue, fragment_red, fragment_yellow, fragment_white, spirit_stone
+	# monster_def_lv1, monster_atk_lv1, monster_spd_lv1, monster_basic_lv1
+	# hp_herb_lv1, mp_herb_lv1, 
+	# helm_lv1, chestplate_lv1, leggings_lv1, bracers_lv1, boot_lv1, 
+	# sword_lv1, blade_lv1, dagger_lv1, shield_lv1, spear_lv1, fan_lv1, staff_lv1

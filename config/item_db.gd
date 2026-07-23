@@ -84,7 +84,7 @@ func _ready():
 		0, 0, "EQUIPMENT_HELM_LV1_DESC",
 		0, 10, 0, Item.EquipSlot.HEAD
 	)
-	bracers_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 5)
+	bracers_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 4)
 	db["bracers_lv1"] = bracers_lv1
 
 	var sword_lv1 = Item.new().setup(

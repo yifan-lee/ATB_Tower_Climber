@@ -1,4 +1,4 @@
-# res://scenes/maps/floor_1.gd
+# res://scenes/maps/floor_2.gd
 extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
