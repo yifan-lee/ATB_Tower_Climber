@@ -200,6 +200,8 @@ func change_state(new_state: AppState):
 		AppState.INTERACTION_DIALOG:
 			overlay_layer1.show()
 			interaction_dialog_view.show()
+			info_panel.show()
+			
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
