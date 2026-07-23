@@ -4,17 +4,17 @@ extends "res://scenes/maps/base_map.gd"
 func _init() -> void:
 	config = {"floor": 5, "name": "MAP_FLOOR_NAME_BOSS1", "desc": "MAP_FLOOR_DESC_BOSS1"}
 	map_data = [
-		["chestplate_lv2", "monster_basic_lv1", "                 ", "monster_basic_lv1", "                 ", "door_closed", "    ", "monster_basic_lv1", "                 ", "monster_basic_lv1", "leggings_lv2"],
-		["monster_basic_lv1", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "wall", "wall             ", "wall             ", "wall             ", "monster_basic_lv1"],
-		["                 ", "wall             ", "                 ", "monster_basic_lv1", "                 ", "door_closed", "    ", "monster_basic_lv1", "                 ", "wall             ", "                 "],
-		["monster_basic_lv1", "wall             ", "monster_basic_lv1", "wall             ", "wall             ", "wall       ", "wall", "wall             ", "monster_basic_lv1", "wall             ", "monster_basic_lv1"],
-		["                 ", "wall             ", "                 ", "wall             ", "boss_lv1         ", "stair_up   ", "    ", "wall             ", "                 ", "wall             ", "                 "],
-		["door_closed      ", "wall             ", "door_closed      ", "wall             ", "                 ", "           ", "    ", "wall             ", "door_closed      ", "wall             ", "door_closed      "],
-		["                 ", "wall             ", "                 ", "wall             ", "                 ", "           ", "    ", "wall             ", "                 ", "wall             ", "                 "],
-		["monster_basic_lv1", "wall             ", "monster_basic_lv1", "wall             ", "wall             ", "           ", "    ", "wall             ", "monster_basic_lv1", "wall             ", "monster_basic_lv1"],
-		["                 ", "wall             ", "                 ", "monster_basic_lv1", "                 ", "wall       ", "    ", "monster_basic_lv1", "                 ", "wall             ", "                 "],
-		["monster_basic_lv1", "wall             ", "wall             ", "wall             ", "monster_basic_lv1", "wall       ", "wall", "wall             ", "wall             ", "wall             ", "monster_basic_lv1"],
-		["helm_lv2", "monster_basic_lv1", "stair_down       ", "wall             ", "                 ", "door_closed", "    ", "monster_basic_lv1", "                 ", "monster_basic_lv1", "bracers_lv2"],
+		["chestplate_lv2   ", "monster_basic_lv1", "fragment_red     ", "monster_basic_lv1", "fragment_red     ", "door_closed", "fragment_red", "monster_basic_lv1", "fragment_red     ", "monster_basic_lv1", "leggings_lv2     "],
+		["monster_basic_lv1", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "wall        ", "wall             ", "wall             ", "wall             ", "monster_basic_lv1"],
+		["fragment_blue    ", "wall             ", "sword_lv2        ", "monster_basic_lv1", "spirit_stone     ", "door_closed", "spirit_stone", "monster_basic_lv1", "sword_lv2        ", "wall             ", "fragment_yellow  "],
+		["monster_basic_lv1", "wall             ", "monster_basic_lv1", "wall             ", "wall             ", "wall       ", "wall        ", "wall             ", "monster_basic_lv1", "wall             ", "monster_basic_lv1"],
+		["fragment_blue    ", "wall             ", "spirit_stone     ", "wall             ", "boss_lv1         ", "stair_up   ", "            ", "wall             ", "mp_herb_lv2", "wall             ", "fragment_yellow  "],
+		["door_closed      ", "wall             ", "door_closed      ", "wall             ", "                 ", "           ", "            ", "wall             ", "door_closed      ", "wall             ", "door_closed      "],
+		["fragment_blue    ", "wall             ", "spirit_stone     ", "wall             ", "                 ", "           ", "            ", "wall             ", "mp_herb_lv2", "wall             ", "fragment_yellow  "],
+		["monster_basic_lv1", "wall             ", "monster_basic_lv1", "wall             ", "wall             ", "           ", "            ", "wall             ", "monster_basic_lv1", "wall             ", "monster_basic_lv1"],
+		["fragment_blue    ", "wall             ", "boot_lv2         ", "monster_basic_lv1", "hp_herb_lv2      ", "wall       ", "mp_herb_lv2", "monster_basic_lv1", "mp_herb_lv2", "wall             ", "fragment_yellow  "],
+		["monster_basic_lv1", "wall             ", "wall             ", "wall             ", "monster_basic_lv1", "wall       ", "wall        ", "wall             ", "wall             ", "wall             ", "monster_basic_lv1"],
+		["helm_lv2         ", "monster_basic_lv1", "stair_down       ", "wall             ", "hp_herb_lv2      ", "door_closed", "hp_herb_lv2 ", "monster_basic_lv1", "hp_herb_lv2      ", "monster_basic_lv1", "bracers_lv2      "],
 	]
 
 

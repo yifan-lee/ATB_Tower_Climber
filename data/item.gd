@@ -3,7 +3,7 @@ extends Resource
 class_name Item
 
 enum ItemType {POTION, EQUIPMENT, MATERIAL, KEY_ITEM}
-enum EquipSlot {NONE, HEAD, CHEST, LEGS, FEET, LEFT_HAND, RIGHT_HAND, ACCESSORY}
+enum EquipSlot {NONE, HEAD, CHEST, LEGS, FEET, ARMS, LEFT_HAND, RIGHT_HAND, ACCESSORY}
 
 @export var item_id: String
 @export var item_name: String

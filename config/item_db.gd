@@ -122,10 +122,20 @@ func _ready():
 		"EQUIPMENT_HELM_LV1",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_HELM_LV1_DESC",
-		0, 10, 0, Item.EquipSlot.HEAD
+		0, 10, 0, Item.EquipSlot.ARMS
 	)
 	bracers_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 4)
 	db["bracers_lv1"] = bracers_lv1
+
+	var bracers_lv2 = Item.new().setup(
+		"bracers_lv2",
+		"EQUIPMENT_BRACERS_LV2",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BRACERS_LV2_DESC",
+		0, 15, 0, Item.EquipSlot.ARMS
+	)
+	bracers_lv2.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 1, 4)
+	db["bracers_lv2"] = bracers_lv2
 
 	var sword_lv1 = Item.new().setup(
 		"sword_lv1",

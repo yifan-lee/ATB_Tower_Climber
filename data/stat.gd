@@ -18,9 +18,10 @@ class_name Stats
 	Item.EquipSlot.CHEST: null,
 	Item.EquipSlot.LEGS: null,
 	Item.EquipSlot.FEET: null,
+	Item.EquipSlot.ARMS: null,
 	Item.EquipSlot.LEFT_HAND: null,
 	Item.EquipSlot.RIGHT_HAND: null,
-	Item.EquipSlot.ACCESSORY: null
+	Item.EquipSlot.ACCESSORY: null,
 }
 
 @export var level_up_skills: Dictionary = {}

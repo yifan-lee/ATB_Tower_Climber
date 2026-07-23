@@ -34,9 +34,11 @@ extends "res://scenes/main.gd"
 @export var equip_chest: String = ""
 @export var equip_legs: String = ""
 @export var equip_feet: String = ""
+@export var equip_arms: String = ""
 @export var equip_left_hand: String = "tree_branch"
 @export var equip_right_hand: String = ""
 @export var equip_accessory: String = ""
+
 
 func _load_initial_scenes():
 	# 1. 强制覆盖玩家初始数据 (EntityDB 是全局共享的，在 main 加载前修改即可)
@@ -72,9 +74,10 @@ func _load_initial_scenes():
 			ItemClass.EquipSlot.CHEST: equip_chest,
 			ItemClass.EquipSlot.LEGS: equip_legs,
 			ItemClass.EquipSlot.FEET: equip_feet,
+			ItemClass.EquipSlot.ARMS: equip_arms,
 			ItemClass.EquipSlot.LEFT_HAND: equip_left_hand,
 			ItemClass.EquipSlot.RIGHT_HAND: equip_right_hand,
-			ItemClass.EquipSlot.ACCESSORY: equip_accessory
+			ItemClass.EquipSlot.ACCESSORY: equip_accessory,
 		}
 		
 		# 清空旧装备
