@@ -16,7 +16,7 @@ extends "res://scenes/main.gd"
 
 @export_category("Inventory & Skills")
 @export var debug_inventory: Dictionary = {
-	# "spirit_stone": 50,
+	"spirit_stone": 999,
 	# "fragment_red": 10,
 	# "sword_level5": 1,
 	# "hp_herb": 99

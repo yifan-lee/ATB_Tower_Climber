@@ -114,8 +114,8 @@ func _unhandled_input(event):
 		elif event.keycode == KEY_SPACE or event.keycode == KEY_ENTER:
 			var opt = current_options[current_selection_index]
 			if opt.get("enabled", true):
-				EventBus.interaction_action_selected.emit(opt.get("action", ""), opt.get("metadata", {}))
 				EventBus.interaction_dialog_closed.emit()
+				EventBus.interaction_action_selected.emit(opt.get("action", ""), opt.get("metadata", {}))
 			get_viewport().set_input_as_handled()
 		elif event.keycode == KEY_ESCAPE or event.keycode == KEY_X:
 			EventBus.interaction_dialog_closed.emit()

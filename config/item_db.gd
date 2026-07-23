@@ -34,7 +34,7 @@ func _ready():
 		50, # 回蓝50
 		"ITEM_MP_POTION_DESC"
 	)
-	mp_herb_lv1.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 3, 0)
+	mp_herb_lv1.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 0, 3)
 	db["mp_herb_lv1"] = mp_herb_lv1
 
 	var helm_lv1 = Item.new().setup(
