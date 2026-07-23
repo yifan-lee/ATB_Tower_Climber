@@ -4,17 +4,17 @@ extends "res://scenes/maps/base_map.gd"
 func _init() -> void:
 	config = {"floor": 3, "name": "MAP_FLOOR_NAME_SHOP", "desc": "MAP_FLOOR_DESC_SHOP"}
 	map_data = [
-		["stair_down       ", "                 ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "wall       ", "wall       ", "wall             "],
-		["wall             ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "                 ", "wall             ", "shop       ", "           ", "           ", "wall             "],
-		["wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "door_closed      ", "wall             ", "           ", "           ", "           ", "wall             "],
-		["                 ", "                 ", "monster_basic_lv1", "monster_basic_lv1", "monster_basic_lv1", "                 ", "wall             ", "           ", "           ", "           ", "wall             "],
-		["spirit_stone     ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "           ", "wall       ", "wall             "],
-		["                 ", "hp_herb_lv1      ", "mp_herb_lv1      ", "                 ", "monster_basic_lv1", "                 ", "                 ", "wall       ", "           ", "wall       ", "spirit_stone     "],
-		["wall             ", "wall             ", "wall             ", "monster_basic_lv1", "                 ", "                 ", "monster_basic_lv1", "wall       ", "           ", "wall       ", "monster_basic_lv1"],
-		["helm_lv1         ", "hp_herb_lv1      ", "wall             ", "                 ", "                 ", "monster_basic_lv1", "                 ", "           ", "           ", "           ", "                 "],
-		["mp_herb_lv1      ", "monster_basic_lv1", "wall             ", "wall             ", "door_closed      ", "wall             ", "wall             ", "wall       ", "           ", "wall       ", "monster_basic_lv1"],
-		["monster_basic_lv1", "                 ", "                 ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "wall       ", "           ", "wall       ", "monster_basic_lv1"],
-		["                 ", "                 ", "                 ", "                 ", "spirit_stone     ", "monster_basic_lv1", "pedal_switch     ", "wall       ", "wall       ", "wall       ", "spirit_stone     "],
+		["stair_down       ", "                 ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall", "wall", "wall", "wall             "],
+		["wall             ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "                 ", "wall             ", "shop", "    ", "    ", "wall             "],
+		["wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "door_closed      ", "wall             ", "    ", "    ", "    ", "wall             "],
+		["                 ", "                 ", "monster_basic_lv1", "monster_basic_lv1", "monster_basic_lv1", "                 ", "wall             ", "    ", "    ", "    ", "wall             "],
+		["spirit_stone     ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall", "    ", "wall", "wall             "],
+		["                 ", "hp_herb_lv1      ", "mp_herb_lv1      ", "                 ", "monster_basic_lv1", "                 ", "                 ", "wall", "    ", "wall", "spirit_stone     "],
+		["wall             ", "wall             ", "wall             ", "monster_basic_lv1", "                 ", "                 ", "monster_basic_lv1", "wall", "    ", "wall", "monster_basic_lv1"],
+		["helm_lv1         ", "hp_herb_lv1      ", "wall             ", "                 ", "                 ", "monster_basic_lv1", "                 ", "    ", "    ", "    ", "                 "],
+		["mp_herb_lv1      ", "monster_basic_lv1", "wall             ", "wall             ", "door_closed      ", "wall             ", "wall             ", "wall", "    ", "wall", "monster_basic_lv1"],
+		["monster_basic_lv1", "                 ", "                 ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "wall", "    ", "wall", "monster_basic_lv1"],
+		["                 ", "                 ", "                 ", "                 ", "spirit_stone     ", "monster_basic_lv1", "pedal_switch     ", "wall", "wall", "wall", "spirit_stone     "],
 	]
 
 

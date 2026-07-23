@@ -1,7 +1,7 @@
 extends "res://scenes/main.gd"
 
 @export_category("Map Settings")
-@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_3.gd"
+@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_5.gd"
 @export var start_pos: Vector2i = Vector2i(5, 7)
 
 @export_category("Player Stats")

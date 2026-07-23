@@ -47,25 +47,55 @@ func _ready():
 	helm_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 0)
 	db["helm_lv1"] = helm_lv1
 
+	var helm_lv2 = Item.new().setup(
+		"helm_lv2",
+		"EQUIPMENT_HELM_LV2",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_HELM_LV2_DESC",
+		0, 10, 0, Item.EquipSlot.HEAD
+	)
+	helm_lv2.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 1, 0)
+	db["helm_lv2"] = helm_lv2
+
 	var chestplate_lv1 = Item.new().setup(
 		"chestplate_lv1",
 		"EQUIPMENT_HELM_LV1",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_HELM_LV1_DESC",
-		0, 10, 0, Item.EquipSlot.HEAD
+		0, 10, 0, Item.EquipSlot.CHEST
 	)
 	chestplate_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 1)
 	db["chestplate_lv1"] = chestplate_lv1
+
+	var chestplate_lv2 = Item.new().setup(
+		"chestplate_lv2",
+		"EQUIPMENT_HELM_LV2",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_HELM_LV2_DESC",
+		0, 10, 0, Item.EquipSlot.CHEST
+	)
+	chestplate_lv2.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 1, 1)
+	db["chestplate_lv2"] = chestplate_lv2
 
 	var leggings_lv1 = Item.new().setup(
 		"leggings_lv1",
 		"EQUIPMENT_HELM_LV1",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_HELM_LV1_DESC",
-		0, 10, 0, Item.EquipSlot.HEAD
+		0, 10, 0, Item.EquipSlot.LEGS
 	)
 	leggings_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 2)
 	db["leggings_lv1"] = leggings_lv1
+
+	var leggings_lv2 = Item.new().setup(
+		"leggings_lv2",
+		"EQUIPMENT_HELM_LV2",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_HELM_LV2_DESC",
+		0, 10, 0, Item.EquipSlot.LEGS
+	)
+	leggings_lv2.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 1, 2)
+	db["leggings_lv2"] = leggings_lv2
 
 	var boot_lv1 = Item.new().setup(
 		"boot_lv1",
@@ -76,6 +106,16 @@ func _ready():
 	)
 	boot_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
 	db["boot_lv1"] = boot_lv1
+
+	var boot_lv2 = Item.new().setup(
+		"boot_lv2",
+		"EQUIPMENT_BOOTS_LV2",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BOOTS_LV2_DESC",
+		0, 0, 10, Item.EquipSlot.FEET
+	)
+	boot_lv2.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 1, 3)
+	db["boot_lv2"] = boot_lv2
 
 	var bracers_lv1 = Item.new().setup(
 		"bracers_lv1",
