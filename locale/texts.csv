@@ -69,16 +69,18 @@ ITEM_FRAG_WHITE_NAME,白色碎片,White Fragment
 ITEM_FRAG_WHITE_DESC,散发着白色光芒的碎片,A fragment glowing with white light
 TAB_KEY_ITEMS,重要道具,Key Items
 TAB_MATERIALS,材料,Materials
-MAP_FLOOR_UNKNOWN,未知领域,Unknown Area
-MAP_DESC_UNKNOWN,此处没有任何说明。,No description available.
-MAP_FLOOR_ATK_NAME,攻击,ATK
-MAP_FLOOR_ATK_DESC,攻击线105,ATK 105
-MAP_FLOOR_SPD_NAME,速度,SPD
-MAP_FLOOR_SPD_DESC,速度线115,SPD 115
-MAP_FLOOR_SHOP_NAME,商店,Shop
-MAP_FLOOR_SHOP_DESC,商店,Shop
-MAP_FLOOR_LEFT_NAME,规则,Rule
-MAP_FLOOR_LEFT_DESC,顾右不顾左，顾前不顾后,"Left is left, Right is right"
+MAP_FLOOR_NAME_UNKNOWN,未知领域,Unknown Area
+MAP_DESC_DESC_UNKNOWN,此处没有任何说明。,No description available.
+MAP_FLOOR_NAME_ATK,攻击,ATK
+MAP_FLOOR_DESC_ATK,攻击线105,ATK 105
+MAP_FLOOR_NAME_SPD,速度,SPD
+MAP_FLOOR_DESC_SPD,速度线115,SPD 115
+MAP_FLOOR_NAME_SHOP,商店,Shop
+MAP_FLOOR_DESC_SHOP,商店,Shop
+MAP_FLOOR_NAME_LEFT_RULE,规则,Rule
+MAP_FLOOR_DESC_LEFT_RULE,顾右不顾左，顾前不顾后,"Left is left, Right is right"
+MAP_FLOOR_NAME_BOSS1,初见BOSS,First Boss
+MAP_FLOOR_DESC_BOSS1,初见BOSS,First Boss
 UI_CONTROLS_GUIDE,"WASD移动 | B打开背包 | 回车确认 | ESC退出","WASD to Move | B for Inventory | Enter to Confirm | ESC to Cancel"
 STAT_HP,生命值,HP
 STAT_MP,魔法值,MP
@@ -92,3 +94,4 @@ MSG_STAT_POINTS,可用属性点：,Stat Points:
 MSG_LV,等级,LV
 MSG_EXP,经验：,EXP: 
 MSG_FAKE_WALL_REVEALED,发现了一条隐藏的通道！,A hidden path is revealed!
+MSG_FLOOR_PREFIX,楼层 ,Floor 

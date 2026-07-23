@@ -7,7 +7,7 @@ var anim_sprite: AnimatedSprite2D
 
 func _ready():
 	add_to_group("player")
-	z_index = 10 # 强制让玩家渲染在最上层，避免被新加载的地图背景遮挡
+	z_index = GameConfig.ZLayer.PLAYER # 强制让玩家渲染在最上层，避免被新加载的地图背景遮挡
 	_setup_sprite()
 
 func _setup_sprite():

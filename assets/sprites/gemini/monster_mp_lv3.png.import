@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cd3e8svi3qu73"
-path="res://.godot/imported/monster_spd_lv1.png-152af5f4138bb223c2e48991438f6ccc.ctex"
+uid="uid://bq7ut5g4eyuoq"
+path="res://.godot/imported/monster_mp_lv3.png-f0ad08de78b60aeb1d5b554e532881da.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemy/gemini/monster_spd_lv1.png"
-dest_files=["res://.godot/imported/monster_spd_lv1.png-152af5f4138bb223c2e48991438f6ccc.ctex"]
+source_file="res://assets/sprites/gemini/monster_mp_lv3.png"
+dest_files=["res://.godot/imported/monster_mp_lv3.png-f0ad08de78b60aeb1d5b554e532881da.ctex"]
 
 [params]
 

@@ -2,29 +2,29 @@
 extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
-	config = {"floor": 4, "name": "MAP_FLOOR_LEFT_NAME", "desc": "MAP_FLOOR_LEFT_DESC"}
+	config = {"floor": 4, "name": "MAP_FLOOR_NAME_LEFT_RULE", "desc": "MAP_FLOOR_DESC_LEFT_RULE"}
 	map_data = [
-		["    ", "    ", "        ", "    ", "    ", "    ", "    ", "                 ", "                 ", "    ", "                 "],
-		["    ", "wall", "        ", "wall", "    ", "wall", "    ", "wall             ", "wall             ", "wall", "monster_basic_lv2"],
-		["    ", "wall", "        ", "    ", "    ", "    ", "    ", "monster_basic_lv2", "bracers_lv1      ", "    ", "                 "],
-		["    ", "wall", "        ", "wall", "    ", "wall", "wall", "wall             ", "monster_basic_lv1", "wall", "hp_herb_lv1      "],
-		["    ", "wall", "        ", "wall", "    ", "    ", "    ", "monster_basic_lv2", "spirit_stone     ", "wall", "                 "],
-		["    ", "    ", "        ", "    ", "    ", "    ", "    ", "wall             ", "monster_basic_lv1", "wall", "monster_basic_lv1"],
-		["wall", "wall", "        ", "wall", "    ", "wall", "wall", "wall             ", "                 ", "wall", "monster_basic_lv1"],
-		["wall", "wall", "        ", "    ", "    ", "    ", "    ", "monster_basic_lv2", "                 ", "wall", "                 "],
-		["wall", "wall", "        ", "wall", "wall", "wall", "    ", "wall             ", "monster_basic_lv1", "wall", "leggings_lv1     "],
-		["wall", "wall", "        ", "    ", "    ", "    ", "    ", "hp_herb_lv1      ", "                 ", "    ", "                 "],
-		["wall", "wall", "stair_up", "wall", "wall", "wall", "wall", "wall             ", "stair_down       ", "wall", "wall             "],
+		["           ", "monster_basic_lv2", "                 ", "monster_basic_lv2", "hp_herb_lv1      ", "mp_herb_lv1      ", "hp_herb_lv1      ", "mp_herb_lv1      ", "dagger_lv1       ", "monster_basic_lv2", "                 "],
+		["hp_herb_lv1", "wall             ", "                 ", "wall             ", "monster_basic_lv2", "wall             ", "monster_basic_lv2", "wall             ", "wall             ", "wall             ", "monster_basic_lv2"],
+		["mp_herb_lv1", "wall             ", "                 ", "fragment_red     ", "                 ", "                 ", "                 ", "monster_basic_lv2", "bracers_lv1      ", "                 ", "                 "],
+		["hp_herb_lv1", "wall             ", "monster_basic_lv1", "wall             ", "monster_basic_lv2", "wall             ", "wall             ", "wall             ", "monster_basic_lv1", "wall             ", "hp_herb_lv1      "],
+		["mp_herb_lv1", "wall             ", "monster_basic_lv1", "wall             ", "                 ", "fragment_red     ", "fragment_yellow  ", "monster_basic_lv2", "spirit_stone     ", "wall             ", "                 "],
+		["           ", "monster_basic_lv2", "monster_basic_lv2", "fragment_yellow  ", "                 ", "fragment_blue    ", "fragment_white   ", "wall             ", "monster_basic_lv1", "wall             ", "monster_basic_lv1"],
+		["wall       ", "wall             ", "                 ", "wall             ", "                 ", "wall             ", "wall             ", "wall             ", "                 ", "wall             ", "monster_basic_lv1"],
+		["wall       ", "wall             ", "                 ", "monster_basic_lv2", "spirit_stone     ", "spirit_stone     ", "spirit_stone     ", "monster_basic_lv2", "                 ", "wall             ", "                 "],
+		["wall       ", "wall             ", "monster_basic_lv2", "wall             ", "wall             ", "wall             ", "monster_basic_lv2", "wall             ", "monster_basic_lv1", "wall             ", "leggings_lv1     "],
+		["wall       ", "wall             ", "                 ", "monster_basic_lv1", "fragment_blue    ", "monster_basic_lv1", "                 ", "hp_herb_lv1      ", "                 ", "                 ", "                 "],
+		["wall       ", "wall             ", "stair_up         ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "stair_down       ", "wall             ", "wall             "],
 	]
 
 
 	stairs_config = {
 		Vector2i(8, 10): {
-			"target_scene": "res://scenes/maps/floor_2.gd",
+			"target_scene": "res://scenes/maps/floor_3.gd",
 			"spawn_grid": Vector2i(8, 10)
 		},
         Vector2i(2, 10): {
-			"target_scene": "res://scenes/maps/floor_4.gd",
+			"target_scene": "res://scenes/maps/floor_5.gd",
 			"spawn_grid": Vector2i(2, 10)
 		},
 	}

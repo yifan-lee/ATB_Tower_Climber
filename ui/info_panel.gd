@@ -94,7 +94,9 @@ func _on_clear_preview_interaction():
 
 func refresh_floor_info(map_node: Node2D):
 	if map_node and "config" in map_node:
-		floor_title_label.text = tr(map_node.config.get("name", "MAP_FLOOR_UNKNOWN"))
+		var floor_num = map_node.config.get("floor", 0)
+		var floor_name = tr(map_node.config.get("name", "MAP_FLOOR_UNKNOWN"))
+		floor_title_label.text = "%s%d: %s" % [tr("MSG_FLOOR_PREFIX"), floor_num, floor_name]
 		floor_desc_label.text = tr(map_node.config.get("desc", "MAP_DESC_UNKNOWN"))
 	else:
 		floor_title_label.text = "???"

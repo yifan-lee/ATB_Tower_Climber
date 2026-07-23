@@ -36,6 +36,14 @@ func _ready():
         3: "heavy_strike",
         5: "fireball"
     }
+
+    # 商店实体配置
+    var shop_stats = Stats.new().setup(
+        "shop", 1, 1, 0, 0, 0, 0, 0,
+        "res://assets/sprites/map/shop.tres", [], {}, "as_mob_level"
+    )
+    db['shop'] = shop_stats
+    
     
     var monster_first = Stats.new().setup_enemy(
         "monster_first",
@@ -189,6 +197,17 @@ func _ready():
         10000
     )
     db['monster_basic_lv3'] = monster_basic_lv3
+
+    var boss_lv1 = Stats.new().setup_enemy(
+        "boss_lv1",
+        "boss_lv1",
+        10000,
+        10000,
+        10000,
+        10000,
+        10000
+    )
+    db['boss_lv1'] = boss_lv1
 
 func get_stats(id: String) -> Stats:
     return db.get(id)

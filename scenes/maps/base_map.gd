@@ -8,8 +8,8 @@ var items_config = {}
 var fake_walls_config = {}
 var doors_config = {}
 var statues_config = {}
+var entities_size_config = {}
 var custom_state = {}
-
 
 var config: Dictionary = {"floor": 0, "name": "MAP_FLOOR_UNKNOWN", "desc": "MAP_DESC_UNKNOWN"}
 
@@ -68,14 +68,15 @@ func _build_map_grids():
 				var v = str(map_data[y][x]).strip_edges()
 				if v == "" or v == "0":
 					cell_val = "floor"
-				elif v in ["wall", "door_closed", "door_opened", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap", "statue_part"]:
+				elif v in ["wall", "door_closed", "door_opened", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap"]:
 					cell_val = v
 				elif EntityDB.db.has(v):
+					var e_type = "shop" if v == "shop" else "enemy"
+					_spawn_entity(v, Vector2i(x, y), e_type)
 					cell_val = "floor"
-					_spawn_entity(v, Vector2i(x, y), true)
 				elif ItemDB.db.has(v):
+					_spawn_entity(v, Vector2i(x, y), "item")
 					cell_val = "floor"
-					_spawn_entity(v, Vector2i(x, y), false)
 				else:
 					cell_val = "floor"
 			
@@ -87,53 +88,51 @@ func _build_map_grids():
 				var orig_size = sprite.texture.get_size()
 				sprite.scale = Vector2(GameConfig.GRID_SIZE / orig_size.x, GameConfig.GRID_SIZE / orig_size.y)
 
-	_render_statues()
 
-func _render_statues():
-	for pos in statues_config:
-		var config = statues_config[pos]
-		var tex_path = config.get("texture", "res://assets/sprites/map/statue.png")
-		var texture = load(tex_path)
-		if texture:
-			var sprite = Sprite2D.new()
-			sprite.texture = texture
-			var orig_size = texture.get_size()
-			# Scale to exactly 3x3 grid sizes
-			var target_w = GameConfig.GRID_SIZE * 3.0
-			var target_h = GameConfig.GRID_SIZE * 3.0
-			sprite.scale = Vector2(target_w / orig_size.x, target_h / orig_size.y)
-			sprite.position = GameConfig.get_game_area_pixel_position(pos.x, pos.y)
-			add_child(sprite)
+func _calculate_entity_pixel_pos(grid_pos: Vector2i, size: Vector2i) -> Vector2:
+	var center_x = grid_pos.x + (size.x - 1) / 2.0
+	var center_y = grid_pos.y + (size.y - 1) / 2.0
+	return Vector2(
+		center_x * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0) + GameConfig.WALL_THICKNESS,
+		center_y * GameConfig.GRID_SIZE + (GameConfig.GRID_SIZE / 2.0) + GameConfig.WALL_THICKNESS
+	)
 
-func _spawn_entity(id: String, grid_pos: Vector2i, is_enemy: bool):
-	var pixel_pos = GameConfig.get_game_area_pixel_position(grid_pos.x, grid_pos.y)
-	var node = null
-	
-	if is_enemy:
-		var enemy = BaseEnemy.new()
-		enemy.setup(id)
-		enemy.position = pixel_pos
-		add_child(enemy)
-		node = enemy
-	else:
-		var item_data = ItemDB.get_item(id)
-		var sprite = Sprite2D.new()
-		if item_data.icon:
-			sprite.texture = item_data.icon
-		else:
-			sprite.texture = MapDB.get_fallback_texture() # 使用占位符防止隐形
-			
-		var orig_size = sprite.texture.get_size()
-		sprite.scale = Vector2(GameConfig.GRID_SIZE / orig_size.x, GameConfig.GRID_SIZE / orig_size.y)
-		sprite.position = pixel_pos
-		add_child(sprite)
-		node = sprite
-		
-	entities_data[grid_pos] = {
+func _register_entity(id: String, entity_type: String, node: Node, grid_pos: Vector2i, size: Vector2i):
+	var entity_info = {
 		"id": id,
-		"is_enemy": is_enemy,
-		"node": node
+		"type": entity_type,
+		"node": node,
+		"pos": grid_pos,
+		"size": size
 	}
+	for dx in range(size.x):
+		for dy in range(size.y):
+			entities_data[grid_pos + Vector2i(dx, dy)] = entity_info
+
+func _spawn_entity(id: String, grid_pos: Vector2i, entity_type: String):
+	var size = entities_size_config.get(grid_pos, Vector2i(1, 1))
+	var pixel_pos = _calculate_entity_pixel_pos(grid_pos, size)
+	
+	var node
+	var z_layer
+	
+	if entity_type == "shop":
+		node = BaseShop.new()
+		z_layer = GameConfig.ZLayer.SHOP
+	elif entity_type == "item":
+		node = BaseItem.new()
+		z_layer = GameConfig.ZLayer.ITEM
+	else:
+		node = BaseEnemy.new()
+		z_layer = GameConfig.ZLayer.ENEMY
+		
+	node.setup(id)
+	node.scale = Vector2(size.x, size.y)
+	node.position = pixel_pos
+	node.z_index = z_layer
+	add_child(node)
+	
+	_register_entity(id, entity_type, node, grid_pos, size)
 
 func get_cell_interaction(grid_pos: Vector2i) -> Dictionary:
 	if grid_pos.x < 0 or grid_pos.x >= GameConfig.GRID_COLUMNS or grid_pos.y < 0 or grid_pos.y >= GameConfig.GRID_ROWS:
@@ -141,8 +140,10 @@ func get_cell_interaction(grid_pos: Vector2i) -> Dictionary:
 		
 	var entity = get_entity_at(grid_pos)
 	if not entity.is_empty():
-		if entity.get("is_enemy", false):
-			return {"type": "enemy", "id": entity["id"], "node": entity["node"]}
+		if entity.get("type", "") == "enemy":
+			return {"type": "enemy", "id": entity["id"], "node": entity["node"], "pos": entity["pos"]}
+		elif entity.get("type", "") == "shop":
+			return {"type": "door", "pos": entity["pos"]}
 		# Items are generally passable, handled during step
 			
 	if fake_walls_config.has(grid_pos):
@@ -155,12 +156,53 @@ func get_cell_interaction(grid_pos: Vector2i) -> Dictionary:
 	if terrain == "door_closed":
 		return {"type": "door", "pos": grid_pos}
 		
-	if terrain == "statue_part":
-		return {"type": "door", "pos": grid_pos} # Using 'door' type for general map interactions
-		
 	return {"type": "passable"}
 
 func trigger_interaction(grid_pos: Vector2i):
+	var entity = get_entity_at(grid_pos)
+	if not entity.is_empty() and entity.get("type", "") == "shop":
+		var player_stats = EntityDB.get_stats("player")
+		var current_red = player_stats.inventory.get("fragment_red", 0)
+		var current_blue = player_stats.inventory.get("fragment_blue", 0)
+		var current_yellow = player_stats.inventory.get("fragment_yellow", 0)
+		
+		var cost_red = GameRules.STATUE_EXCHANGE_COST_RED
+		var cost_blue = GameRules.STATUE_EXCHANGE_COST_BLUE
+		var cost_yellow = GameRules.STATUE_EXCHANGE_COST_YELLOW
+		
+		var title = "一座古老的商店，似乎蕴含着神秘的力量..."
+		var options = [
+			{
+				"text": "消耗 %d 红色碎片，提升 %d 攻击力 (拥有: %d)" % [cost_red, GameRules.STATUE_EXCHANGE_GAIN_ATK, current_red],
+				"action": "shop_exchange_atk",
+				"enabled": current_red >= cost_red,
+				"close_on_select": false,
+				"metadata": {"pos": grid_pos, "cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK, "expected_change": {"atk": GameRules.STATUE_EXCHANGE_GAIN_ATK, "fragment_red": - cost_red}}
+			},
+			{
+				"text": "消耗 %d 蓝色碎片，提升 %d 速度 (拥有: %d)" % [cost_blue, GameRules.STATUE_EXCHANGE_GAIN_SPD, current_blue],
+				"action": "shop_exchange_spd",
+				"enabled": current_blue >= cost_blue,
+				"close_on_select": false,
+				"metadata": {"pos": grid_pos, "cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD, "expected_change": {"spd": GameRules.STATUE_EXCHANGE_GAIN_SPD, "fragment_blue": - cost_blue}}
+			},
+			{
+				"text": "消耗 %d 黄色碎片，提升 %d 防御力 (拥有: %d)" % [cost_yellow, GameRules.STATUE_EXCHANGE_GAIN_DEF, current_yellow],
+				"action": "shop_exchange_def",
+				"enabled": current_yellow >= cost_yellow,
+				"close_on_select": false,
+				"metadata": {"pos": grid_pos, "cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF, "expected_change": {"def": GameRules.STATUE_EXCHANGE_GAIN_DEF, "fragment_yellow": - cost_yellow}}
+			},
+			{
+				"text": "离开",
+				"action": "shop_leave",
+				"enabled": true,
+				"metadata": {}
+			}
+		]
+		EventBus.show_interaction_dialog.emit(title, options)
+		return
+
 	var terrain = str(map_data[grid_pos.y][grid_pos.x])
 	if terrain == "door_closed":
 		var config = doors_config.get(grid_pos, {})
@@ -198,47 +240,7 @@ func trigger_interaction(grid_pos: Vector2i):
 			}
 		]
 		EventBus.show_interaction_dialog.emit(title, options)
-	elif terrain == "statue_part":
-		var player_stats = EntityDB.get_stats("player")
-		var current_red = player_stats.inventory.get("fragment_red", 0)
-		var current_blue = player_stats.inventory.get("fragment_blue", 0)
-		var current_yellow = player_stats.inventory.get("fragment_yellow", 0)
-		
-		var cost_red = GameRules.STATUE_EXCHANGE_COST_RED
-		var cost_blue = GameRules.STATUE_EXCHANGE_COST_BLUE
-		var cost_yellow = GameRules.STATUE_EXCHANGE_COST_YELLOW
-		
-		var title = "一座古老的神像，似乎蕴含着神秘的力量..."
-		var options = [
-			{
-				"text": "消耗 %d 红色碎片，提升 %d 攻击力 (拥有: %d)" % [cost_red, GameRules.STATUE_EXCHANGE_GAIN_ATK, current_red],
-				"action": "statue_exchange_atk",
-				"enabled": current_red >= cost_red,
-				"close_on_select": false,
-				"metadata": {"pos": grid_pos, "cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK, "expected_change": {"atk": GameRules.STATUE_EXCHANGE_GAIN_ATK, "fragment_red": -cost_red}}
-			},
-			{
-				"text": "消耗 %d 蓝色碎片，提升 %d 速度 (拥有: %d)" % [cost_blue, GameRules.STATUE_EXCHANGE_GAIN_SPD, current_blue],
-				"action": "statue_exchange_spd",
-				"enabled": current_blue >= cost_blue,
-				"close_on_select": false,
-				"metadata": {"pos": grid_pos, "cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD, "expected_change": {"spd": GameRules.STATUE_EXCHANGE_GAIN_SPD, "fragment_blue": -cost_blue}}
-			},
-			{
-				"text": "消耗 %d 黄色碎片，提升 %d 防御力 (拥有: %d)" % [cost_yellow, GameRules.STATUE_EXCHANGE_GAIN_DEF, current_yellow],
-				"action": "statue_exchange_def",
-				"enabled": current_yellow >= cost_yellow,
-				"close_on_select": false,
-				"metadata": {"pos": grid_pos, "cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF, "expected_change": {"def": GameRules.STATUE_EXCHANGE_GAIN_DEF, "fragment_yellow": -cost_yellow}}
-			},
-			{
-				"text": "离开",
-				"action": "statue_cancel",
-				"enabled": true,
-				"metadata": {}
-			}
-		]
-		EventBus.show_interaction_dialog.emit(title, options)
+
 
 func open_door(grid_pos: Vector2i, show_message: bool = true):
 	var current = str(map_data[grid_pos.y][grid_pos.x])
@@ -260,9 +262,10 @@ func reveal_fake_wall(grid_pos: Vector2i, show_message: bool = true):
 	else:
 		change_tile(grid_pos, "floor")
 		if ItemDB.db.has(real_type):
-			_spawn_entity(real_type, grid_pos, false)
+			_spawn_entity(real_type, grid_pos, "item")
 		elif EntityDB.db.has(real_type):
-			_spawn_entity(real_type, grid_pos, true)
+			var e_type = "shop" if real_type == "shop" else "enemy"
+			_spawn_entity(real_type, grid_pos, e_type)
 			
 	if show_message:
 		EventBus.show_system_message.emit(["MSG_FAKE_WALL_REVEALED"])
@@ -278,7 +281,12 @@ func remove_entity(grid_pos: Vector2i):
 		var data = entities_data[grid_pos]
 		if is_instance_valid(data["node"]):
 			data["node"].queue_free()
-		entities_data.erase(grid_pos)
+		
+		var root_pos = data["pos"]
+		var size = data.get("size", Vector2i(1, 1))
+		for dx in range(size.x):
+			for dy in range(size.y):
+				entities_data.erase(root_pos + Vector2i(dx, dy))
 
 func remove_entity_by_node(node: Node):
 	var to_remove = null
@@ -329,19 +337,19 @@ func _on_interaction_action_selected(action: String, metadata: Dictionary):
 	elif action == "door_fight":
 		pending_interaction_door_pos = metadata.pos
 		EventBus.encounter_monster.emit(metadata.monster, null)
-	elif action == "statue_exchange_atk":
+	elif action == "shop_exchange_atk":
 		var player_stats = EntityDB.get_stats("player")
 		player_stats.inventory["fragment_red"] = player_stats.inventory.get("fragment_red", 0) - metadata.get("cost", 1)
 		player_stats.atk += metadata.get("gain", 0)
 		EventBus.show_system_message.emit(["提升了 %d 攻击力！" % metadata.get("gain", 0)])
 		trigger_interaction(metadata.pos)
-	elif action == "statue_exchange_spd":
+	elif action == "shop_exchange_spd":
 		var player_stats = EntityDB.get_stats("player")
 		player_stats.inventory["fragment_blue"] = player_stats.inventory.get("fragment_blue", 0) - metadata.get("cost", 1)
 		player_stats.spd += metadata.get("gain", 0)
 		EventBus.show_system_message.emit(["提升了 %d 速度！" % metadata.get("gain", 0)])
 		trigger_interaction(metadata.pos)
-	elif action == "statue_exchange_def":
+	elif action == "shop_exchange_def":
 		var player_stats = EntityDB.get_stats("player")
 		player_stats.inventory["fragment_yellow"] = player_stats.inventory.get("fragment_yellow", 0) - metadata.get("cost", 1)
 		player_stats.def += metadata.get("gain", 0)
@@ -401,7 +409,7 @@ func _on_player_stepped(grid_pos: Vector2i):
 			
 	# Check items
 	var entity = get_entity_at(grid_pos)
-	if not entity.is_empty() and not entity["is_enemy"]:
+	if not entity.is_empty() and entity.get("type", "") == "item":
 		var item_id = entity["id"]
 		var item_data = ItemDB.get_item(item_id)
 		

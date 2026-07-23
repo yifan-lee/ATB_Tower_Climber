@@ -1,0 +1,18 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://bhpur2xmhcesb"]
+
+[ext_resource type="Texture2D" uid="uid://7xxe4gk3r60o" path="res://assets/sprites/gemini/shop.png" id="1_5v87g"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akk05"]
+atlas = ExtResource("1_5v87g")
+region = Rect2(0, 0, 1024, 1024)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_akk05")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}]

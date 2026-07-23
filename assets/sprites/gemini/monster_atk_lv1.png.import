@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cda4d7p8udok0"
-path="res://.godot/imported/monster_basic_lv1.png-c67603c0587df81d6ed2d2c31ec482de.ctex"
+uid="uid://nlvl3oofe33u"
+path="res://.godot/imported/monster_atk_lv1.png-7f41dbbd6636c4bd04f1efc538b64ba4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemy/gemini/monster_basic_lv1.png"
-dest_files=["res://.godot/imported/monster_basic_lv1.png-c67603c0587df81d6ed2d2c31ec482de.ctex"]
+source_file="res://assets/sprites/gemini/monster_atk_lv1.png"
+dest_files=["res://.godot/imported/monster_atk_lv1.png-7f41dbbd6636c4bd04f1efc538b64ba4.ctex"]
 
 [params]
 

@@ -2,12 +2,12 @@
 extends "res://scenes/maps/base_map.gd"
 
 func _init() -> void:
-	config = {"floor": 3, "name": "MAP_FLOOR_SHOP_NAME", "desc": "MAP_FLOOR_SHOP_DESC"}
+	config = {"floor": 3, "name": "MAP_FLOOR_NAME_SHOP", "desc": "MAP_FLOOR_DESC_SHOP"}
 	map_data = [
 		["stair_down       ", "                 ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "wall       ", "wall       ", "wall             "],
-		["wall             ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "                 ", "wall             ", "statue_part", "statue_part", "statue_part", "wall             "],
-		["wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "door_closed      ", "wall             ", "statue_part", "statue_part", "statue_part", "wall             "],
-		["                 ", "                 ", "monster_basic_lv1", "monster_basic_lv1", "monster_basic_lv1", "                 ", "wall             ", "statue_part", "statue_part", "statue_part", "wall             "],
+		["wall             ", "                 ", "monster_basic_lv1", "spirit_stone     ", "monster_basic_lv1", "                 ", "wall             ", "shop       ", "           ", "           ", "wall             "],
+		["wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "door_closed      ", "wall             ", "           ", "           ", "           ", "wall             "],
+		["                 ", "                 ", "monster_basic_lv1", "monster_basic_lv1", "monster_basic_lv1", "                 ", "wall             ", "           ", "           ", "           ", "wall             "],
 		["spirit_stone     ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall             ", "wall       ", "           ", "wall       ", "wall             "],
 		["                 ", "hp_herb_lv1      ", "mp_herb_lv1      ", "                 ", "monster_basic_lv1", "                 ", "                 ", "wall       ", "           ", "wall       ", "spirit_stone     "],
 		["wall             ", "wall             ", "wall             ", "monster_basic_lv1", "                 ", "                 ", "monster_basic_lv1", "wall       ", "           ", "wall       ", "monster_basic_lv1"],
@@ -25,6 +25,10 @@ func _init() -> void:
 		Vector2i(8, 10): {
 			"target_scene": "res://scenes/maps/floor_4.gd",
 		},
+	}
+
+	entities_size_config = {
+		Vector2i(7, 1): Vector2i(3, 3)
 	}
 
 	triggers_config = {
@@ -47,12 +51,7 @@ func _init() -> void:
 		}
 	}
 	
-	statues_config = {
-		Vector2i(8, 2): {
-			"texture": "res://assets/sprites/map/statue.png"
-		}
-	}
-
+	
 	# stair_down, stair_up, pedal_switch, door_closed
 	# fragment_blue, fragment_red, fragment_yellow, fragment_white, spirit_stone
 	# monster_def_lv1, monster_atk_lv1, monster_spd_lv1, monster_basic_lv1

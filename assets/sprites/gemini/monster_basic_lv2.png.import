@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ycgkx3nj4jw7"
-path="res://.godot/imported/monster_basic_lv2.png-baf95b3f671de4e1de2cd28c979d4f5e.ctex"
+path="res://.godot/imported/monster_basic_lv2.png-33c7247c5fa18cfbd241dca16712be22.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/enemy/gemini/monster_basic_lv2.png"
-dest_files=["res://.godot/imported/monster_basic_lv2.png-baf95b3f671de4e1de2cd28c979d4f5e.ctex"]
+source_file="res://assets/sprites/gemini/monster_basic_lv2.png"
+dest_files=["res://.godot/imported/monster_basic_lv2.png-33c7247c5fa18cfbd241dca16712be22.ctex"]
 
 [params]
 

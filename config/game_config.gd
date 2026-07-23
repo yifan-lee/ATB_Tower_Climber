@@ -20,6 +20,16 @@ const UI_AREA_HEIGHT: int = SCREEN_HEIGHT - GAME_AREA_HEIGHT
 # 塔的总层数 (N)
 const MAX_FLOOR: int = 3
 
+# Z-Index 渲染层级统一定义 (从小到大)
+# 地图背景和墙壁默认为 0
+enum ZLayer {
+	BACKGROUND = 0, # 地图背景/墙壁等
+	SHOP = 2,       # 商店建筑 (比地板高，比角色低)
+	ITEM = 5,       # 地上道具
+	ENEMY = 9,      # 怪物
+	PLAYER = 10     # 玩家
+}
+
 # 控制设置
 # 如果为 true，则使用 WASD 移动；如果为 false，则使用方向键移动
 var use_wasd_movement: bool = true
