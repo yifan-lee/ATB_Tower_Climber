@@ -4,47 +4,98 @@ extends Node
 var db: Dictionary = {}
 
 func _ready():
-	var hp_herb = Item.new().setup(
-		"hp_herb",
+	var hp_herb_lv1 = Item.new().setup(
+		"hp_herb_lv1",
 		"ITEM_HP_POTION_NAME",
 		Item.ItemType.POTION,
 		50, # 回血50
 		0,
 		"ITEM_HP_POTION_DESC"
 	)
-	hp_herb.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 0, 0)
-	db["hp_herb"] = hp_herb
+	hp_herb_lv1.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 0, 0)
+	db["hp_herb_lv1"] = hp_herb_lv1
+
+	var hp_herb_lv2 = Item.new().setup(
+		"hp_herb_lv2",
+		"ITEM_HP_POTION_NAME",
+		Item.ItemType.POTION,
+		50, # 回血50
+		0,
+		"ITEM_HP_POTION_DESC"
+	)
+	hp_herb_lv2.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 0, 1)
+	db["hp_herb_lv2"] = hp_herb_lv2
 	
-	var mp_herb = Item.new().setup(
-		"mp_herb",
+	var mp_herb_lv1 = Item.new().setup(
+		"mp_herb_lv1",
 		"ITEM_MP_POTION_NAME",
 		Item.ItemType.POTION,
 		0,
 		50, # 回蓝50
 		"ITEM_MP_POTION_DESC"
 	)
-	mp_herb.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 3, 0)
-	db["mp_herb"] = mp_herb
+	mp_herb_lv1.icon = get_atlas_icon("res://assets/sprites/item/herb.png", 2, 6, 3, 0)
+	db["mp_herb_lv1"] = mp_herb_lv1
 
-	var helm_level1 = Item.new().setup(
-		"helm_level1",
+	var helm_lv1 = Item.new().setup(
+		"helm_lv1",
 		"EQUIPMENT_HELM_LV1",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_HELM_LV1_DESC",
 		0, 10, 0, Item.EquipSlot.HEAD
 	)
-	helm_level1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 0)
-	db["helm_level1"] = helm_level1
+	helm_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 0)
+	db["helm_lv1"] = helm_lv1
 
-	var sword_level1 = Item.new().setup(
-		"sword_level1",
+	var chestplate_lv1 = Item.new().setup(
+		"chestplate_lv1",
+		"EQUIPMENT_HELM_LV1",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_HELM_LV1_DESC",
+		0, 10, 0, Item.EquipSlot.HEAD
+	)
+	chestplate_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 1)
+	db["chestplate_lv1"] = chestplate_lv1
+
+	var leggings_lv1 = Item.new().setup(
+		"leggings_lv1",
+		"EQUIPMENT_HELM_LV1",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_HELM_LV1_DESC",
+		0, 10, 0, Item.EquipSlot.HEAD
+	)
+	leggings_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 2)
+	db["leggings_lv1"] = leggings_lv1
+
+	var boot_lv1 = Item.new().setup(
+		"boot_lv1",
+		"EQUIPMENT_BOOTS_LV1",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BOOTS_LV1_DESC",
+		0, 0, 10, Item.EquipSlot.FEET
+	)
+	boot_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
+	db["boot_lv1"] = boot_lv1
+
+	var bracers_lv1 = Item.new().setup(
+		"bracers_lv1",
+		"EQUIPMENT_HELM_LV1",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_HELM_LV1_DESC",
+		0, 10, 0, Item.EquipSlot.HEAD
+	)
+	bracers_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 5)
+	db["bracers_lv1"] = bracers_lv1
+
+	var sword_lv1 = Item.new().setup(
+		"sword_lv1",
 		"EQUIPMENT_SWORD_LV1",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_SWORD_LV1_DESC",
 		20, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
-	sword_level1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 1, 1)
-	db["sword_level1"] = sword_level1
+	sword_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 1, 1)
+	db["sword_lv1"] = sword_lv1
 
 	var tree_branch = Item.new().setup(
 		"tree_branch",
@@ -56,35 +107,86 @@ func _ready():
 	tree_branch.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 0, 1)
 	db["tree_branch"] = tree_branch
 
-	var sword_level2 = Item.new().setup(
-		"sword_level2",
+	var sword_lv2 = Item.new().setup(
+		"sword_lv2",
 		"EQUIPMENT_JY_SWORD",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_JY_SWORD_DESC",
 		100, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
-	sword_level2.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 2, 1)
-	db["sword_level2"] = sword_level2
+	sword_lv2.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 2, 1)
+	db["sword_lv2"] = sword_lv2
 
-	var sword_level5 = Item.new().setup(
+	var sword_lv5 = Item.new().setup(
 		"sword_level5",
 		"EQUIPMENT_BEST_SWORD",
 		Item.ItemType.EQUIPMENT,
 		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
 		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
-	sword_level5.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 4, 1)
-	db["sword_level5"] = sword_level5
-	
-	var boot_level1 = Item.new().setup(
-		"boot_level1",
-		"EQUIPMENT_BOOTS_LV1",
+	sword_lv5.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 4, 1)
+	db["sword_lv5"] = sword_lv5
+
+	var blade_lv1 = Item.new().setup(
+		"swordblade_lv1_level5",
+		"EQUIPMENT_BEST_SWORD",
 		Item.ItemType.EQUIPMENT,
-		0, 0, "EQUIPMENT_BOOTS_LV1_DESC",
-		0, 0, 10, Item.EquipSlot.FEET
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
 	)
-	boot_level1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
-	db["boot_level1"] = boot_level1
+	blade_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 0, 3)
+	db["blade_lv1"] = blade_lv1
+
+	var dagger_lv1 = Item.new().setup(
+		"swordblade_lv1_level5",
+		"EQUIPMENT_BEST_SWORD",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
+	)
+	dagger_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 0, 4)
+	db["dagger_lv1"] = dagger_lv1
+
+	var shield_lv1 = Item.new().setup(
+		"swordblade_lv1_level5",
+		"EQUIPMENT_BEST_SWORD",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
+	)
+	shield_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon2.png", 5, 5, 0, 0)
+	db["shield_lv1"] = shield_lv1
+
+	var spear_lv1 = Item.new().setup(
+		"swordblade_lv1_level5",
+		"EQUIPMENT_BEST_SWORD",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
+	)
+	spear_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon2.png", 5, 5, 0, 1)
+	db["spear_lv1"] = spear_lv1
+
+	var fan_lv1 = Item.new().setup(
+		"swordblade_lv1_level5",
+		"EQUIPMENT_BEST_SWORD",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
+	)
+	fan_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon2.png", 5, 5, 0, 3)
+	db["fan_lv1"] = fan_lv1
+
+	var staff_lv1 = Item.new().setup(
+		"swordblade_lv1_level5",
+		"EQUIPMENT_BEST_SWORD",
+		Item.ItemType.EQUIPMENT,
+		0, 0, "EQUIPMENT_BEST_SWORD_DESC",
+		10000, 0, 0, Item.EquipSlot.RIGHT_HAND
+	)
+	staff_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon2.png", 5, 5, 0, 4)
+	db["staff_lv1"] = staff_lv1
+	
 	
 	var spirit_stone = Item.new().setup(
 		"spirit_stone",

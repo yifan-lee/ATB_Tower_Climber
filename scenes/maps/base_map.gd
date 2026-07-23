@@ -6,6 +6,8 @@ var stairs_config = {}
 var triggers_config = {}
 var items_config = {}
 var fake_walls_config = {}
+var doors_config = {}
+var custom_state = {}
 
 
 var floor_name_key: String = "MAP_FLOOR_UNKNOWN"
@@ -18,6 +20,8 @@ var trigger_handlers = {
 
 var visual_grid: Array = []
 var entities_data: Dictionary = {}
+
+var pending_interaction_door_pos: Vector2i = Vector2i(-1, -1)
 
 const BaseEnemy = preload("res://entities/enemy/base_enemy.gd")
 
@@ -64,7 +68,7 @@ func _build_map_grids():
 				var v = str(map_data[y][x]).strip_edges()
 				if v == "" or v == "0":
 					cell_val = "floor"
-				elif v in ["wall", "door_closed", "door_open", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap"]:
+				elif v in ["wall", "door_closed", "door_opened", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap"]:
 					cell_val = v
 				elif EntityDB.db.has(v):
 					cell_val = "floor"
@@ -127,10 +131,60 @@ func get_cell_interaction(grid_pos: Vector2i) -> Dictionary:
 		return {"type": "fake_wall"}
 		
 	var terrain = str(map_data[grid_pos.y][grid_pos.x])
-	if terrain in ["wall", "door_closed", "portal_closed", "", "0"]:
+	if terrain in ["wall", "portal_closed", "", "0"]:
 		return {"type": "wall"}
 		
+	if terrain == "door_closed":
+		return {"type": "door", "pos": grid_pos}
+		
 	return {"type": "passable"}
+
+func trigger_interaction(grid_pos: Vector2i):
+	var terrain = str(map_data[grid_pos.y][grid_pos.x])
+	if terrain == "door_closed":
+		var config = doors_config.get(grid_pos, {})
+		var cost = config.get("cost", 0)
+		var monster_id = config.get("monster", "")
+		
+		var m_name = monster_id
+		var m_stats = EntityDB.get_stats(monster_id)
+		if m_stats:
+			m_name = m_stats.entity_name
+			
+		var player_stats = EntityDB.get_stats("player")
+		var current_stones = player_stats.inventory.get("spirit_stone", 0)
+		var pay_enabled = current_stones >= cost
+		
+		var title = "一扇门挡住了去路。打开它需要花费 " + str(cost) + " 颗灵石。"
+		var options = [
+			{
+				"text": "交出 " + str(cost) + " 颗灵石",
+				"action": "door_pay",
+				"enabled": pay_enabled,
+				"metadata": {"pos": grid_pos, "cost": cost}
+			},
+			{
+				"text": "与 " + m_name + " 战斗",
+				"action": "door_fight",
+				"enabled": true,
+				"metadata": {"pos": grid_pos, "monster": monster_id}
+			},
+			{
+				"text": "离开",
+				"action": "door_cancel",
+				"enabled": true,
+				"metadata": {}
+			}
+		]
+		EventBus.show_interaction_dialog.emit(title, options)
+
+func open_door(grid_pos: Vector2i, show_message: bool = true):
+	var current = str(map_data[grid_pos.y][grid_pos.x])
+	if current == "door_closed":
+		map_data[grid_pos.y][grid_pos.x] = "door_opened"
+		change_tile(grid_pos, "door_opened")
+		if show_message:
+			EventBus.show_system_message.emit(["MSG_DOOR_OPENED"])
 
 func reveal_fake_wall(grid_pos: Vector2i, show_message: bool = true):
 	if not fake_walls_config.has(grid_pos):
@@ -139,7 +193,7 @@ func reveal_fake_wall(grid_pos: Vector2i, show_message: bool = true):
 	var real_type = fake_walls_config[grid_pos]
 	fake_walls_config.erase(grid_pos)
 	
-	if real_type in ["floor", "stair_up", "stair_down", "portal_open", "portal_closed", "door_closed", "door_open"]:
+	if real_type in ["floor", "stair_up", "stair_down", "portal_open", "portal_closed", "door_closed", "door_opened"]:
 		change_tile(grid_pos, real_type)
 	else:
 		change_tile(grid_pos, "floor")
@@ -185,11 +239,43 @@ func change_tile(grid_pos: Vector2i, new_type: String):
 func _enter_tree():
 	if not EventBus.player_stepped.is_connected(_on_player_stepped):
 		EventBus.player_stepped.connect(_on_player_stepped)
+	if not EventBus.interaction_action_selected.is_connected(_on_interaction_action_selected):
+		EventBus.interaction_action_selected.connect(_on_interaction_action_selected)
+	if not EventBus.battle_ended.is_connected(_on_battle_ended):
+		EventBus.battle_ended.connect(_on_battle_ended)
 
 func _exit_tree():
 	if EventBus.player_stepped.is_connected(_on_player_stepped):
 		EventBus.player_stepped.disconnect(_on_player_stepped)
+	if EventBus.interaction_action_selected.is_connected(_on_interaction_action_selected):
+		EventBus.interaction_action_selected.disconnect(_on_interaction_action_selected)
+	if EventBus.battle_ended.is_connected(_on_battle_ended):
+		EventBus.battle_ended.disconnect(_on_battle_ended)
 		
+func on_player_entered(grid_pos: Vector2i):
+	pass
+
+func _on_interaction_action_selected(action: String, metadata: Dictionary):
+	# Make sure this interaction belongs to the currently active map
+	if self.get_parent() == null or not self.visible:
+		return
+		
+	if action == "door_pay":
+		var player_stats = EntityDB.get_stats("player")
+		player_stats.inventory["spirit_stone"] -= metadata.get("cost", 0)
+		open_door(metadata.pos)
+	elif action == "door_fight":
+		pending_interaction_door_pos = metadata.pos
+		EventBus.encounter_monster.emit(metadata.monster, null)
+
+func _on_battle_ended(result: String):
+	if self.get_parent() == null or not self.visible:
+		return
+		
+	if result == "win" and pending_interaction_door_pos != Vector2i(-1, -1):
+		open_door(pending_interaction_door_pos)
+	pending_interaction_door_pos = Vector2i(-1, -1)
+
 func _on_player_stepped(grid_pos: Vector2i):
 	var terrain = str(map_data[grid_pos.y][grid_pos.x])
 	

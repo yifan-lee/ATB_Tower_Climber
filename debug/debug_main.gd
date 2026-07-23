@@ -1,8 +1,8 @@
 extends "res://scenes/main.gd"
 
 @export_category("Map Settings")
-@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_6.gd"
-@export var start_pos: Vector2i = Vector2i(5, 10)
+@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_3.gd"
+@export var start_pos: Vector2i = Vector2i(0, 0)
 
 @export_category("Player Stats")
 @export var debug_level: int = 1
@@ -21,7 +21,10 @@ extends "res://scenes/main.gd"
 	# "sword_level5": 1,
 	# "hp_herb": 99
 }
-@export var debug_skills: Array[String] = ["fireball", "heavy_strike", "one_hit"]
+@export var debug_skills: Array[String] = [
+	"basic_atk",
+	"one_hit"
+]
 
 @export_category("Equipment")
 @export var equip_head: String = ""

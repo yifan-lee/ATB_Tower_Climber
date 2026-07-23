@@ -5,7 +5,7 @@ const TILE_RES = {
 	"floor": "res://assets/sprites/map/floor1.tres",
 	"wall": "res://assets/sprites/map/wall1.tres",
 	"door_closed": "res://assets/sprites/map/door_closed.tres",
-	"door_open": "res://assets/sprites/map/door_open.tres",
+	"door_opened": "res://assets/sprites/map/door_opened.tres",
 	"stair_up": "res://assets/sprites/map/stair_up.tres",
 	"stair_down": "res://assets/sprites/map/stair_down.tres",
 	"portal_closed": "res://assets/sprites/map/portal_closed.tres",

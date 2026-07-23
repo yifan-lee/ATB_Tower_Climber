@@ -66,6 +66,10 @@ region = Rect2(1024, 512, 512, 512)
 atlas = ExtResource("1_vjmfk")
 region = Rect2(1536, 512, 512, 512)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vjmfk"]
+atlas = ExtResource("1_vjmfk")
+region = Rect2(0, 0, 512, 512)
+
 [resource]
 animations = [{
 "frames": [{
@@ -99,7 +103,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_f5fla")
 }],
 "loop": 1,
-"name": &"attack_standby",
+"name": &"combat_idle",
 "speed": 5.0
 }, {
 "frames": [{
@@ -138,7 +142,7 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_r6oju")
+"texture": SubResource("AtlasTexture_vjmfk")
 }],
 "loop": 1,
 "name": &"static",

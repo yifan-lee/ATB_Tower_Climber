@@ -12,6 +12,7 @@ const PlayerMenuView = preload("res://ui/player_menu_view.gd")
 const SystemMessageView = preload("res://ui/system_message_view.gd")
 const InfoPanel = preload("res://ui/info_panel.gd")
 const SystemMenuView = preload("res://ui/system_menu_view.gd")
+const InteractionDialogView = preload("res://ui/interaction_dialog_view.gd")
 
 var game_container: Control
 var ui_container: Control
@@ -30,11 +31,12 @@ var battle_menu_view: Control
 var system_message_view: Control
 var info_panel: Control
 var system_menu_view: Control
+var interaction_dialog_view: Control
 
 var initial_player_position_x: int = 5
 var initial_player_position_y: int = 10
 
-enum AppState {MAP, BATTLE, INVENTORY, LEVEL_UP, SYSTEM}
+enum AppState {MAP, BATTLE, INVENTORY, LEVEL_UP, SYSTEM, INTERACTION_DIALOG}
 var current_state: AppState = AppState.MAP
 
 func _ready():
@@ -70,6 +72,8 @@ func _ready():
 	EventBus.encounter_monster.connect(_on_encounter_monster)
 	EventBus.battle_ended.connect(_on_battle_ended)
 	EventBus.show_level_up.connect(_on_show_level_up)
+	EventBus.show_interaction_dialog.connect(_on_show_interaction_dialog)
+	EventBus.interaction_dialog_closed.connect(_on_interaction_dialog_closed)
 
 	_setup_containers()
 	_load_initial_scenes()
@@ -136,6 +140,10 @@ func _load_initial_scenes():
 	system_menu_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	overlay_layer2.add_child(system_menu_view)
 	
+	interaction_dialog_view = InteractionDialogView.new()
+	interaction_dialog_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	overlay_layer1.add_child(interaction_dialog_view)
+	
 	EventBus.game_loaded.connect(_on_game_loaded)
 	
 	_update_floor_info()
@@ -155,6 +163,7 @@ func change_state(new_state: AppState):
 	level_up_view.hide()
 	info_panel.hide()
 	system_menu_view.hide()
+	interaction_dialog_view.hide()
 	
 	if current_battle:
 		current_battle.hide()
@@ -188,6 +197,9 @@ func change_state(new_state: AppState):
 			overlay_layer2.show()
 			system_menu_view.show()
 			system_menu_view.refresh()
+		AppState.INTERACTION_DIALOG:
+			overlay_layer1.show()
+			interaction_dialog_view.show()
 
 func _unhandled_input(event):
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -294,3 +306,10 @@ func _on_game_loaded():
 	# Update the player_instance reference if it was recreated or re-parented?
 	# We don't recreate player_instance, its data just updates in EntityDB.
 	_update_floor_info()
+
+func _on_show_interaction_dialog(title: String, options: Array):
+	interaction_dialog_view.setup(title, options)
+	change_state(AppState.INTERACTION_DIALOG)
+
+func _on_interaction_dialog_closed():
+	change_state(AppState.MAP)

@@ -85,11 +85,11 @@ func _ready():
     var monster_def_lv1 = Stats.new().setup_enemy(
         "monster_def_lv1",
         "monster_def_lv1",
-        200,
-        0,
-        35,
-        105,
-        40
+        110,
+        10,
+        30,
+        120,
+        37
     )
     db['monster_def_lv1'] = monster_def_lv1
 
@@ -119,11 +119,14 @@ func _ready():
     var monster_atk_lv1 = Stats.new().setup_enemy(
         "monster_atk_lv1",
         "monster_atk_lv1",
-        100,
-        100,
-        100,
-        100,
-        100
+        80,
+        10,
+        80,
+        60,
+        50,
+        "as_mob_level",
+        "",
+        [SkillDB.get_skill("basic_atk"), SkillDB.get_skill("heavy_strike")]
     )
     db['monster_atk_lv1'] = monster_atk_lv1
 
@@ -153,11 +156,14 @@ func _ready():
     var monster_basic_lv1 = Stats.new().setup_enemy(
         "monster_basic_lv1",
         "monster_basic_lv1",
+        180,
+        10,
         100,
         100,
-        100,
-        100,
-        100
+        95,
+        "as_elite_level",
+        "",
+        [SkillDB.get_skill("basic_atk"), SkillDB.get_skill("heavy_strike")]
     )
     db['monster_basic_lv1'] = monster_basic_lv1
 

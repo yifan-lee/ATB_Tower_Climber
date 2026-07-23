@@ -26,7 +26,7 @@ const RECOVER_ON_LEVEL_UP: bool = false
 
 const EXP_YIELD_DIVISOR: float = 10.0
 const LEVEL_UP_EXP_BASE: int = 50
-const LEVEL_UP_EXP_MULTIPLIER: int = 10
+const LEVEL_UP_EXP_MULTIPLIER: int = 50
 
 static func calculate_cp(hp: int, mp: int, atk: int, def: int, spd: int) -> float:
 	return (

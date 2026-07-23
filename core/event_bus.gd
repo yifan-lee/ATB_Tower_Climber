@@ -14,6 +14,10 @@ signal player_stepped(grid_pos: Vector2i)
 # 请求主程序切换地图 (参数：目标场景路径, 玩家出生的网格坐标)
 signal request_map_change(target_scene_path: String, spawn_grid_pos: Vector2i)
 
+signal show_interaction_dialog(title: String, options: Array)
+signal interaction_action_selected(action: String, metadata: Dictionary)
+signal interaction_dialog_closed()
+
 signal encounter_monster(entity_id: String, monster_node: Node)
 
 signal battle_ended(result: String)

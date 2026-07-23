@@ -9,16 +9,16 @@ func _init():
 	# 除了真正的"wall"，其他所有非墙壁元素（floor, monster, stair_up, item）
 	# 在初始化时都会被自动转换成"假墙"！
 	var real_map_data = [
-		["        ", "wall", "wall        ", "wall ", "wall ", "stair_up  ", "wall ", "wall        ", "wall ", "wall ", "wall"],
-		["        ", "wall", "wall        ", "floor", "floor", "floor     ", "floor", "floor       ", "wall ", "floor", "wall"],
-		["        ", "wall", "wall        ", "wall ", "wall ", "wall      ", "wall ", "wall        ", "wall ", "floor", "wall"],
-		["        ", "wall", "spirit_stone", "wall ", "floor", "floor     ", "floor", "spirit_stone", "wall ", "floor", "wall"],
-		["        ", "wall", "wall        ", "wall ", "floor", "wall      ", "floor", "wall        ", "wall ", "floor", "wall"],
-		["        ", "wall", "floor       ", "floor", "floor", "wall      ", "floor", "floor       ", "floor", "floor", "wall"],
-		["        ", "wall", "wall        ", "wall ", "wall ", "wall      ", "wall ", "wall        ", "wall ", "wall ", "wall"],
-		["        ", "wall", "wall        ", "floor", "floor", "floor     ", "floor", "floor       ", "floor", "floor", "wall"],
-		["        ", "", "        ", "", " ", "      ", " ", "        ", " ", "", "wall"],
-		["        ", "    ", "wall        ", "floor", "wall ", "floor     ", "wall ", "floor       ", "wall ", "", ""],
+		["        ", "wall", "wall        ", "wall ", "wall ", "stair_up  ", "wall ", "wall        ", "wall ", "wall ", "wall    "],
+		["        ", "wall", "wall        ", "floor", "floor", "floor     ", "floor", "floor       ", "wall ", "floor", "wall    "],
+		["        ", "wall", "wall        ", "wall ", "wall ", "wall      ", "wall ", "wall        ", "wall ", "floor", "wall    "],
+		["        ", "wall", "spirit_stone", "wall ", "floor", "floor     ", "floor", "spirit_stone", "wall ", "floor", "wall    "],
+		["        ", "wall", "wall        ", "wall ", "floor", "wall      ", "floor", "wall        ", "wall ", "floor", "wall    "],
+		["        ", "wall", "floor       ", "floor", "floor", "wall      ", "floor", "floor       ", "floor", "floor", "wall    "],
+		["        ", "wall", "wall        ", "wall ", "wall ", "wall      ", "wall ", "wall        ", "wall ", "wall ", "wall    "],
+		["        ", "wall", "wall        ", "floor", "floor", "floor     ", "floor", "floor       ", "floor", "floor", "wall    "],
+		["        ", "    ", "            ", "     ", "     ", "          ", "     ", "            ", "     ", "     ", "wall    "],
+		["        ", "    ", "wall        ", "floor", "wall ", "floor     ", "wall ", "floor       ", "wall ", "     ", "        "],
 		["stair_up", "wall", "wall        ", "wall ", "wall ", "stair_down", "wall ", "wall        ", "wall ", "wall ", "stair_up"],
 	]
 	

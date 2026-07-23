@@ -8,17 +8,17 @@ func _init():
 	floor_desc_key = "MAP_DESC_UNKNOWN"
 	
 	map_data = [
-		["wall", "wall", "wall", "wall", "wall", "stair_up", "wall", "wall", "wall", "wall", "wall"],
-		["wall", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall"],
-		["wall", "floor", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "floor", "wall"],
-		["wall", "floor", "wall", "floor", "floor", "floor", "floor", "floor", "wall", "floor", "wall"],
-		["wall", "floor", "wall", "floor", "wall", "wall", "wall", "floor", "wall", "floor", "wall"],
-		["wall", "floor", "floor", "floor", "wall", "monster_def_lv1", "wall", "floor", "floor", "floor", "wall"],
-		["wall", "floor", "wall", "floor", "wall", "wall", "wall", "floor", "wall", "floor", "wall"],
-		["wall", "floor", "wall", "floor", "floor", "floor", "floor", "floor", "wall", "floor", "wall"],
-		["wall", "floor", "wall", "wall", "wall", "wall", "wall", "wall", "wall", "floor", "wall"],
-		["wall", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "floor", "wall"],
-		["wall", "wall", "wall", "wall", "wall", "stair_down", "wall", "wall", "wall", "wall", "wall"]
+		["wall", "wall ", "wall ", "wall ", "wall ", "stair_up       ", "wall ", "wall ", "wall ", "wall ", "wall"],
+		["wall", "floor", "floor", "floor", "floor", "floor          ", "floor", "floor", "floor", "floor", "wall"],
+		["wall", "floor", "wall ", "wall ", "wall ", "wall           ", "wall ", "wall ", "wall ", "floor", "wall"],
+		["wall", "floor", "wall ", "floor", "floor", "floor          ", "floor", "floor", "wall ", "floor", "wall"],
+		["wall", "floor", "wall ", "floor", "wall ", "wall           ", "wall ", "floor", "wall ", "floor", "wall"],
+		["wall", "floor", "floor", "floor", "wall ", "monster_def_lv1", "wall ", "floor", "floor", "floor", "wall"],
+		["wall", "floor", "wall ", "floor", "wall ", "wall           ", "wall ", "floor", "wall ", "floor", "wall"],
+		["wall", "floor", "wall ", "floor", "floor", "floor          ", "floor", "floor", "wall ", "floor", "wall"],
+		["wall", "floor", "wall ", "wall ", "wall ", "wall           ", "wall ", "wall ", "wall ", "floor", "wall"],
+		["wall", "floor", "floor", "floor", "floor", "floor          ", "floor", "floor", "floor", "floor", "wall"],
+		["wall", "wall ", "wall ", "wall ", "wall ", "stair_down     ", "wall ", "wall ", "wall ", "wall ", "wall"],
 	]
 	
 	stairs_config = {

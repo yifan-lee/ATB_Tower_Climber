@@ -72,6 +72,10 @@ func _try_move(direction: Vector2):
 			EventBus.show_system_message.emit(["MSG_HIT_ENEMY"])
 			EventBus.encounter_monster.emit(interaction.id, interaction.node)
 			return
+		"door":
+			anim_sprite.play("idle")
+			map_node.trigger_interaction(interaction.pos)
+			return
 		"passable":
 			pass # Proceed to movement
 
