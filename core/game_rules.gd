@@ -1,5 +1,12 @@
-# res://core/combat_formula.gd
-class_name CombatFormula
+# res://core/game_rules.gd
+class_name GameRules
+
+const STATUE_EXCHANGE_COST_RED = 1
+const STATUE_EXCHANGE_GAIN_ATK = 5
+const STATUE_EXCHANGE_COST_BLUE = 1
+const STATUE_EXCHANGE_GAIN_SPD = 5
+const STATUE_EXCHANGE_COST_YELLOW = 1
+const STATUE_EXCHANGE_GAIN_DEF = 5
 
 const BASE_PLAYER_CP: float = 200.0
 const CP_GROWTH_PER_LEVEL: float = 0.05

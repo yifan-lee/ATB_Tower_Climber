@@ -72,10 +72,10 @@ func _build_middle_stats(player_stats: Stats, enemy_stats: Stats):
 	
 	var basic_atk_skill = SkillDB.get_skill("basic_atk")
 	
-	var expected_p_dmg = ceil(CombatFormula.calculate_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), basic_atk_skill.damage))
+	var expected_p_dmg = ceil(GameRules.calculate_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), basic_atk_skill.damage))
 	p_stat_view.set_extra_info(TranslationServer.translate("EXPECTED_DMG") + ": [color=red]" + str(expected_p_dmg) + "[/color]")
 	
-	var expected_e_dmg = ceil(CombatFormula.calculate_damage(enemy_stats.get_total_atk(), player_stats.get_total_def(), basic_atk_skill.damage))
+	var expected_e_dmg = ceil(GameRules.calculate_damage(enemy_stats.get_total_atk(), player_stats.get_total_def(), basic_atk_skill.damage))
 	e_stat_view.set_extra_info(TranslationServer.translate("EXPECTED_DMG") + ": [color=red]" + str(expected_e_dmg) + "[/color]")
 
 func _build_bottom_animations(player_stats: Stats, enemy_stats: Stats):

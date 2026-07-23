@@ -100,11 +100,11 @@ func refresh():
 func _update_ui():
 	points_label.text = TranslationServer.translate("MSG_STAT_POINTS") + str(available_points)
 	
-	_update_row(hp_label, 0, "hp", player_stats.max_hp, temp_allocations["hp"], CombatFormula.STAT_ADD_RATIO_HP)
-	_update_row(mp_label, 1, "mp", player_stats.max_mp, temp_allocations["mp"], CombatFormula.STAT_ADD_RATIO_MP)
-	_update_row(atk_label, 2, "atk", player_stats.atk, temp_allocations["atk"], CombatFormula.STAT_ADD_RATIO_ATK)
-	_update_row(def_label, 3, "def", player_stats.def, temp_allocations["def"], CombatFormula.STAT_ADD_RATIO_DEF)
-	_update_row(spd_label, 4, "spd", player_stats.spd, temp_allocations["spd"], CombatFormula.STAT_ADD_RATIO_SPD)
+	_update_row(hp_label, 0, "hp", player_stats.max_hp, temp_allocations["hp"], GameRules.STAT_ADD_RATIO_HP)
+	_update_row(mp_label, 1, "mp", player_stats.max_mp, temp_allocations["mp"], GameRules.STAT_ADD_RATIO_MP)
+	_update_row(atk_label, 2, "atk", player_stats.atk, temp_allocations["atk"], GameRules.STAT_ADD_RATIO_ATK)
+	_update_row(def_label, 3, "def", player_stats.def, temp_allocations["def"], GameRules.STAT_ADD_RATIO_DEF)
+	_update_row(spd_label, 4, "spd", player_stats.spd, temp_allocations["spd"], GameRules.STAT_ADD_RATIO_SPD)
 	
 	var confirm_text = tr("MSG_CONFIRM")
 	if current_selection_index == 5:
@@ -192,13 +192,13 @@ func _handle_allocation(delta: int):
 	_update_ui()
 
 func _apply_allocations():
-	player_stats.max_hp += temp_allocations["hp"] * CombatFormula.STAT_ADD_RATIO_HP
-	player_stats.current_hp += temp_allocations["hp"] * CombatFormula.STAT_ADD_RATIO_HP # Also heal by the amount gained
-	player_stats.max_mp += temp_allocations["mp"] * CombatFormula.STAT_ADD_RATIO_MP
-	player_stats.current_mp += temp_allocations["mp"] * CombatFormula.STAT_ADD_RATIO_MP
-	player_stats.atk += temp_allocations["atk"] * CombatFormula.STAT_ADD_RATIO_ATK
-	player_stats.def += temp_allocations["def"] * CombatFormula.STAT_ADD_RATIO_DEF
-	player_stats.spd += temp_allocations["spd"] * CombatFormula.STAT_ADD_RATIO_SPD
+	player_stats.max_hp += temp_allocations["hp"] * GameRules.STAT_ADD_RATIO_HP
+	player_stats.current_hp += temp_allocations["hp"] * GameRules.STAT_ADD_RATIO_HP # Also heal by the amount gained
+	player_stats.max_mp += temp_allocations["mp"] * GameRules.STAT_ADD_RATIO_MP
+	player_stats.current_mp += temp_allocations["mp"] * GameRules.STAT_ADD_RATIO_MP
+	player_stats.atk += temp_allocations["atk"] * GameRules.STAT_ADD_RATIO_ATK
+	player_stats.def += temp_allocations["def"] * GameRules.STAT_ADD_RATIO_DEF
+	player_stats.spd += temp_allocations["spd"] * GameRules.STAT_ADD_RATIO_SPD
 	
 	player_stats.stat_points = 0 # Safety
 	EventBus.player_stats_changed.emit()

@@ -11,7 +11,8 @@ const TILE_RES = {
 	"portal_closed": "res://assets/sprites/map/portal_closed.tres",
 	"portal_open": "res://assets/sprites/map/portal_opened.tres",
 	"pedal_switch": "res://assets/sprites/map/pedal_switch.tres",
-	"pedal_trap": "res://assets/sprites/map/pedal_trap.tres"
+	"pedal_trap": "res://assets/sprites/map/pedal_trap.tres",
+	"statue_part": "res://assets/sprites/map/floor1.tres"
 }
 
 static var _fallback_texture: Texture2D = null

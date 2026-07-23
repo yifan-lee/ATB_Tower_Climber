@@ -7,6 +7,7 @@ var triggers_config = {}
 var items_config = {}
 var fake_walls_config = {}
 var doors_config = {}
+var statues_config = {}
 var custom_state = {}
 
 
@@ -68,7 +69,7 @@ func _build_map_grids():
 				var v = str(map_data[y][x]).strip_edges()
 				if v == "" or v == "0":
 					cell_val = "floor"
-				elif v in ["wall", "door_closed", "door_opened", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap"]:
+				elif v in ["wall", "door_closed", "door_opened", "stair_up", "stair_down", "portal_closed", "portal_open", "pedal_switch", "pedal_trap", "statue_part"]:
 					cell_val = v
 				elif EntityDB.db.has(v):
 					cell_val = "floor"
@@ -86,6 +87,24 @@ func _build_map_grids():
 			if sprite.texture:
 				var orig_size = sprite.texture.get_size()
 				sprite.scale = Vector2(GameConfig.GRID_SIZE / orig_size.x, GameConfig.GRID_SIZE / orig_size.y)
+
+	_render_statues()
+
+func _render_statues():
+	for pos in statues_config:
+		var config = statues_config[pos]
+		var tex_path = config.get("texture", "res://assets/sprites/map/statue.png")
+		var texture = load(tex_path)
+		if texture:
+			var sprite = Sprite2D.new()
+			sprite.texture = texture
+			var orig_size = texture.get_size()
+			# Scale to exactly 3x3 grid sizes
+			var target_w = GameConfig.GRID_SIZE * 3.0
+			var target_h = GameConfig.GRID_SIZE * 3.0
+			sprite.scale = Vector2(target_w / orig_size.x, target_h / orig_size.y)
+			sprite.position = GameConfig.get_game_area_pixel_position(pos.x, pos.y)
+			add_child(sprite)
 
 func _spawn_entity(id: String, grid_pos: Vector2i, is_enemy: bool):
 	var pixel_pos = GameConfig.get_game_area_pixel_position(grid_pos.x, grid_pos.y)
@@ -137,6 +156,9 @@ func get_cell_interaction(grid_pos: Vector2i) -> Dictionary:
 	if terrain == "door_closed":
 		return {"type": "door", "pos": grid_pos}
 		
+	if terrain == "statue_part":
+		return {"type": "door", "pos": grid_pos} # Using 'door' type for general map interactions
+		
 	return {"type": "passable"}
 
 func trigger_interaction(grid_pos: Vector2i):
@@ -172,6 +194,44 @@ func trigger_interaction(grid_pos: Vector2i):
 			{
 				"text": "离开",
 				"action": "door_cancel",
+				"enabled": true,
+				"metadata": {}
+			}
+		]
+		EventBus.show_interaction_dialog.emit(title, options)
+	elif terrain == "statue_part":
+		var player_stats = EntityDB.get_stats("player")
+		var current_red = player_stats.inventory.get("fragment_red", 0)
+		var current_blue = player_stats.inventory.get("fragment_blue", 0)
+		var current_yellow = player_stats.inventory.get("fragment_yellow", 0)
+		
+		var cost_red = GameRules.STATUE_EXCHANGE_COST_RED
+		var cost_blue = GameRules.STATUE_EXCHANGE_COST_BLUE
+		var cost_yellow = GameRules.STATUE_EXCHANGE_COST_YELLOW
+		
+		var title = "一座古老的神像，似乎蕴含着神秘的力量..."
+		var options = [
+			{
+				"text": "消耗 %d 红色碎片，提升 %d 攻击力 (拥有: %d)" % [cost_red, GameRules.STATUE_EXCHANGE_GAIN_ATK, current_red],
+				"action": "statue_exchange_atk",
+				"enabled": current_red >= cost_red,
+				"metadata": {"cost": cost_red, "gain": GameRules.STATUE_EXCHANGE_GAIN_ATK}
+			},
+			{
+				"text": "消耗 %d 蓝色碎片，提升 %d 速度 (拥有: %d)" % [cost_blue, GameRules.STATUE_EXCHANGE_GAIN_SPD, current_blue],
+				"action": "statue_exchange_spd",
+				"enabled": current_blue >= cost_blue,
+				"metadata": {"cost": cost_blue, "gain": GameRules.STATUE_EXCHANGE_GAIN_SPD}
+			},
+			{
+				"text": "消耗 %d 黄色碎片，提升 %d 防御力 (拥有: %d)" % [cost_yellow, GameRules.STATUE_EXCHANGE_GAIN_DEF, current_yellow],
+				"action": "statue_exchange_def",
+				"enabled": current_yellow >= cost_yellow,
+				"metadata": {"cost": cost_yellow, "gain": GameRules.STATUE_EXCHANGE_GAIN_DEF}
+			},
+			{
+				"text": "离开",
+				"action": "statue_cancel",
 				"enabled": true,
 				"metadata": {}
 			}
@@ -267,6 +327,21 @@ func _on_interaction_action_selected(action: String, metadata: Dictionary):
 	elif action == "door_fight":
 		pending_interaction_door_pos = metadata.pos
 		EventBus.encounter_monster.emit(metadata.monster, null)
+	elif action == "statue_exchange_atk":
+		var player_stats = EntityDB.get_stats("player")
+		player_stats.inventory["fragment_red"] = player_stats.inventory.get("fragment_red", 0) - metadata.get("cost", 1)
+		player_stats.atk += metadata.get("gain", 0)
+		EventBus.show_system_message.emit(["提升了 %d 攻击力！" % metadata.get("gain", 0)])
+	elif action == "statue_exchange_spd":
+		var player_stats = EntityDB.get_stats("player")
+		player_stats.inventory["fragment_blue"] = player_stats.inventory.get("fragment_blue", 0) - metadata.get("cost", 1)
+		player_stats.spd += metadata.get("gain", 0)
+		EventBus.show_system_message.emit(["提升了 %d 速度！" % metadata.get("gain", 0)])
+	elif action == "statue_exchange_def":
+		var player_stats = EntityDB.get_stats("player")
+		player_stats.inventory["fragment_yellow"] = player_stats.inventory.get("fragment_yellow", 0) - metadata.get("cost", 1)
+		player_stats.def += metadata.get("gain", 0)
+		EventBus.show_system_message.emit(["提升了 %d 防御力！" % metadata.get("gain", 0)])
 
 func _on_battle_ended(result: String):
 	if self.get_parent() == null or not self.visible:

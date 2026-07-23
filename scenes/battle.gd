@@ -41,8 +41,8 @@ func _ready():
 	ui_view.setup(player_stats, enemy_stats)
 
 	# 计算 ATB 移动速度 (像素/秒)
-	p_speed_px = BAR_WIDTH * CombatFormula.get_atb_speed(player_stats.get_total_spd())
-	e_speed_px = BAR_WIDTH * CombatFormula.get_atb_speed(enemy_stats.get_total_spd())
+	p_speed_px = BAR_WIDTH * GameRules.get_atb_speed(player_stats.get_total_spd())
+	e_speed_px = BAR_WIDTH * GameRules.get_atb_speed(enemy_stats.get_total_spd())
 
 	EventBus.player_skill_chosen.connect(_on_player_skill_chosen)
 	EventBus.player_item_used.connect(_on_player_item_used)
@@ -94,7 +94,7 @@ func _process(delta):
 		ready_character = "player"
 		var skills_info = []
 		for skill in player_stats.skills:
-			var estimated_dmg = CombatFormula.calculate_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), skill.damage)
+			var estimated_dmg = GameRules.calculate_damage(player_stats.get_total_atk(), enemy_stats.get_total_def(), skill.damage)
 			skills_info.append({
 				"skill": skill,
 				"estimated_damage": int(estimated_dmg)
@@ -148,7 +148,7 @@ func _on_enemy_turn():
 
 func _execute_skill(attacker: Stats, defender: Stats, skill: Skill) -> int:
 	attacker.current_mp = max(0, attacker.current_mp - skill.mana_cost)
-	var final_damage = int(CombatFormula.calculate_damage(attacker.get_total_atk(), defender.get_total_def(), skill.damage))
+	var final_damage = int(GameRules.calculate_damage(attacker.get_total_atk(), defender.get_total_def(), skill.damage))
 	
 	# 扣血并防止出现负数血量
 	defender.current_hp = max(0, defender.current_hp - final_damage)

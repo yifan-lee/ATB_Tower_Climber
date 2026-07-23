@@ -6,12 +6,12 @@ func _init() -> void:
 	floor_desc_key = "MAP_FLOOR_1_DESC"
 	
 	map_data = [
-		["wall", "wall         ", "wall", "wall", "wall", "wall         ", "wall", "wall", "wall", "wall         ", "wall"],
-		["wall", "wall         ", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall         ", "wall"],
-		["wall", "wall         ", "wall", "    ", "    ", "wall         ", "    ", "    ", "wall", "wall         ", "wall"],
-		["wall", "wall         ", "    ", "    ", "wall", "wall         ", "wall", "    ", "    ", "wall         ", "wall"],
-		["wall", "wall         ", "    ", "wall", "wall", "wall         ", "wall", "wall", "    ", "wall         ", "wall"],
-		["wall", "pedal_switch ", "wall", "wall", "wall", "sword_lv5    ", "wall", "wall", "wall", "tree_branch  ", "wall"],
+		["wall", "wall         ", "wall", "wall", "wall", "sword_lv5    ", "wall", "wall", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
+		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
+		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
+		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
+		["wall", "pedal_switch ", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "tree_branch  ", "wall"],
 		["wall", "monster_first", "    ", "    ", "wall", "wall         ", "wall", "    ", "    ", "monster_first", "wall"],
 		["wall", "wall         ", "wall", "    ", "wall", "             ", "wall", "    ", "wall", "wall         ", "wall"],
 		["wall", "wall         ", "wall", "    ", "    ", "monster_first", "    ", "    ", "wall", "wall         ", "wall"],

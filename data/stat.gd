@@ -47,9 +47,9 @@ func setup(
 	anim_path = anim
 	skills = sk
 	inventory = inv
-	var result = CombatFormula.evaluate_monster(hp, mp, a, d, s)
+	var result = GameRules.evaluate_monster(hp, mp, a, d, s)
 	level = result[entity_type]
-	max_exp = CombatFormula.get_level_up_exp(level)
+	max_exp = GameRules.get_level_up_exp(level)
 	return self
 
 func setup_enemy(
@@ -88,20 +88,20 @@ func setup_enemy(
 		skills = typed_skills
 		
 	inventory = {}
-	var result = CombatFormula.evaluate_monster(hp, mp, a, d, s)
+	var result = GameRules.evaluate_monster(hp, mp, a, d, s)
 	level = result[entity_type]
-	max_exp = CombatFormula.get_level_up_exp(level)
+	max_exp = GameRules.get_level_up_exp(level)
 	return self
 
 
 func get_exp_yield() -> int:
 	if exp_yield != -1:
 		return exp_yield
-	return CombatFormula.get_monster_exp_yield(max_hp, max_mp, atk, def, spd)
+	return GameRules.get_monster_exp_yield(max_hp, max_mp, atk, def, spd)
 
 # Future interface for recovering on level up (currently disabled by user request)
 func recover_on_level_up():
-	if CombatFormula.RECOVER_ON_LEVEL_UP:
+	if GameRules.RECOVER_ON_LEVEL_UP:
 		current_hp = get_total_max_hp()
 		current_mp = get_total_max_mp()
 
@@ -111,8 +111,8 @@ func gain_exp(amount: int) -> bool:
 	while exp >= max_exp:
 		exp -= max_exp
 		level += 1
-		max_exp = CombatFormula.get_level_up_exp(level)
-		stat_points += CombatFormula.STAT_POINTS_PER_LEVEL
+		max_exp = GameRules.get_level_up_exp(level)
+		stat_points += GameRules.STAT_POINTS_PER_LEVEL
 		leveled_up = true
 		recover_on_level_up()
 		
