@@ -55,14 +55,18 @@ func _on_item_selected(item_dict):
 	var item_data = item_dict.data
 	if item_data.type == Item.ItemType.POTION:
 		_use_item(item_dict)
-		_close_menu()
+		is_menu_active = false
+		EventBus.clear_skill_preview.emit()
+		EventBus.clear_preview.emit()
 		EventBus.player_item_used.emit()
 
 func _on_skill_selected(skill_dict):
 	if not is_menu_active: return
 	var chosen_skill = skill_dict.skill
 	if chosen_skill.current_cd <= 0:
-		_close_menu()
+		is_menu_active = false
+		EventBus.clear_skill_preview.emit()
+		EventBus.clear_preview.emit()
 		EventBus.player_skill_chosen.emit(chosen_skill)
 
 func _use_item(item_dict):
@@ -100,6 +104,8 @@ func _on_game_loaded():
 		_update_data_and_refresh(false)
 
 func _process(_delta):
-	# Visibility synchronization because _close_menu hides tabbed_menu directly, but we want it visible when active
 	if is_menu_active and not tabbed_menu.visible:
 		tabbed_menu.visible = true
+	
+	if tabbed_menu.visible and player_stats != null:
+		tabbed_menu.update_cooldowns_live(available_skills)

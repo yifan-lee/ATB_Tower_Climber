@@ -55,8 +55,13 @@ static func show_skill_list(container: Control, skills_info: Array, current_sele
 		cd_bar.max_value = max(0.01, skill.max_cd)
 		cd_bar.value = max(0, skill.max_cd - skill.current_cd)
 		cd_bar.size_flags_vertical = Control.SIZE_SHRINK_CENTER
+		cd_bar.set_meta("skill_obj", skill)
+		cd_bar.set_meta("is_cd_bar", true)
 		
 		var lbl = Label.new()
+		lbl.set_meta("skill_obj", skill)
+		lbl.set_meta("is_skill_label", true)
+		lbl.set_meta("is_selected", (i == current_selection))
 		
 		var prefix = "> " if i == current_selection else "   "
 		var text_str = TranslationServer.translate(skill.skill_name)
@@ -93,6 +98,35 @@ static func show_skill_list(container: Control, skills_info: Array, current_sele
 					"enemy_changes": {"hp": - estimated_damage},
 					"player_changes": {"mp": - skill.mana_cost}
 				})
+
+static func update_skill_list_cooldowns(container: Control, skills_info: Array):
+	for hbox in container.get_children():
+		var cd_bar = null
+		var lbl = null
+		for child in hbox.get_children():
+			if child.has_meta("is_cd_bar"): cd_bar = child
+			elif child.has_meta("is_skill_label"): lbl = child
+		
+		if cd_bar != null and lbl != null:
+			var skill = cd_bar.get_meta("skill_obj")
+			var is_sel = lbl.get_meta("is_selected")
+			
+			cd_bar.value = max(0, skill.max_cd - skill.current_cd)
+			
+			var prefix = "> " if is_sel else "   "
+			var text_str = TranslationServer.translate(skill.skill_name)
+			if skill.current_cd > 0:
+				text_str += " (CD:" + str(ceil(skill.current_cd)) + ")"
+				lbl.modulate = ThemeConfig.COLOR_TEXT_DISABLED
+				cd_bar.modulate = Color(0.7, 0.7, 0.7, 1.0)
+			elif is_sel:
+				lbl.modulate = ThemeConfig.COLOR_TEXT_NORMAL
+				cd_bar.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			else:
+				lbl.modulate = ThemeConfig.COLOR_TEXT_DISABLED
+				cd_bar.modulate = Color(1.0, 1.0, 1.0, 1.0)
+				
+			lbl.text = prefix + text_str
 
 static func get_inventory_categories() -> Array:
 	return [Item.ItemType.POTION, Item.ItemType.EQUIPMENT, Item.ItemType.MATERIAL, Item.ItemType.KEY_ITEM]

@@ -1,19 +1,19 @@
 extends "res://scenes/main.gd"
 
 @export_category("Map Settings")
-@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_2.gd"
-@export var start_pos: Vector2i = Vector2i(10, 5)
+@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_3.gd"
+@export var start_pos: Vector2i = Vector2i(0, 0)
 
 @export_category("Player Stats")
-@export var debug_level: int = 1
+@export var debug_level: int = 2
 @export var debug_max_hp: int = 200
-@export var debug_current_hp: int = 175
+@export var debug_current_hp: int = 143
 @export var debug_max_mp: int = 100
 @export var debug_current_mp: int = 100
-@export var debug_atk: int = 10
-@export var debug_def: int = 10
-@export var debug_spd: int = 10
-@export var debug_exp: int = 29
+@export var debug_atk: int = 30
+@export var debug_def: int = 20
+@export var debug_spd: int = 20
+@export var debug_exp: int = 20
 @export var debug_stat_points: int = 0
 
 @export_category("Inventory & Skills")
@@ -24,7 +24,7 @@ extends "res://scenes/main.gd"
 	# "fragment_blue": 10,
 	# "fragment_white": 10,
 	# "sword_level5": 1,
-	# "hp_herb": 99
+	"hp_herb_lv1": 2
 }
 @export var debug_skills: Array[String] = [
 	"basic_atk",
@@ -32,13 +32,13 @@ extends "res://scenes/main.gd"
 ]
 
 @export_category("Equipment")
-@export var equip_head: String = ""
+@export var equip_head: String = "helm_lv1"
 @export var equip_chest: String = ""
 @export var equip_legs: String = ""
-@export var equip_feet: String = ""
+@export var equip_feet: String = "boot_lv1"
 @export var equip_arms: String = ""
 @export var equip_left_hand: String = "wooden_sword"
-@export var equip_right_hand: String = ""
+@export var equip_right_hand: String = "sword_lv1"
 @export var equip_accessory: String = ""
 
 

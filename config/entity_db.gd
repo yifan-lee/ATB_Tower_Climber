@@ -33,7 +33,7 @@ func _ready():
     
     # 配置主角的升级自动学习技能树
     db['player'].level_up_skills = {
-        3: "heavy_strike",
+        2: "heavy_strike",
         5: "fireball"
     }
 
@@ -62,9 +62,9 @@ func _ready():
         "monster_spd_lv1",
         80,
         10,
-        46,
-        30,
-        114
+        5,
+        3,
+        22
     )
     db['monster_spd_lv1'] = monster_spd_lv1
 
@@ -93,11 +93,11 @@ func _ready():
     var monster_def_lv1 = Stats.new().setup_enemy(
         "monster_def_lv1",
         "monster_def_lv1",
-        110,
-        10,
-        30,
         120,
-        37
+        10,
+        10,
+        12,
+        4
     )
     db['monster_def_lv1'] = monster_def_lv1
 
@@ -129,9 +129,9 @@ func _ready():
         "monster_atk_lv1",
         80,
         10,
-        80,
-        60,
-        50,
+        20,
+        8,
+        12,
         "as_mob_level",
         "",
         [SkillDB.get_skill("basic_atk"), SkillDB.get_skill("heavy_strike")]

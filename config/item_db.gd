@@ -30,7 +30,10 @@ func _ready():
 
 	## Armors
 	var helm_lv1 = Item.new().setup(
-		"helm_lv1", "EQUIPMENT_HELM_LV1", Item.ItemType.EQUIPMENT, "EQUIPMENT_HELM_LV1_DESC", Item.EquipSlot.HEAD, 0, 0, 0, 10, 0
+		"helm_lv1", "EQUIPMENT_NAME_HELM_LV1",
+		Item.ItemType.EQUIPMENT, "EQUIPMENT_DESC_HELM_LV1",
+		Item.EquipSlot.HEAD,
+		0, 0, 0, 5, 0
 	)
 	helm_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 0)
 	db["helm_lv1"] = helm_lv1
@@ -66,7 +69,10 @@ func _ready():
 	db["leggings_lv2"] = leggings_lv2
 
 	var boot_lv1 = Item.new().setup(
-		"boot_lv1", "EQUIPMENT_BOOTS_LV1", Item.ItemType.EQUIPMENT, "EQUIPMENT_BOOTS_LV1_DESC", Item.EquipSlot.FEET, 0, 0, 0, 0, 10
+		"boot_lv1", "EQUIPMENT_NAME_BOOTS_LV1",
+		Item.ItemType.EQUIPMENT, "EQUIPMENT_DESC_BOOTS_LV1",
+		Item.EquipSlot.FEET,
+		0, 0, 0, 0, 5
 	)
 	boot_lv1.icon = get_atlas_icon("res://assets/sprites/item/arm.png", 5, 5, 0, 3)
 	db["boot_lv1"] = boot_lv1
@@ -92,7 +98,7 @@ func _ready():
 	## Weapon 
 
 	var wooden_sword = Item.new().setup(
-		"wooden_sword", "EQUIPMENT_WOODEN_SWORD",
+		"wooden_sword", "EQUIPMENT_NAME_WOODEN_SWORD",
 		Item.ItemType.EQUIPMENT, "EQUIPMENT_DESC_WOODEN_SWORD",
 		Item.EquipSlot.RIGHT_HAND,
 		0, 0, 1, 0, 0
@@ -101,7 +107,9 @@ func _ready():
 	db["wooden_sword"] = wooden_sword
 
 	var sword_lv1 = Item.new().setup(
-		"sword_lv1", "EQUIPMENT_SWORD_LV1", Item.ItemType.EQUIPMENT, "EQUIPMENT_SWORD_LV1_DESC", Item.EquipSlot.RIGHT_HAND, 0, 0, 20, 0, 0
+		"sword_lv1", "EQUIPMENT_NAME_SWORD_LV1",
+		Item.ItemType.EQUIPMENT, "EQUIPMENT_DESC_SWORD_LV1",
+		Item.EquipSlot.RIGHT_HAND, 0, 0, 5, 0, 0
 	)
 	sword_lv1.icon = get_atlas_icon("res://assets/sprites/item/weapon1.png", 5, 5, 0, 1)
 	db["sword_lv1"] = sword_lv1

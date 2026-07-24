@@ -1,4 +1,16 @@
 keys,zh_CN,en_US
+EQUIPMENT_NAME_WOODEN_SWORD,木剑,Wooden Sword
+EQUIPMENT_DESC_WOODEN_SWORD, 增加一点点攻击力，随时可能会坏,"Improves attack power a little bit, might break at any time."
+
+
+MAP_FLOOR_NAME_ATK,攻击,ATK
+MAP_FLOOR_DESC_ATK,超过特定攻击线可以减少受伤次数,"Crossing a specific attack line can reduce the number of injuries." 
+MAP_FLOOR_NAME_SPD,速度,SPD
+MAP_FLOOR_DESC_SPD,超过特定速度线可以先出手,"Crossing a specific speed line can attack firstly." 
+
+
+
+
 MSG_WELCOME,欢迎来到 TT 塔，勇者！,"Welcome to TT Tower, Hero!"
 MSG_HIT_WALL,哎哟！前面是一堵墙。,"Ouch! It's a wall."
 MSG_GAINED_EXP,获得经验：,"Gained EXP: "
@@ -33,16 +45,14 @@ SLOT_FEET,脚,Feet
 SLOT_LEFT_HAND,左手,Left Hand
 SLOT_RIGHT_HAND,右手,Right Hand
 SLOT_ACCESSORY,饰品,Accessory
-EQUIPMENT_HELM_LV1,1级头盔,Helmet LV1
-EQUIPMENT_HELM_LV1_DESC,增强防御力的头盔,Enhance defense Helmet LV1
-EQUIPMENT_SWORD_LV1,1级武器,Weapon LV1
-EQUIPMENT_SWORD_LV1_DESC,增强攻击力的武器,Enhance attack Weapon LV1
-EQUIPMENT_JY_SWORD,绝世好剑,Peerless Sword
-EQUIPMENT_JY_SWORD_DESC,提升大量攻击力,Increases attack power
-EQUIPMENT_WOODEN_SWORD,木剑,Wooden Sword
-EQUIPMENT_DESC_WOODEN_SWORD, 增加一点点攻击力，随时可能会坏,"Improves attack power a little bit, might break at any time."
-EQUIPMENT_BOOTS_LV1,1级鞋子,Boots LV1
-EQUIPMENT_BOOTS_LV1_DESC,增强速度的鞋子,Shoes that enhance speed
+EQUIPMENT_NAME_HELM_LV1,1级头盔,Helmet LV1
+EQUIPMENT_DESC_HELM_LV1,增强防御力的头盔,Enhance defense Helmet LV1
+EQUIPMENT_NAME_SWORD_LV1,1级武器,Weapon LV1
+EQUIPMENT_DESC_SWORD_LV1,增强攻击力的武器,Enhance attack Weapon LV1
+EQUIPMENT_NAME_JY_SWORD,绝世好剑,Peerless Sword
+EQUIPMENT_DESC_JY_SWORD,提升大量攻击力,Increases attack power
+EQUIPMENT_NAME_BOOTS_LV1,1级鞋子,Boots LV1
+EQUIPMENT_DESC_BOOTS_LV1,增强速度的鞋子,Shoes that enhance speed
 MSG_USED_ITEM,使用了,"Used "
 MSG_GOT_ITEM,获得了,"Got "
 MSG_EQUIPPED,装备了,"Equipped "
@@ -71,10 +81,7 @@ TAB_KEY_ITEMS,重要道具,Key Items
 TAB_MATERIALS,材料,Materials
 MAP_FLOOR_NAME_UNKNOWN,未知领域,Unknown Area
 MAP_DESC_DESC_UNKNOWN,此处没有任何说明。,No description available.
-MAP_FLOOR_NAME_ATK,攻击,ATK
-MAP_FLOOR_DESC_ATK,超过特定攻击线可以减少受伤次数,"Crossing a specific attack line can reduce the number of injuries." 
-MAP_FLOOR_NAME_SPD,速度,SPD
-MAP_FLOOR_DESC_SPD,超过特定速度即可通过,SPD 115
+
 MAP_FLOOR_NAME_SHOP,商店,Shop
 MAP_FLOOR_DESC_SHOP,商店,Shop
 MAP_FLOOR_NAME_LEFT_RULE,规则,Rule

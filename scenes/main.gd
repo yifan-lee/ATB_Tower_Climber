@@ -98,6 +98,9 @@ func _setup_containers():
 
 var loaded_maps: Dictionary = {}
 var current_enemy_node: Node = null
+var pre_battle_player_hp: int = 0
+var pre_battle_player_mp: int = 0
+var pre_battle_player_pos: Vector2 = Vector2.ZERO
 
 func _load_initial_scenes():
 	# 1. 加载地图 1 楼
@@ -270,6 +273,13 @@ func _set_map_active(map_node: Node2D, active: bool):
 
 # 进入战斗
 func _on_encounter_monster(monster_id: String, monster_node: Node = null):
+	var p_stats = EntityDB.get_stats("player")
+	if p_stats:
+		pre_battle_player_hp = p_stats.current_hp
+		pre_battle_player_mp = p_stats.current_mp
+	if player_instance:
+		pre_battle_player_pos = player_instance.position
+		
 	current_enemy_node = monster_node
 	
 	current_battle = BattleScene.new()
@@ -281,6 +291,11 @@ func _on_encounter_monster(monster_id: String, monster_node: Node = null):
 
 # 退出战斗
 func _on_battle_ended(result: String = ""):
+	var player_stats = EntityDB.get_stats("player")
+	if player_stats != null and player_stats.skills != null:
+		for skill in player_stats.skills:
+			skill.current_cd = 0.0
+
 	if current_battle:
 		current_battle.queue_free()
 		current_battle = null
@@ -290,10 +305,18 @@ func _on_battle_ended(result: String = ""):
 			current_map.remove_entity_by_node(current_enemy_node)
 		else:
 			current_enemy_node.queue_free()
+	elif result == "lose":
+		if player_stats != null:
+			player_stats.current_hp = pre_battle_player_hp
+			player_stats.current_mp = pre_battle_player_mp
+		if player_instance:
+			player_instance.position = pre_battle_player_pos
+		EventBus.player_stats_changed.emit()
+		_update_floor_info()
+		
 	current_enemy_node = null
 		
-	var player_stats = EntityDB.get_stats("player")
-	if player_stats.stat_points > 0:
+	if player_stats != null and player_stats.stat_points > 0:
 		change_state(AppState.LEVEL_UP)
 	else:
 		change_state(AppState.MAP)

@@ -6,16 +6,16 @@ func _init() -> void:
 	
 	map_data = [
 		["stair_up       ", "wall           ", "wall           ", "                 ", "               ", "                 ", "wall           ", "               ", "               ", "               ", "           "],
-		["               ", "wall           ", "wall           ", "                 ", "               ", "                 ", "wall           ", "               ", "               ", "               ", "           "],
-		["               ", "wall           ", "wall           ", "                 ", "               ", "monster_basic_lv3", "door_closed    ", "               ", "               ", "               ", "           "],
-		["               ", "wall           ", "wall           ", "wall             ", "wall           ", "wall             ", "wall           ", "               ", "               ", "               ", "           "],
-		["               ", "monster_def_lv1", "monster_def_lv1", "monster_basic_lv1", "monster_spd_lv1", "                 ", "wall           ", "wall           ", "wall           ", "wall           ", "wall       "],
+		["hp_herb_lv1", "wall           ", "wall           ", "                 ", "               ", "                 ", "wall           ", "               ", "               ", "               ", "           "],
+		["hp_herb_lv1", "wall           ", "wall           ", "                 ", "               ", "monster_basic_lv3", "door_closed    ", "               ", "               ", "               ", "           "],
+		["hp_herb_lv1", "wall           ", "wall           ", "wall             ", "wall           ", "wall             ", "wall           ", "               ", "               ", "               ", "           "],
+		["               ", "hp_herb_lv1", "monster_def_lv1", "helm_lv1", "monster_def_lv1", "                 ", "wall           ", "wall           ", "wall           ", "wall           ", "wall       "],
 		["monster_def_lv3", "wall           ", "wall           ", "wall             ", "wall           ", "                 ", "wall           ", "wall           ", "wall           ", "               ", "stair_down "],
-		["               ", "               ", "               ", "                 ", "wall           ", "                 ", "monster_def_lv1", "monster_spd_lv1", "monster_spd_lv1", "               ", "wall       "],
+		["               ", "               ", "               ", "                 ", "wall           ", "                 ", "monster_spd_lv1", "spirit_stone", "monster_spd_lv1", "               ", "wall       "],
 		["wall           ", "wall           ", "wall           ", "wall             ", "wall           ", "                 ", "wall           ", "wall           ", "wall           ", "               ", "wall       "],
-		["fragment_blue  ", "monster_def_lv1", "fragment_white ", "wall             ", "spirit_stone   ", "monster_def_lv1  ", "hp_herb_lv1    ", "wall           ", "wall           ", "               ", "wall       "],
-		["monster_def_lv1", "spirit_stone   ", "monster_def_lv1", "                 ", "monster_def_lv1", "sword_lv1        ", "monster_def_lv1", "wall           ", "monster_spd_lv1", "monster_spd_lv1", "hp_herb_lv1"],
-		["fragment_red   ", "monster_def_lv1", "fragment_yellow", "wall             ", "spirit_stone   ", "monster_def_lv1  ", "hp_herb_lv1    ", "wall           ", "hp_herb_lv1    ", "monster_spd_lv1", "boot_lv1   "],
+		["hp_herb_lv1  ", "monster_spd_lv1", "hp_herb_lv1 ", "wall             ", "spirit_stone   ", "monster_spd_lv1  ", "hp_herb_lv1    ", "wall           ", "wall           ", "               ", "wall       "],
+		["monster_spd_lv1", "hp_herb_lv1   ", "monster_spd_lv1", "                 ", "monster_def_lv1", "sword_lv1        ", "monster_spd_lv1", "wall           ", "monster_spd_lv1", "monster_spd_lv1", "hp_herb_lv1"],
+		["hp_herb_lv1   ", "monster_spd_lv1", "hp_herb_lv1", "wall             ", "spirit_stone   ", "monster_def_lv1  ", "hp_herb_lv1    ", "wall           ", "hp_herb_lv1    ", "monster_spd_lv1", "boot_lv1   "],
 	]
 
 
@@ -31,5 +31,5 @@ func _init() -> void:
 	}
 	
 	items_config = {
-		Vector2i(4, 2): 10
+		# Vector2i(4, 2): 10
 	}

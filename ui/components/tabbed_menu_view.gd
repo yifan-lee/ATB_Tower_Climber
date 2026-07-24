@@ -140,6 +140,10 @@ func _refresh_view():
 		var sel = current_selection if current_focus == FocusState.FOCUS_LIST else -1
 		UIUtils.show_skill_list(content_list_box, all_skills, sel, desc_label, true)
 
+func update_cooldowns_live(skills: Array):
+	if current_tab == TabSide.SKILLS:
+		UIUtils.update_skill_list_cooldowns(content_list_box, skills)
+
 func _process(delta: float):
 	if not visible:
 		return
