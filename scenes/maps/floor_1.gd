@@ -10,9 +10,9 @@ func _init() -> void:
 		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
 		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
 		["wall", "wall         ", "    ", "    ", "    ", "             ", "    ", "    ", "    ", "wall         ", "wall"],
-		["wall", "pedal_switch ", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "tree_branch  ", "wall"],
+		["wall", "pedal_switch ", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wooden_sword  ", "wall"],
 		["wall", "monster_first", "    ", "    ", "wall", "wall         ", "wall", "    ", "    ", "monster_first", "wall"],
-		["wall", "wall         ", "wall", "    ", "wall", "             ", "wall", "    ", "wall", "wall         ", "wall"],
+		["wall", "wall         ", "wall", "    ", "wall", "wall", "wall", "    ", "wall", "wall         ", "wall"],
 		["wall", "wall         ", "wall", "    ", "    ", "monster_first", "    ", "    ", "wall", "wall         ", "wall"],
 		["wall", "wall         ", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall         ", "wall"],
 		["wall", "wall         ", "wall", "wall", "wall", "             ", "wall", "wall", "wall", "wall         ", "wall"],
@@ -42,7 +42,7 @@ func _init() -> void:
 			},
 			{
 				"type": "give_exp",
-				"amount": 10,
+				"amount": 20,
 				"one_shot": true
 			}
 		]

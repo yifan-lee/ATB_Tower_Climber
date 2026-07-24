@@ -8,7 +8,7 @@ const STATUE_EXCHANGE_GAIN_SPD = 5
 const STATUE_EXCHANGE_COST_YELLOW = 1
 const STATUE_EXCHANGE_GAIN_DEF = 5
 
-const BASE_PLAYER_CP: float = 200.0
+const BASE_PLAYER_CP: float = 100.0
 const CP_GROWTH_PER_LEVEL: float = 0.05
 
 const MULTIPLIER_MOB: float = 0.5 # 普通小怪战力是同级玩家的 45%
@@ -23,17 +23,17 @@ const ATB_SPEED_DOM: float = 400.0
 const ATB_SPEED_CONSTANT: float = 400.0
 const ATB_SPEED_LOWERBOUND: float = 0.1
 
-const STAT_ADD_RATIO_HP: int = 20
-const STAT_ADD_RATIO_MP: int = 10
-const STAT_ADD_RATIO_ATK: int = 2
-const STAT_ADD_RATIO_DEF: int = 2
-const STAT_ADD_RATIO_SPD: int = 2
+const STAT_ADD_RATIO_HP: int = 10
+const STAT_ADD_RATIO_MP: int = 5
+const STAT_ADD_RATIO_ATK: int = 1
+const STAT_ADD_RATIO_DEF: int = 1
+const STAT_ADD_RATIO_SPD: int = 1
 
 const RECOVER_ON_LEVEL_UP: bool = false
 
 const EXP_YIELD_DIVISOR: float = 10.0
 const LEVEL_UP_EXP_BASE: int = 50
-const LEVEL_UP_EXP_MULTIPLIER: int = 50
+const LEVEL_UP_EXP_MULTIPLIER: int = 10
 
 static func calculate_cp(hp: int, mp: int, atk: int, def: int, spd: int) -> float:
 	return (
@@ -70,7 +70,7 @@ static func get_level_up_exp(current_level: int) -> int:
 
 # 伤害公式
 static func calculate_damage(atk: int, def: int, skill_damage: int) -> float:
-	return max(1, atk / 100.0 * skill_damage * (100.0 / (100.0 + def)))
+	return max(1, atk / 10.0 * skill_damage * (100.0 / (100.0 + def)))
 
 # 速度公式 
 static func get_atb_speed(speed: float) -> float:

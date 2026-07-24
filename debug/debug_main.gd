@@ -1,32 +1,34 @@
 extends "res://scenes/main.gd"
 
 @export_category("Map Settings")
-@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_5.gd"
-@export var start_pos: Vector2i = Vector2i(5, 7)
+@export_file("*.gd") var starting_map: String = "res://scenes/maps/floor_2.gd"
+@export var start_pos: Vector2i = Vector2i(10, 5)
 
 @export_category("Player Stats")
 @export var debug_level: int = 1
-@export var debug_hp: int = 500
-@export var debug_mp: int = 250
-@export var debug_atk: int = 100
-@export var debug_def: int = 100
-@export var debug_spd: int = 900
-@export var debug_exp: int = 40
+@export var debug_max_hp: int = 200
+@export var debug_current_hp: int = 175
+@export var debug_max_mp: int = 100
+@export var debug_current_mp: int = 100
+@export var debug_atk: int = 10
+@export var debug_def: int = 10
+@export var debug_spd: int = 10
+@export var debug_exp: int = 29
 @export var debug_stat_points: int = 0
 
 @export_category("Inventory & Skills")
 @export var debug_inventory: Dictionary = {
-	"spirit_stone": 999,
-	"fragment_red": 10,
-	"fragment_yellow": 10,
-	"fragment_blue": 10,
-	"fragment_white": 10,
+	# "spirit_stone": 999,
+	# "fragment_red": 10,
+	# "fragment_yellow": 10,
+	# "fragment_blue": 10,
+	# "fragment_white": 10,
 	# "sword_level5": 1,
 	# "hp_herb": 99
 }
 @export var debug_skills: Array[String] = [
 	"basic_atk",
-	"one_hit"
+	# "one_hit"
 ]
 
 @export_category("Equipment")
@@ -35,7 +37,7 @@ extends "res://scenes/main.gd"
 @export var equip_legs: String = ""
 @export var equip_feet: String = ""
 @export var equip_arms: String = ""
-@export var equip_left_hand: String = "tree_branch"
+@export var equip_left_hand: String = "wooden_sword"
 @export var equip_right_hand: String = ""
 @export var equip_accessory: String = ""
 
@@ -45,10 +47,10 @@ func _load_initial_scenes():
 	var player_stats = EntityDB.get_stats("player")
 	if player_stats:
 		player_stats.level = debug_level
-		player_stats.max_hp = debug_hp
-		player_stats.current_hp = debug_hp
-		player_stats.max_mp = debug_mp
-		player_stats.current_mp = debug_mp
+		player_stats.max_hp = debug_max_hp
+		player_stats.current_hp = debug_current_hp
+		player_stats.max_mp = debug_max_mp
+		player_stats.current_mp = debug_current_mp
 		player_stats.atk = debug_atk
 		player_stats.def = debug_def
 		player_stats.spd = debug_spd

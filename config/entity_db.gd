@@ -7,13 +7,13 @@ var db: Dictionary = {}
 func _ready():
     db['player'] = Stats.new().setup(
         "TooTwo",
-        500,
-        500,
-        250,
-        250,
+        200,
+        200,
         100,
         100,
-        100,
+        20,
+        20,
+        20,
         "res://assets/sprites/player/player.tres",
         # "res://assets/sprites/player/warrior.tres",
         [
@@ -48,11 +48,11 @@ func _ready():
     var monster_first = Stats.new().setup_enemy(
         "monster_first",
         "monster_first",
-        80,
-        10,
-        70,
-        30,
-        90
+        40,
+        5,
+        7,
+        3,
+        10
     )
     # bloodshot.exp_yield = 50
     db['monster_first'] = monster_first

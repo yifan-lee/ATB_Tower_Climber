@@ -17,7 +17,11 @@ enum EquipSlot {NONE, HEAD, CHEST, LEGS, FEET, ARMS, LEFT_HAND, RIGHT_HAND, ACCE
 @export var description: String
 @export var icon: Texture2D
 
-func setup(id: String, n: String, t: ItemType, hp: int, mp: int, desc: String, atk: int = 0, def: int = 0, spd: int = 0, slot: EquipSlot = EquipSlot.NONE) -> Item:
+func setup(
+	id: String, n: String, t: ItemType, desc: String,
+	slot: EquipSlot = EquipSlot.NONE,
+	hp: int = 0, mp: int = 0, atk: int = 0, def: int = 0, spd: int = 0
+) -> Item:
 	item_id = id
 	item_name = n
 	type = t
